@@ -33,7 +33,6 @@ __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
 import inspect as _inspect
-import itertools as _it
 
 import sqlalchemy as _sa
 
@@ -97,7 +96,7 @@ class Type(object):
         except TypeError:
             pass
         else:
-            defaults = dict(_it.izip(spec[0][::-1], (spec[3] or ())[::-1]))
+            defaults = dict(zip(spec[0][::-1], (spec[3] or ())[::-1]))
             kwds = False
             for arg in spec[0][1:]:
                 value = getattr(self._ctype, arg)
@@ -118,7 +117,7 @@ class Type(object):
                 if _find_class(self._ctype, '__init__') is not \
                         _sa.types.TypeEngine:
                     params.extend(list(
-                        _it.imap(repr, getattr(self._ctype, spec[1]))
+                        map(repr, getattr(self._ctype, spec[1]))
                     ))
 
         params = ', '.join(params)

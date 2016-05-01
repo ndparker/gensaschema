@@ -32,7 +32,6 @@ if __doc__:
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
-import itertools as _it
 import logging as _logging
 import operator as _op
 import warnings as _warnings
@@ -120,7 +119,7 @@ class Table(object):
         self._symbols = symbols
         self.varname = varname
         self.sa_table = table
-        self.constraints = list(_it.ifilter(None, [_constraint.Constraint(
+        self.constraints = list(filter(None, [_constraint.Constraint(
             con, self.varname, self._symbols,
         ) for con in table.constraints]))
 
@@ -278,7 +277,7 @@ class TableCollection(tuple):
                 )
             return objects[sa_table.key]
 
-        tables = list(_it.imap(map_table, metadata.tables.itervalues()))
+        tables = list(map(map_table, metadata.tables.itervalues()))
         tables.sort(key=lambda x: (not(x.is_reference), x.varname))
 
         _break_cycles(metadata)
@@ -314,7 +313,7 @@ def _break_cycles(metadata):
     """
     def break_cycle(e):
         """ Break foreign key cycle """
-        cycle_keys = set(_it.imap(_op.attrgetter('key'), e.cycles))
+        cycle_keys = set(map(_op.attrgetter('key'), e.cycles))
         cycle_path = [
             (parent, child)
             for parent, child in e.edges
@@ -334,7 +333,7 @@ def _break_cycles(metadata):
         if deps[0][0].key != deps[-1][1].key:
             raise AssertionError("Could not construct sorted cycle path")
 
-        deps = list(_it.imap(_op.itemgetter(0), deps))
+        deps = list(map(_op.itemgetter(0), deps))
         first_dep = list(sorted(deps, key=_op.attrgetter('name')))[0]
         while first_dep != deps[-1]:
             deps = [deps[-1]] + deps[:-1]

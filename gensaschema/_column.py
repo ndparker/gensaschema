@@ -32,8 +32,6 @@ if __doc__:
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
-import itertools as _it
-
 from . import _type
 from . import _util
 
@@ -161,7 +159,7 @@ class Column(object):
         :Return: The string representation
         :Rtype: ``str``
         """
-        params = list(_it.imap(repr, (self._name, self._ctype)))
+        params = list(map(repr, (self._name, self._ctype)))
         if not self._nullable:
             params.append('nullable=%r' % (False,))
         if not self._autoincrement and self._primary_key:
