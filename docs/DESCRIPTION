@@ -10,13 +10,13 @@ Supported python versions are Python 2.7 and Python 3.3 and above.
 Development Status
 ~~~~~~~~~~~~~~~~~~
 
-Pre-Alpha.
+Alpha.
 
 
 Copyright and License
 ~~~~~~~~~~~~~~~~~~~~~
 
-Copyright 2014 - 2016
+Copyright 2010 - 2016
 André Malo or his licensors, as applicable.
 
 The whole package is distributed under the Apache License Version 2.0.

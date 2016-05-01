@@ -45,7 +45,7 @@ WRITEME.
 Development Status
 ~~~~~~~~~~~~~~~~~~
 
-Pre-Alpha.
+Alpha.
 
 
 .. placeholder: Download
