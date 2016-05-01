@@ -8,9 +8,6 @@
 # pygtk.require().
 #init-hook=
 
-# Profiled execution.
-profile=no
-
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
 ignore=
@@ -36,6 +33,14 @@ unsafe-load-any-extension=no
 # run arbitrary code
 extension-pkg-whitelist=
 
+# Allow optimization of some AST trees. This will activate a peephole AST
+# optimizer, which will apply various small optimizations. For instance, it can
+# be used to obtain the result of joining multiple strings with the addition
+# operator. Joining a lot of strings can lead to a maximum recursion error in
+# Pylint and this flag can prevent that. It has one side effect, the resulting
+# AST will be different than the one from reality.
+optimize-ast=no
+
 
 [MESSAGES CONTROL]
 
@@ -58,10 +63,19 @@ confidence=
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 disable=
-    wrong-import-position
+    locally-disabled,
+    redefined-variable-type,
+    wrong-import-position,
+
+    duplicate-code,
 
 
 [REPORTS]
+
+# Set the output format. Available formats are text, parseable, colorized, msvs
+# (visual studio) and html. You can also give a reporter class, eg
+# mypackage.mymodule.MyReporterClass.
+output-format=text
 
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
@@ -77,10 +91,6 @@ reports=no
 # number of statements analyzed. This is used by the global evaluation report
 # (RP0004).
 evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
-
-# Add a comment according to your evaluation note. This is used by the global
-# evaluation report (RP0004).
-comment=no
 
 # Template used to display messages. This is a python new-style format string
 # used to format the message information. See doc for all details
@@ -127,38 +137,30 @@ ignore-mixin-members=yes
 
 # List of module names for which member attributes should not be checked
 # (useful for modules/projects where namespaces are manipulated during runtime
-# and thus existing member attributes cannot be deduced by static analysis
+# and thus existing member attributes cannot be deduced by static analysis. It
+# supports qualified module names, as well as Unix pattern matching.
 ignored-modules=
     nose.tools
 
 # List of classes names for which member attributes should not be checked
-# (useful for classes with attributes dynamically set).
+# (useful for classes with attributes dynamically set). This supports can work
+# with qualified names.
 ignored-classes=
 
-# When zope mode is activated, add a predefined set of Zope acquired attributes
-# to generated-members.
-zope=no
-
 # List of members which are set dynamically and missed by pylint inference
-# system, and so shouldn't trigger E0201 when accessed. Python regular
+# system, and so shouldn't trigger E1101 when accessed. Python regular
 # expressions are accepted.
 generated-members=
 
 
 [BASIC]
 
-# Required attributes for module, separated by a comma
-required-attributes=
-    __author__,
-    __docformat__,
-
 # List of builtins function names that should not be used, separated by a comma
-bad-functions=
-    apply,input,exec,hasattr
+bad-functions=apply,input,exec
 
 # Good variable names which should always be accepted, separated by a comma
 good-names=
-    _,j,e,c
+    _, j, e, c, fp
 
 # Bad variable names which should always be refused, separated by a comma
 bad-names=foo,bar,baz,toto,tutu,tata
@@ -241,6 +243,12 @@ no-docstring-rgx=(?x)
 docstring-min-length=-1
 
 
+[ELIF]
+
+# Maximum number of nested blocks for function / method body
+max-nested-blocks=5
+
+
 [FORMAT]
 
 # Maximum number of characters on a single line.
@@ -253,17 +261,20 @@ ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 # else.
 single-line-if-stmt=no
 
-# List of optional constructs for which whitespace checking is disabled
-no-space-check=trailing-comma,dict-separator
+# List of optional constructs for which whitespace checking is disabled. `dict-
+# separator` is used to allow tabulation in dicts, etc.: {1  : 1,\n222: 2}.
+# `trailing-comma` allows a space between comma and closing bracket: (a, ).
+# `empty-line` allows space-only lines.
+no-space-check=
 
 # Maximum number of lines in a module
 max-module-lines=1500
 
-# String used as indentation unit. This is usually " " (4 spaces) or "\t" (1
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
 # tab).
 indent-string='    '
 
-# Number of spaces of indent required inside a hanging or continued line.
+# Number of spaces of indent required inside a hanging  or continued line.
 indent-after-paren=4
 
 # Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
@@ -273,7 +284,7 @@ expected-line-ending-format=LF
 [VARIABLES]
 
 # Tells whether we should check for unused import in __init__ files.
-init-import=yes
+init-import=no
 
 # A regular expression matching the name of dummy variables (i.e. expectedly
 # not used).
@@ -335,6 +346,9 @@ min-public-methods=0
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=50
 
+# Maximum number of boolean expressions in a if statement
+max-bool-expr=5
+
 
 [IMPORTS]
 
@@ -355,10 +369,6 @@ int-import-graph=
 
 
 [CLASSES]
-
-# List of interface methods to ignore, separated by a comma. This is used for
-# instance to not check methods defines in Zope's Interface base class.
-ignore-iface-methods=
 
 # List of method names used to declare (i.e. assign) instance attributes.
 defining-attr-methods=__init__,__new__

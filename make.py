@@ -129,6 +129,7 @@ class NoseTest(Target):
         term.green("Removing coverage files...")
         shell.rm_rf(self.dirs['coverage'])
         shell.rm('.coverage')
+        shell.rm_rf('.tox')
 
 
 class Compile(Target):

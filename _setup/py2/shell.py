@@ -82,12 +82,14 @@ def rm(dest):
         if _errno.ENOENT != e.errno:
             raise
 
+
 def rm_rf(dest):
     """ Remove a tree """
     dest = native(dest)
     if _os.path.exists(dest):
         for path in files(dest, '*'):
-            _os.chmod(native(path), 0644)
+            if not _os.path.islink(native(path)):
+                _os.chmod(native(path), 0644)
         _shutil.rmtree(dest)
 
 
