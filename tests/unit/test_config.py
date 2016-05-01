@@ -105,3 +105,4 @@ a = b.c
 [schemas]
 foo = bar
     """.strip() + '\n'
+    fp.close()
