@@ -37,12 +37,16 @@ try:
 except NameError:
     # pylint: disable = redefined-builtin, invalid-name
     unicode = str
+else:
+    unicode = unicode  # pylint: disable = invalid-name
 
 try:
     bytes
 except NameError:
     # pylint: disable = redefined-builtin, invalid-name
     bytes = str
+else:
+    bytes = bytes  # pylint: disable = invalid-name
 
 py2 = bytes is str
 
