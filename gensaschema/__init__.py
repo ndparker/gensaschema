@@ -32,7 +32,7 @@ if __doc__:
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
-__version__ = ('0.5.0', False, 2)
+__version__ = ('0.5.1', False, 2)
 
 from gensaschema import _util
 from gensaschema import _version
