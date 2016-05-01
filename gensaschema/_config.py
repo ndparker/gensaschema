@@ -200,6 +200,12 @@ class Config(object):
                 if tables:
                     result.append('')
                     result.extend(tables)
+                schemas = ['%s = %s' % (key, value)
+                           for key, value in self.schemas.items()]
+                if schemas:
+                    result.append('')
+                    result.append('[schemas]')
+                    result.extend(schemas)
         else:
             result = lines
 
