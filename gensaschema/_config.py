@@ -32,12 +32,19 @@ if __doc__:
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
-import ConfigParser as _config_parser
 import errno as _errno
-try:
-    import cStringIO as _string_io
-except ImportError:
-    import StringIO as _string_io
+
+if 1:  # pylint: disable = using-constant-test
+    # pylint: disable = import-error
+    try:
+        import ConfigParser as _config_parser
+    except ImportError:
+        import configparser as _config_parser
+
+    try:
+        from cStringIO import StringIO as _TextIO
+    except ImportError:
+        from io import StringIO as _TextIO
 
 from . import _template
 
@@ -116,8 +123,8 @@ class Config(object):
             if read is None:
                 try:
                     fp = file(name_or_file)
-                except IOError, e:
-                    if e[0] != _errno.ENOENT:
+                except IOError as e:
+                    if e.errno != _errno.ENOENT:
                         raise
                     lines = []
                 else:
@@ -155,7 +162,7 @@ class Config(object):
                 conf_lines.append('%s = %s' % (name, line))
         parser = _config_parser.RawConfigParser()
         parser.optionxform = lambda x: x
-        parser.readfp(_string_io.StringIO('\n'.join(conf_lines)))
+        parser.readfp(_TextIO('\n'.join(conf_lines)))
         return cls.from_parser(parser, lines=lines)
 
     @classmethod

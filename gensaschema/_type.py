@@ -37,6 +37,8 @@ import itertools as _it
 
 import sqlalchemy as _sa
 
+from . import _util
+
 
 class Type(object):
     """
@@ -117,7 +119,9 @@ class Type(object):
             if not kwds and spec[1] is not None:
                 if _find_class(self._ctype.__init__) is not \
                         _sa.types.TypeEngine:
-                    params.extend(map(repr, getattr(self._ctype, spec[1])))
+                    params.extend(list(
+                        _it.imap(repr, getattr(self._ctype, spec[1]))
+                    ))
 
         params = ', '.join(params)
         if params:
@@ -137,7 +141,8 @@ def _find_class(method):
     :Rtype: ``type``
     """
     name = method.__name__
-    for cls in _inspect.getmro(method.im_class):
+    first_cls = method.im_class if _util.py2 else method.__self__.__class__
+    for cls in _inspect.getmro(first_cls):
         if name in cls.__dict__:
             return cls
     return None

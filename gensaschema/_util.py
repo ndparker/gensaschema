@@ -32,6 +32,21 @@ __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
 
+try:
+    unicode
+except NameError:
+    # pylint: disable = redefined-builtin, invalid-name
+    unicode = str
+
+try:
+    bytes
+except NameError:
+    # pylint: disable = redefined-builtin, invalid-name
+    bytes = str
+
+py2 = bytes is str
+
+
 def find_public(space):
     """
     Determine all public names in space

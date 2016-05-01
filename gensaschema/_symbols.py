@@ -36,6 +36,8 @@ import keyword as _keyword
 import operator as _op
 import weakref as _weakref
 
+from . import _util
+
 
 class SymbolException(Exception):
     """ Symbol error """
@@ -83,9 +85,9 @@ class Symbols(object):
         self.types = _Types(_weakref.proxy(self))
         if symbols is not None:
             symbols = dict(symbols)
-            for key, value in defaults.iteritems():
+            for key, value in defaults.items():
                 symbols.setdefault(key, value)
-            for name, symbol in dict(symbols).iteritems():
+            for name, symbol in dict(symbols).items():
                 self[name] = symbol
 
     def __delitem__(self, name):
@@ -110,13 +112,13 @@ class Symbols(object):
           - `SymbolException` : Symbol could not be set because of some
             conflict
         """
-        if not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, unicode):
             name = str(name).decode('ascii')
         if _keyword.iskeyword(symbol):
             raise SymbolException(
                 "Cannot use keyword %r as symbol" % (symbol,)
             )
-        elif symbol in self._symbols.values():
+        elif symbol in list(self._symbols.values()):
             raise SymbolException("Symbol conflict: %r" % (symbol,))
         elif name in self._symbols and self._symbols[name] != symbol:
             raise SymbolException("Symbol identifier conflict: %r" % (name,))
@@ -136,7 +138,7 @@ class Symbols(object):
         :Exceptions:
           - `KeyError` : Symbol not found
         """
-        if not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, unicode):
             name = str(name).decode('ascii')
         return self._symbols[name]
 
@@ -147,7 +149,7 @@ class Symbols(object):
         :Return: The iterator
         :Rtype: iterable
         """
-        return iter(self._symbols.items())
+        return iter(list(self._symbols.items()))
 
 
 class _Types(object):
@@ -212,7 +214,7 @@ class _Types(object):
         """
         if type_.__class__ in self._types:
             return self._symbols[self._types[type_.__class__]]
-        for class_, symbol in self._types.iteritems():
+        for class_, symbol in self._types.items():
             if isinstance(type_, class_):
                 return self._symbols[symbol]
 
@@ -268,7 +270,7 @@ class _Imports(object):
         :Exceptions:
           - `SymbolException` : Import conflict
         """
-        if not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, unicode):
             name = str(name).decode('ascii')
         imports = dict(self._imports)
         if name in imports:

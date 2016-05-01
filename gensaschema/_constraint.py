@@ -36,6 +36,8 @@ import keyword as _keyword
 import re as _re
 import tokenize as _tokenize
 
+from . import _util
+
 
 class Constraint(object):
     """
@@ -170,12 +172,16 @@ def access_col(col):
         name = col.name
     except AttributeError:
         name = col
-    if isinstance(name, unicode):
-        try:
-            name = name.encode('ascii')
-        except UnicodeError:
-            return ".c[%r]" % name
-    if not _keyword.iskeyword(name) and \
+    try:
+        if _util.py2 and isinstance(name, _util.bytes):
+            name.decode('ascii')
+        else:
+            name.encode('ascii')
+    except UnicodeError:
+        is_ascii = False
+    else:
+        is_ascii = True
+    if is_ascii and not _keyword.iskeyword(name) and \
             _re.match(_tokenize.Name + '$', name):
         return ".c.%s" % name
     return ".c[%r]" % name

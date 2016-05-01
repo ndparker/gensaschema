@@ -41,6 +41,7 @@ import sqlalchemy as _sa
 
 from . import _column
 from . import _constraint
+from . import _util
 
 logger = _logging.getLogger(__name__)
 
@@ -119,9 +120,9 @@ class Table(object):
         self._symbols = symbols
         self.varname = varname
         self.sa_table = table
-        self.constraints = filter(None, [_constraint.Constraint(
+        self.constraints = list(_it.ifilter(None, [_constraint.Constraint(
             con, self.varname, self._symbols,
-        ) for con in table.constraints])
+        ) for con in table.constraints]))
 
     @classmethod
     def by_name(cls, name, varname, metadata, schemas, symbols):
@@ -189,14 +190,14 @@ class Table(object):
             for col in self.sa_table.columns
         ]
         if self.sa_table.schema is not None:
-            args.append('schema=%r' % (unicode(self.sa_table.schema),))
+            args.append('schema=%r' % (_util.unicode(self.sa_table.schema),))
 
         args = ',\n    '.join(args)
         if args:
             args = ',\n    %s,\n' % args
         result = "%s(%r, %s%s)" % (
             self._symbols['table'],
-            unicode(self.sa_table.name),
+            _util.unicode(self.sa_table.name),
             self._symbols['meta'],
             args,
         )
@@ -270,14 +271,14 @@ class TableCollection(tuple):
             """ Map SA table to table object """
             if sa_table.key not in objects:
                 varname = sa_table.name
-                if isinstance(varname, unicode):
+                if _util.py2 and isinstance(varname, _util.unicode):
                     varname = varname.encode('ascii')
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols
                 )
             return objects[sa_table.key]
 
-        tables = map(map_table, metadata.tables.itervalues())
+        tables = list(_it.imap(map_table, metadata.tables.itervalues()))
         tables.sort(key=lambda x: (not(x.is_reference), x.varname))
 
         _break_cycles(metadata)
@@ -333,7 +334,7 @@ def _break_cycles(metadata):
         if deps[0][0].key != deps[-1][1].key:
             raise AssertionError("Could not construct sorted cycle path")
 
-        deps = map(_op.itemgetter(0), deps)
+        deps = list(_it.imap(_op.itemgetter(0), deps))
         first_dep = list(sorted(deps, key=_op.attrgetter('name')))[0]
         while first_dep != deps[-1]:
             deps = [deps[-1]] + deps[:-1]
@@ -355,7 +356,7 @@ def _break_cycles(metadata):
     while True:
         try:
             metadata.sorted_tables
-        except _sa.exc.CircularDependencyError, e:
+        except _sa.exc.CircularDependencyError as e:
             break_cycle(e)
         else:
             break
