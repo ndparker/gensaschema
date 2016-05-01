@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: ascii -*-
 #
-# Copyright 2006 - 2014
+# Copyright 2006 - 2016
 # Andr\xe9 Malo or his licensors, as applicable
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@ __author__ = "Andr\xe9 Malo"
 __author__ = getattr(__author__, 'decode', lambda x: __author__)('latin-1')
 __docformat__ = "restructuredtext en"
 
+import errno as _errno
 import os as _os
 import re as _re
 import sys as _sys
@@ -37,12 +38,20 @@ from _setup import term
 from _setup.make import targets
 
 if _sys.version_info[0] == 3:
+    py3 = 1
     cfgread = dict(encoding='utf-8')
     def textopen(*args):
         return open(*args, **cfgread)
+    exec ("def reraise(*e): raise e[1].with_traceback(e[2])")
 else:
+    py3 = 0
+    try:
+        True
+    except NameError:
+        exec ("True = 1; False = 0")
     textopen = open
     cfgread = {}
+    exec ("def reraise(*e): raise e[0], e[1], e[2]")
 
 
 class Target(make.Target):
@@ -57,7 +66,7 @@ class Target(make.Target):
             'userdoc_source': 'docs/_userdoc',
             'userdoc_build': 'docs/_userdoc/_build',
             'website': 'dist/website',
-            '_website': '_website', # source dir
+            '_website': '_website',  # source dir
             'dist': 'dist',
             'build': 'build',
             'ebuild': '_pkg/ebuilds',
@@ -71,7 +80,7 @@ class Target(make.Target):
         self.ebuild_files = {
             'gensaschema-beta.ebuild.in':
                 'gensaschema-%(VERSION)s_beta%(REV)s.ebuild',
-            'gensaschema.ebuild.in': 'gensaschema-%(VERSION)s.ebuild',
+            # 'gensaschema.ebuild.in': 'gensaschema-%(VERSION)s.ebuild',
         }
 
 
@@ -125,7 +134,7 @@ class NoseTest(Target):
 class Compile(Target):
     """ Compile the python code """
     NAME = "compile"
-    #DEPS = None
+    # DEPS = None
 
     def run(self):
         import setup
@@ -157,7 +166,7 @@ class Compile(Target):
     def compile(self, name):
         path = shell.native(name)
         term.write("%(ERASE)s%(BOLD)s>>> Compiling %(name)s...%(NORMAL)s",
-            name=name)
+                   name=name)
         from distutils import util
         try:
             from distutils import log
@@ -210,7 +219,7 @@ class ApiDoc(Target):
             prepend=[
                 shell.native(self.dirs['lib']),
             ],
-            env={'GENSASCHEMA_NO_C_OVERRIDE': '1', 'EPYDOC_INSPECTOR': '1'}
+            env={'EPYDOC_INSPECTOR': '1'}
         )
 
     def clean(self, scm, dist):
@@ -351,7 +360,7 @@ class SVNRelease(Target):
         revision = parser.getint('package', 'version.revision')
         version = strversion
         if isdev:
-            version += '-dev-r%d' % (revision,)
+            version += '.dev%d' % (revision,)
         trunk_url = self._repo_url()
         if not trunk_url.endswith('/trunk'):
             rex = _re.compile(r'/branches/\d+(?:\.\d+)*\.[xX]$').search
@@ -393,7 +402,7 @@ class SVNRelease(Target):
                     text.append(node.data)
         finally:
             info.unlink()
-        return ''.join(text).encode('utf-8')
+        return (''.decode('ascii')).join(text).encode('utf-8')
 
     def _check_committed(self):
         """ Check if everything is committed """
@@ -433,7 +442,7 @@ class GitRelease(Target):
         revision = parser.getint('package', 'version.revision')
         version = strversion
         if isdev:
-            version += '-dev-r%d' % (revision,)
+            version += '.dev%d' % (revision,)
         git = shell.frompath('git')
         shell.spawn(
             git, 'tag', '-a', '-m', 'Release version ' + version, '--',
@@ -579,21 +588,20 @@ class Version(Target):
 
         self._version_init(strversion, isdev, revision)
         self._version_userdoc(strversion, isdev, revision)
-        #self._version_download(strversion, isdev, revision)
+        self._version_download(strversion, isdev, revision)
         self._version_changes(strversion, isdev, revision)
 
-        #parm = {'VERSION': strversion, 'REV': revision}
-        #for src, dest in self.ebuild_files.items():
-        #    src = "%s/%s" % (self.dirs['ebuild'], src)
-        #    dest = "%s/%s" % (self.dirs['ebuild'], dest % parm)
-        #    term.green("Creating %(name)s...", name=dest)
-        #    shell.cp(src, dest)
+        parm = {'VERSION': strversion, 'REV': revision}
+        for src, dest in self.ebuild_files.items():
+            src = "%s/%s" % (self.dirs['ebuild'], src)
+            dest = "%s/%s" % (self.dirs['ebuild'], dest % parm)
+            term.green("Creating %(name)s...", name=dest)
+            shell.cp(src, dest)
 
     def _version_init(self, strversion, isdev, revision):
         """ Modify version in __init__ """
-        filename = _os.path.join(
-            self.dirs['lib'], 'gensaschema', '__init__.py'
-        )
+        filename = _os.path.join(self.dirs['lib'], 'gensaschema',
+                                 '__init__.py')
         fp = textopen(filename)
         try:
             initlines = fp.readlines()
@@ -617,7 +625,7 @@ class Version(Target):
         """ Modify version in changes """
         filename = _os.path.join(shell.native(self.dirs['docs']), 'CHANGES')
         if isdev:
-            strversion = "%s-dev-r%d" % (strversion, revision)
+            strversion = "%s.dev%d" % (strversion, revision)
         fp = textopen(filename)
         try:
             initlines = fp.readlines()
@@ -638,7 +646,7 @@ class Version(Target):
         shortversion = '.'.join(strversion.split('.')[:2])
         longversion = strversion
         if isdev:
-            longversion = "%s-dev-r%d" % (strversion, revision)
+            longversion = "%s.dev%d" % (strversion, revision)
         fp = textopen(filename)
         try:
             initlines = fp.readlines()
@@ -669,9 +677,10 @@ class Version(Target):
             oldstable = []
             hasstable = False
             try:
-                fp = open(filename)
-            except IOError, e:
-                if e[0] != _errno.ENOENT:
+                fp = textopen(filename)
+            except IOError:
+                e = _sys.exc_info()[1]
+                if e.args[0] != _errno.ENOENT:
                     raise
             else:
                 try:
@@ -684,7 +693,7 @@ class Version(Target):
             if hasstable:
                 dllines = oldstable
             else:
-                VERSION = "%s-dev-%s" % (strversion, revision)
+                VERSION = "%s.dev%d" % (strversion, revision)
                 PATH='dev/'
         newdev = []
         fp = textopen(filename + '.in')
@@ -728,7 +737,7 @@ class Version(Target):
                             if newdev:
                                 indev = newdev
                             fp.write(''.join(indev)
-                                .replace('@@DEVVERSION@@', "%s-dev-r%d" % (
+                                .replace('@@DEVVERSION@@', "%s.dev%d" % (
                                     strversion, revision
                                 ))
                                 .replace('@@PATH@@', 'dev/')

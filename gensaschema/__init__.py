@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+r"""
 :Copyright:
 
- Copyright 2014
+ Copyright 2014 - 2016
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,17 +25,19 @@ u"""
 
 GenSASchema - Static SQLAlchemy Schema Generator.
 """
-__author__ = u"Andr\xe9 Malo"
+if __doc__:
+    # pylint: disable = redefined-builtin
+    __doc__ = __doc__.encode('ascii').decode('unicode_escape')
+__author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
-__version__ = ('0.1.0', False, 1)
+__version__ = ('0.1.0', True, 1)
 
-# pylint: disable = W0611
-from gensaschema import _util
-from gensaschema import _version
-from gensaschema._exceptions import *  # noqa pylint: disable = W0401, W0614, W0622
+from . import _util
+from . import _version
+from ._exceptions import *  # noqa pylint: disable = redefined-builtin, unused-wildcard-import, wildcard-import
 
-#: Version of the gensaschema package
+#: Version of the package
 version = _version.Version(*__version__)
 
 __all__ = _util.find_public(globals())

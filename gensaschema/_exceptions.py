@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2014
+ Copyright 2014 - 2016
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -36,7 +36,7 @@ class Error(Exception):
     """ Base exception for this package """
 
 
-class Warning(Warning):  # pylint: disable = W0622
+class Warning(Warning):  # noqa pylint: disable = redefined-builtin, undefined-variable
     """
     Base warning for this package
 

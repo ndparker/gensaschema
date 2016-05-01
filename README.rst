@@ -32,7 +32,7 @@ Pre-Alpha.
 COPYRIGHT AND LICENSE
 ---------------------
 
-Copyright 2014
+Copyright 2014 - 2016
 André Malo or his licensors, as applicable.
 
 The whole package is distributed under the Apache License Version 2.0.
@@ -43,14 +43,22 @@ at: <http://www.apache.org/licenses/LICENSE-2.0>.
 SYSTEM REQUIREMENTS
 -------------------
 
-You need python 2.7. Python 3 is NOT supported yet.
+You need at least python 2.7 or Python 3 starting with version 3.3.
 
 
 INSTALLATION
 ------------
 
-GenSASchema is set up using the standard python distutils. So you can install
-it using the usual command:
+Using pip
+~~~~~~~~~
+
+$ pip install gensaschema
+
+
+Using distutils
+~~~~~~~~~~~~~~~
+
+Download the package, unpack it, change into the directory
 
 $ python setup.py install
 

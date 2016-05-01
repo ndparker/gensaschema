@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+r"""
 :Copyright:
 
- Copyright 2014
+ Copyright 2014 - 2016
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,12 +25,13 @@ u"""
 
 Tests for gensaschema._version
 """
-__author__ = u"Andr\xe9 Malo"
+if __doc__:
+    # pylint: disable = redefined-builtin
+    __doc__ = __doc__.encode('ascii').decode('unicode_escape')
+__author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
-from nose.tools import (  # pylint: disable = E0611
-    assert_equals, assert_true, assert_false
-)
+from nose.tools import assert_equals, assert_true, assert_false
 
 from gensaschema import _version
 
@@ -73,7 +74,7 @@ def test_attributes():
 def test_string():
     """ Version produces reasonable string """
     ver = _version.Version("1.2.3.4.foo", True, 5)
-    assert_equals(str(ver), "1.2.3.4.foo-dev-r5")
+    assert_equals(str(ver), "1.2.3.4.foo.dev5")
 
     ver = _version.Version("1.2.3.4.foo", False, 5)
     assert_equals(str(ver), "1.2.3.4.foo")
@@ -85,10 +86,10 @@ def test_string():
 def test_unicode():
     """ Version accepts and produces reasonable unicode """
     ver = _version.Version("1.2.3.4.foo", True, 5)
-    assert_equals(unicode(ver), u"1.2.3.4.foo-dev-r5")
+    assert_equals(unicode(ver), u"1.2.3.4.foo.dev5")
 
     ver = _version.Version(u"1.2.3.4.\xe9", True, 5)
-    assert_equals(unicode(ver), u"1.2.3.4.\xe9-dev-r5")
+    assert_equals(unicode(ver), u"1.2.3.4.\xe9.dev5")
 
     ver = _version.Version(u"1.2.3.4.\xe9", False, 5)
     assert_equals(unicode(ver), u"1.2.3.4.\xe9")
