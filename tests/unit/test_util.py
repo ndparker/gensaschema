@@ -33,8 +33,6 @@ __docformat__ = "restructuredtext en"
 
 import types as _types
 
-from nose.tools import assert_equals
-
 from gensaschema import _util
 
 # pylint: disable = protected-access
@@ -46,7 +44,7 @@ def test_find_public_symbols():
     mod.a = 1
     mod._b = 2
 
-    assert_equals(_util.find_public(vars(mod)), ['a'])
+    assert _util.find_public(vars(mod)) == ['a']
 
 
 def test_find_public_all():
@@ -54,4 +52,4 @@ def test_find_public_all():
     mod = _types.ModuleType('lala')
     mod.__all__ = ['_b', 'c']
 
-    assert_equals(_util.find_public(vars(mod)), ['_b', 'c'])
+    assert _util.find_public(vars(mod)) == ['_b', 'c']

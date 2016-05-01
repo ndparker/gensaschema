@@ -2,7 +2,7 @@
 r"""
 :Copyright:
 
- Copyright 2014 - 2016
+ Copyright 2016
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -19,11 +19,11 @@ r"""
  See the License for the specific language governing permissions and
  limitations under the License.
 
-================
- Test Utilities
-================
+===============================
+ Tests for gensaschema._type
+===============================
 
-Test utilities.
+Tests for gensaschema._type
 """
 if __doc__:
     # pylint: disable = redefined-builtin
@@ -31,17 +31,20 @@ if __doc__:
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
-try:
-    from unittest import mock  # pylint: disable = unused-import
-except ImportError:
-    import mock  # noqa
+from gensaschema import _type
 
-unset = object()
+# pylint: disable = protected-access
 
 
-class Bunch(object):
-    """ Bunch object - represent all init kwargs as attributes """
+def test_find_class():
+    """ _find_class() works as expected """
+    class Sub(_type.Type):
+        """ Subtype """
+        def __repr__(self):
+            """ repr"""
+            return "Sub"
 
-    def __init__(self, **kw):
-        """ Initialization """
-        self.__dict__.update(kw)
+    assert _type._find_class(_type.Type, '__init__') is _type.Type
+    assert _type._find_class(_type.Type, '__repr__') is _type.Type
+    assert _type._find_class(Sub, '__init__') is _type.Type
+    assert _type._find_class(Sub, '__repr__') is Sub

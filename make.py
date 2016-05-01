@@ -110,19 +110,16 @@ class Check(Target):
 class Test(Target):
     """ Test the code """
     NAME = "test"
-    DEPS = ["nose-test"]
+    DEPS = ["tox-test"]
 
 
-class NoseTest(Target):
-    """ Run the nose tests """
-    NAME = "nose-test"
-    DEPS = ["compile-quiet"]
+class ToxTest(Target):
+    """ Run the tests via tox """
+    NAME = "tox-test"
+    DEPS = ["compile-quiet", "MANIFEST"]
 
     def run(self):
-        if shell.spawn(
-                'nosetests',
-                '-c', 'package.cfg',
-                self.dirs['tests'], self.dirs['lib']):
+        if shell.spawn('tox'):
             raise RuntimeError('tests failed')
 
     def clean(self, scm, dist):
@@ -130,6 +127,7 @@ class NoseTest(Target):
         shell.rm_rf(self.dirs['coverage'])
         shell.rm('.coverage')
         shell.rm_rf('.tox')
+        shell.rm_rf('.cache')
 
 
 class Compile(Target):

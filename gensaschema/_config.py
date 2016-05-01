@@ -122,7 +122,7 @@ class Config(object):
             read = getattr(name_or_file, 'read', None)
             if read is None:
                 try:
-                    fp = file(name_or_file)
+                    fp = open(name_or_file)
                 except IOError as e:
                     if e.errno != _errno.ENOENT:
                         raise
@@ -160,9 +160,15 @@ class Config(object):
                 if '.' in name:
                     name = name.rsplit('.', 1)[1]
                 conf_lines.append('%s = %s' % (name, line))
-        parser = _config_parser.RawConfigParser()
-        parser.optionxform = lambda x: x
-        parser.readfp(_TextIO('\n'.join(conf_lines)))
+        if bytes is str:
+            parser = _config_parser.RawConfigParser()
+            parser.optionxform = lambda x: x
+            parser.readfp(_TextIO('\n'.join(conf_lines)))
+        else:
+            parser = _config_parser.RawConfigParser(strict=False)
+            parser.optionxform = lambda x: x
+            # pylint: disable = no-member
+            parser.read_file(_TextIO('\n'.join(conf_lines)))
         return cls.from_parser(parser, lines=lines)
 
     @classmethod
@@ -209,4 +215,9 @@ class Config(object):
         else:
             result = lines
 
-        fp.write('\n'.join([line.rstrip() for line in result]) + '\n')
+        content = '\n'.join([line.rstrip() for line in result]) + '\n'
+        try:
+            fp.write('')
+        except TypeError:
+            content = content.encode('utf-8')
+        fp.write(content)

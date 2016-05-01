@@ -144,13 +144,28 @@ class Version(tuple):
         :Return: The string representation
         :Rtype: ``str``
         """
-        return "%s.%s(%r, is_dev=%r, revision=%r)" % (
-            self.__class__.__module__,
-            self.__class__.__name__,
-            self._str,
-            self.is_dev,
-            self.revision,
-        )
+        if py3:
+            return "%s.%s('%s', is_dev=%r, revision=%r)" % (
+                self.__class__.__module__,
+                self.__class__.__name__,
+                (
+                    self._str
+                    .replace('\\', '\\\\')
+                    .encode('unicode_escape')
+                    .decode('ascii')
+                    .replace("'", "\\'")
+                ),
+                self.is_dev,
+                self.revision,
+            )
+        else:
+            return "%s.%s(%r, is_dev=%r, revision=%r)" % (
+                self.__class__.__module__,
+                self.__class__.__name__,
+                self._str,
+                self.is_dev,
+                self.revision,
+            )
 
     def __str__(self):
         """

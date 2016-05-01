@@ -34,8 +34,6 @@ __docformat__ = "restructuredtext en"
 import os as _os
 import tempfile as _tempfile
 
-from nose.tools import assert_equals
-
 from gensaschema import _config
 
 # pylint: disable = protected-access
@@ -53,19 +51,19 @@ def fixture(name):
 def test_init():
     """ Config initialization works as expected """
     inst = _config.Config.from_file(fixture('config1.schema'))
-    assert_equals(inst.tables, [
+    assert inst.tables == [
         ('Yo', 'Yo'),
         ('some', 'table'),
         ('somethingElse', 'somethingElse'),
         ('y', 'x.y'),
         ('a', 'b.c'),
-    ])
-    assert_equals(inst.schemas, {'foo': 'bar'})
-    assert_equals(inst._lines, [
+    ]
+    assert inst.schemas == {'foo': 'bar'}
+    assert inst._lines == [
         '# This is a comment. I love comments.\n', '#\n', '\n', 'Yo\n',
         'some = table\n', 'somethingElse\n', 'x.y\n', 'a = b.c\n', '\n',
         '[schemas]\n', 'foo = bar\n',
-    ])
+    ]
 
 
 def test_dump():
@@ -78,11 +76,11 @@ def test_dump():
         ('a', 'b.c'),
     ], schemas={'foo': 'bar'})
 
-    fp = _tempfile.TemporaryFile()
+    fp = _tempfile.TemporaryFile(mode="w+")
     inst.dump(fp)
     fp.seek(0, 0)
 
-    assert_equals(fp.read(), """
+    assert fp.read() == """
 # This is a comment. I love comments.
 #
 # This files contains table names, one per line
@@ -106,4 +104,4 @@ a = b.c
 
 [schemas]
 foo = bar
-    """.strip() + '\n')
+    """.strip() + '\n'

@@ -16,3 +16,4 @@ MANIFEST
 .coverage
 docs/coverage/
 .tox
+.cache

@@ -34,13 +34,13 @@ __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
 __version__ = ('0.1.0', True, 1)
 
-from . import _util
-from . import _version
-from ._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
+from gensaschema import _util
+from gensaschema import _version
+from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
 
-from ._config import Config  # noqa
-from ._schema import Schema  # noqa
-from ._symbols import Symbols, SymbolException  # noqa
+from gensaschema._config import Config  # noqa
+from gensaschema._schema import Schema  # noqa
+from gensaschema._symbols import Symbols, SymbolException  # noqa
 
 #: Version of the package
 version = _version.Version(*__version__)

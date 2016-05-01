@@ -37,8 +37,6 @@ import itertools as _it
 
 import sqlalchemy as _sa
 
-from . import _util
-
 
 class Type(object):
     """
@@ -117,7 +115,7 @@ class Type(object):
                 else:
                     params.append(rvalue)
             if not kwds and spec[1] is not None:
-                if _find_class(self._ctype.__init__) is not \
+                if _find_class(self._ctype, '__init__') is not \
                         _sa.types.TypeEngine:
                     params.extend(list(
                         _it.imap(repr, getattr(self._ctype, spec[1]))
@@ -129,19 +127,20 @@ class Type(object):
         return "%s.%s%s" % (mod, self._ctype.__class__.__name__, params)
 
 
-def _find_class(method):
+def _find_class(first_cls, name):
     """
     Find class where a method is defined
 
     :Parameters:
-      `method` : Method
-        Method to lookup
+      `first_cls` : type
+        Class to start with
+
+      `name` : ``str``
+        Method name
 
     :Return: class or ``None``
     :Rtype: ``type``
     """
-    name = method.__name__
-    first_cls = method.im_class if _util.py2 else method.__self__.__class__
     for cls in _inspect.getmro(first_cls):
         if name in cls.__dict__:
             return cls
