@@ -1,3 +1,9 @@
+Changes with version 0.5.3
+
+ *) Type instances were not being inspected properly (leftover from py3
+    transition)
+
+
 Changes with version 0.5.1 + 0.5.2
 
  *) Various python3 fixes

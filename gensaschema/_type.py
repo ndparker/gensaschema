@@ -47,6 +47,9 @@ class Type(object):
 
       `_dialect` : ``str``
         Dialect name
+
+      `_symbols` : ``Symbols``
+        Symbol table
     """
 
     def __init__(self, ctype, dialect_name, symbols):
@@ -59,6 +62,9 @@ class Type(object):
 
           `dialect_name` : ``str``
             Dialect name
+
+          `symbols` : ``Symbols``
+            Symbol table
         """
         self._ctype = ctype
         self._dialect = dialect_name
@@ -140,6 +146,9 @@ def _find_class(first_cls, name):
     :Return: class or ``None``
     :Rtype: ``type``
     """
+    if not isinstance(first_cls, type):
+        first_cls = first_cls.__class__
+
     for cls in _inspect.getmro(first_cls):
         if name in cls.__dict__:
             return cls
