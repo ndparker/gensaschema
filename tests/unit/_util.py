@@ -19,30 +19,42 @@ r"""
  See the License for the specific language governing permissions and
  limitations under the License.
 
-==================================================
- GenSASchema - Static SQLAlchemy Schema Generator
-==================================================
+================
+ Test Utilities
+================
 
-GenSASchema generates static schema definitions using SQLAlchemy's
-inspection capabilities.
+Test utilities.
 """
-if __doc__:  # pragma: no branch
+if __doc__:
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
-__license__ = "Apache License, Version 2.0"
-__version__ = ('0.5.3', False, 5)
 
-from gensaschema import _util
-from gensaschema import _version
-from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
+# pylint: disable = unused-import
+try:
+    from unittest import mock  # noqa
+except ImportError:
+    import mock  # noqa
 
-from gensaschema._config import Config  # noqa
-from gensaschema._schema import Schema  # noqa
-from gensaschema._symbols import Symbols, SymbolException  # noqa
 
-#: Version of the package
-version = _version.Version(*__version__)
+class Bunch(object):
+    """ Bunch object - represent all init kwargs as attributes """
 
-__all__ = _util.find_public(globals())
+    def __init__(self, **kw):
+        """ Initialization """
+        self.__dict__.update(kw)
+
+
+def uni(value):
+    """
+    Create unicode from raw string with unicode escapes
+
+    :Parameters:
+      `value` : ``str``
+        String, which encodes to ascii and decodes as unicode_escape
+
+    :Return: The decoded string
+    :Rtype: ``unicode``
+    """
+    return value.encode('ascii').decode('unicode_escape')
