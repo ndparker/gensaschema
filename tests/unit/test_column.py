@@ -47,11 +47,18 @@ def test_ServerDefault():
     default = _test.Bunch(for_update=None, arg=12)
     symbols = dict(default='DEF')
 
-    inst = _column.ServerDefault(default, symbols)
-    assert repr(inst) == "DEF(u'12')"
+    if bytes is str:
+        inst = _column.ServerDefault(default, symbols)
+        assert repr(inst) == "DEF(u'12')"
 
-    default.for_update = u'lalala'
-    assert repr(inst) == "DEF(u'12', for_update=True)"
+        default.for_update = u'lalala'
+        assert repr(inst) == "DEF(u'12', for_update=True)"
+    else:
+        inst = _column.ServerDefault(default, symbols)
+        assert repr(inst) == "DEF('12')"
+
+        default.for_update = u'lalala'
+        assert repr(inst) == "DEF('12', for_update=True)"
 
 
 def test_Column():
@@ -68,8 +75,12 @@ def test_Column():
     symbols = _symbols.Symbols(symbols=dict(type="TT"))
 
     inst = _column.Column.from_sa(table.c.Lala, symbols)
-    assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
-                          'server_default=D(u\'""\'))')
+    if bytes is str:
+        assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
+                              'server_default=D(u\'""\'))')
+    else:
+        assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
+                              'server_default=D(\'""\'))')
 
     inst = _column.Column.from_sa(table.c.lolo, symbols)
     assert repr(inst) == ("C('lolo', TT.INTEGER, nullable=False, "

@@ -36,6 +36,8 @@ import inspect as _inspect
 
 import sqlalchemy as _sa
 
+_have_signature = hasattr(_inspect, 'signature')
+
 
 class Type(object):
     """
@@ -95,36 +97,73 @@ class Type(object):
         :Return: The string representation
         :Rtype: ``str``
         """
+        # pylint: disable = too-many-branches, too-many-statements
+
         mod = self._symbols.types.resolve(self._ctype, self._dialect)
         params = []
-        try:
-            spec = _inspect.getargspec(self._ctype.__init__)
-        except TypeError:
-            pass
+        if _have_signature:
+            try:
+                # pylint: disable = no-member
+                sign = _inspect.signature(self._ctype.__init__)
+            except TypeError:
+                pass
+            else:
+                varargs, kwds = None, False
+                for arg in sign.parameters.values():
+                    if arg.kind == arg.VAR_POSITIONAL:
+                        varargs = arg
+                        continue
+                    elif arg.kind == arg.VAR_KEYWORD:
+                        continue
+
+                    value = getattr(self._ctype, arg.name)
+                    if arg.default is not arg.empty and arg.default == value:
+                        kwds = arg.kind != arg.POSITIONAL_ONLY
+                        continue
+                    if isinstance(value, _sa.types.TypeEngine):
+                        rvalue = repr(self.__class__(value, self._dialect,
+                                                     self._symbols))
+                    else:
+                        rvalue = repr(value)
+
+                    if kwds:
+                        params.append('%s=%s' % (arg.name, rvalue))
+                    else:
+                        params.append(rvalue)
+                if not kwds and varargs is not None:
+                    if _find_class(self._ctype, '__init__') is not \
+                            _sa.types.TypeEngine:
+                        params.extend(list(
+                            map(repr, getattr(self._ctype, varargs.name))
+                        ))
         else:
-            defaults = dict(zip(spec[0][::-1], (spec[3] or ())[::-1]))
-            kwds = False
-            for arg in spec[0][1:]:
-                value = getattr(self._ctype, arg)
-                if arg in defaults and defaults[arg] == value:
-                    kwds = True
-                    continue
-                if isinstance(value, _sa.types.TypeEngine):
-                    rvalue = repr(
-                        self.__class__(value, self._dialect, self._symbols)
-                    )
-                else:
-                    rvalue = repr(value)
-                if kwds:
-                    params.append('%s=%s' % (arg, rvalue))
-                else:
-                    params.append(rvalue)
-            if not kwds and spec[1] is not None:
-                if _find_class(self._ctype, '__init__') is not \
-                        _sa.types.TypeEngine:
-                    params.extend(list(
-                        map(repr, getattr(self._ctype, spec[1]))
-                    ))
+            try:
+                spec = _inspect.getargspec(self._ctype.__init__)
+            except TypeError:
+                pass
+            else:
+                defaults = dict(zip(spec[0][::-1], (spec[3] or ())[::-1]))
+                kwds = False
+                for arg in spec[0][1:]:
+                    value = getattr(self._ctype, arg)
+                    if arg in defaults and defaults[arg] == value:
+                        kwds = True
+                        continue
+                    if isinstance(value, _sa.types.TypeEngine):
+                        rvalue = repr(self.__class__(value, self._dialect,
+                                                     self._symbols))
+                    else:
+                        rvalue = repr(value)
+                    if kwds:
+                        params.append('%s=%s' % (arg, rvalue))
+                    else:
+                        params.append(rvalue)
+                if not kwds and spec[1] is not None:
+                    if _find_class(self._ctype, '__init__') is not \
+                            _sa.types.TypeEngine:
+                        params.extend(list(
+                            map(repr, getattr(self._ctype, spec[1]))
+                        ))
 
         params = ', '.join(params)
         if params:
