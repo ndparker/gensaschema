@@ -105,7 +105,7 @@ class Type(object):
             try:
                 # pylint: disable = no-member
                 sign = _inspect.signature(self._ctype.__init__)
-            except TypeError:
+            except (TypeError, ValueError):
                 pass
             else:
                 varargs, kwds = None, False
@@ -134,7 +134,7 @@ class Type(object):
                     if _find_class(self._ctype, '__init__') is not \
                             _sa.types.TypeEngine:
                         params.extend(list(
-                            map(repr, getattr(self._ctype, varargs.name))
+                            map(repr, getattr(self._ctype, varargs.name, ()))
                         ))
         else:
             try:
