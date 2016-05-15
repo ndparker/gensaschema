@@ -26,7 +26,7 @@ Constraint inspection and representation.
  limitations under the License.
 
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -97,15 +97,29 @@ class Constraint(object):
             except IndexError:
                 return -1
 
-        return cmp((
+        return _util.cmp((
             bytype(self.constraint),
             self.options is not None,
             self.constraint.name,
+            repr(self),
         ), (
             bytype(other.constraint),
             other.options is not None,
             other.constraint.name,
+            repr(other),
         ))
+
+    def __lt__(self, other, _cmp=__cmp__):
+        """ Check for '<' """
+        return _cmp(self, other) < 0
+
+    def __eq__(self, other, _cmp=__cmp__):
+        """ Check for '==' """
+        return _cmp(self, other) == 0
+
+    def __gt__(self, other, _cmp=__cmp__):
+        """ Check for '>' """
+        return _cmp(self, other) > 0
 
     def repr(self, symbol, args, keywords=(), short=False):
         """

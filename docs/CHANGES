@@ -1,7 +1,11 @@
 Changes with version
 
- *) More python3 fixes: Fixed one itervalues() leftover, use
-    inspect.signature() if available, instead of .getargspec().
+ *) Fixed symbol table creation without any extra symbols
+
+ *) More python3 fixes:
+    - Fixed one itervalues() leftover
+    - use inspect.signature() if available, instead of .getargspec()
+    - Fix constraint ordering (cmp() ./. Py3)
 
 
 Changes with version 0.5.3

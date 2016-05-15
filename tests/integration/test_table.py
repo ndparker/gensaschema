@@ -58,7 +58,7 @@ def test_table(tmpdir):
     db = _sa.create_engine('sqlite:///%s' % (filename,))
     meta = _sa.MetaData(db)
     table = _table.Table.by_name('stocks', 'STOCKS', meta, {},
-                                 _symbols.Symbols(dict(type='t')))
+                                 _symbols.Symbols())
 
     expected = (
         "T(u'stocks', m,\n"

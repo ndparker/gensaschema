@@ -26,7 +26,7 @@ Schema module generation code.
  limitations under the License.
 
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -128,7 +128,8 @@ class Schema(object):
             File to write to
         """
         imports = [item % self._symbols for item in self._symbols.imports]
-        if imports:
+        if imports:  # pragma: no branch
+            imports.sort()
             imports.append('')
         lines = []
         for table in self._tables:
@@ -136,9 +137,10 @@ class Schema(object):
                 continue
             if not lines:
                 lines.append('')
-            lines.append('# Table "%s"' % (
-                table.sa_table.name.encode('ascii', 'backslashescape')
-            ))
+            name = table.sa_table.name.encode('ascii', 'backslashescape')
+            if bytes is not str:  # pragma: no cover
+                name = name.decode('ascii')
+            lines.append('# Table "%s"' % (name,))
             lines.append('%s = %r' % (table.varname, table))
             lines.append('')
             lines.append('')

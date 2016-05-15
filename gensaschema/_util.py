@@ -25,7 +25,7 @@ r"""
 
 Misc utilities.
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -34,21 +34,28 @@ __docformat__ = "restructuredtext en"
 
 try:
     unicode
-except NameError:
+except NameError:  # pragma: no cover
     # pylint: disable = redefined-builtin, invalid-name
     unicode = str
-else:
+else:  # pragma: no cover
     unicode = unicode  # pylint: disable = invalid-name
 
 try:
     bytes
-except NameError:
+except NameError:  # pragma: no cover
     # pylint: disable = redefined-builtin, invalid-name
     bytes = str
-else:
+else:  # pragma: no cover
     bytes = bytes  # pylint: disable = invalid-name
 
 py2 = bytes is str
+
+try:
+    cmp
+except NameError:  # pragma: no cover
+    cmp = lambda a, b: (a > b) - (a < b)  # pylint: disable = redefined-builtin
+else:  # pragma: no cover
+    cmp = cmp
 
 
 def find_public(space):

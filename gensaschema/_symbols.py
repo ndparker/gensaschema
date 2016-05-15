@@ -26,7 +26,7 @@ Symbol management.
  limitations under the License.
 
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -51,10 +51,10 @@ class Symbols(object):
       `_symbols` : ``dict``
         Symbols
 
-      `imports` : `Imports`
+      `imports` : `_Imports`
         Import container
 
-      `types` : `Types`
+      `types` : `_Types`
         Type container
     """
 
@@ -83,12 +83,14 @@ class Symbols(object):
         )
         self.imports = _Imports(imports=imports)
         self.types = _Types(_weakref.proxy(self))
-        if symbols is not None:
+        if symbols is None:
+            symbols = {}
+        else:
             symbols = dict(symbols)
-            for key, value in defaults.items():
-                symbols.setdefault(key, value)
-            for name, symbol in dict(symbols).items():
-                self[name] = symbol
+        for key, value in defaults.items():
+            symbols.setdefault(key, value)
+        for name, symbol in dict(symbols).items():
+            self[name] = symbol
 
     def __delitem__(self, name):
         """ Remove symbol entry if available """

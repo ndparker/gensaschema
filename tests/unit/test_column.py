@@ -37,7 +37,7 @@ from sqlalchemy.dialects import mysql as _mysql
 from gensaschema import _column
 from gensaschema import _symbols
 
-from . import _util as _test
+from .. import _util as _test
 
 # pylint: disable = invalid-name
 

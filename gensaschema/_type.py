@@ -26,7 +26,7 @@ Type inspection and representation.
  limitations under the License.
 
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -101,7 +101,8 @@ class Type(object):
 
         mod = self._symbols.types.resolve(self._ctype, self._dialect)
         params = []
-        if _have_signature:
+
+        if _have_signature:  # pragma: no cover
             try:
                 # pylint: disable = no-member
                 sign = _inspect.signature(self._ctype.__init__)
@@ -136,7 +137,8 @@ class Type(object):
                         params.extend(list(
                             map(repr, getattr(self._ctype, varargs.name, ()))
                         ))
-        else:
+
+        else:  # pragma: no cover
             try:
                 spec = _inspect.getargspec(self._ctype.__init__)
             except TypeError:
@@ -188,7 +190,7 @@ def _find_class(first_cls, name):
     if not isinstance(first_cls, type):
         first_cls = first_cls.__class__
 
-    for cls in _inspect.getmro(first_cls):
+    for cls in _inspect.getmro(first_cls):  # pragma: no branch
         if name in cls.__dict__:
             return cls
     return None

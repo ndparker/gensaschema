@@ -26,7 +26,7 @@ Table inspection and representation
  limitations under the License.
 
 """
-if __doc__:
+if __doc__:  # pragma: no branch
     # pylint: disable = redefined-builtin
     __doc__ = __doc__.encode('ascii').decode('unicode_escape')
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
@@ -162,7 +162,7 @@ class Table(object):
             _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
                                      message=r'^Incomplete reflection of '
                                              r'column definition')
-            _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
+            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
                                      message=r'^Could not instantiate type ')
 
             table = _sa.Table(name, metadata, autoload=True, **kwargs)
