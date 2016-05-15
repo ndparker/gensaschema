@@ -34,10 +34,10 @@ __docformat__ = "restructuredtext en"
 
 try:
     unicode
-except NameError:
+except NameError:  # pragma: no cover
     py3 = True
     unicode = str  # pylint: disable = redefined-builtin, invalid-name
-else:
+else:  # pragma: no cover
     py3 = False
 
 
@@ -87,12 +87,12 @@ class Version(tuple):
         versionstring = versionstring.strip()
         isuni = not(py3) and isinstance(versionstring, unicode)
         strs = []
-        if versionstring:
+        if versionstring:  # pragma: no branch
             for item in versionstring.split('.'):
                 try:
                     item = int(item)
                     strs.append(str(item))
-                except ValueError:
+                except ValueError:  # pragma: no cover
                     if py3:
                         strs.append(item)
                     elif isuni:
@@ -137,7 +137,7 @@ class Version(tuple):
         self.is_dev = bool(is_dev)
         self.revision = int(revision)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         """
         Create a development string representation
 
@@ -179,7 +179,7 @@ class Version(tuple):
             ("", ".dev%d" % self.revision)[self.is_dev],
         )
 
-    def __unicode__(self):
+    def __unicode__(self):  # pragma: no cover
         """
         Create a version like unicode representation
 
@@ -193,7 +193,7 @@ class Version(tuple):
             (u(""), u(".dev%d") % self.revision)[self.is_dev],
         )
 
-    def __bytes__(self):
+    def __bytes__(self):  # pragma: no cover
         """
         Create a version like bytes representation (utf-8 encoded)
 

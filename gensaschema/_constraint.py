@@ -113,14 +113,6 @@ class Constraint(object):
         """ Check for '<' """
         return _cmp(self, other) < 0
 
-    def __eq__(self, other, _cmp=__cmp__):
-        """ Check for '==' """
-        return _cmp(self, other) == 0
-
-    def __gt__(self, other, _cmp=__cmp__):
-        """ Check for '>' """
-        return _cmp(self, other) > 0
-
     def repr(self, symbol, args, keywords=(), short=False):
         """
         Base repr for all constraints
@@ -187,7 +179,7 @@ def access_col(col):
     except AttributeError:
         name = col
     try:
-        if _util.py2 and isinstance(name, _util.bytes):
+        if _util.py2 and isinstance(name, _util.bytes):  # pragma: no cover
             name.decode('ascii')
         else:
             name.encode('ascii')

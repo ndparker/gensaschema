@@ -270,7 +270,9 @@ class TableCollection(tuple):
             """ Map SA table to table object """
             if sa_table.key not in objects:
                 varname = sa_table.name
-                if _util.py2 and isinstance(varname, _util.unicode):
+                if _util.py2 and \
+                        isinstance(varname,
+                                   _util.unicode):  # pragma: no cover
                     varname = varname.encode('ascii')
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols

@@ -38,12 +38,12 @@ if 1:  # pylint: disable = using-constant-test
     # pylint: disable = import-error
     try:
         import ConfigParser as _config_parser
-    except ImportError:
+    except ImportError:  # pragma: no cover
         import configparser as _config_parser
 
     try:
         from cStringIO import StringIO as _TextIO
-    except ImportError:
+    except ImportError:  # pragma: no cover
         from io import StringIO as _TextIO
 
 from . import _template

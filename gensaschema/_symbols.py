@@ -114,7 +114,7 @@ class Symbols(object):
           - `SymbolException` : Symbol could not be set because of some
             conflict
         """
-        if _util.py2 and not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, unicode):  # pragma: no cover
             name = str(name).decode('ascii')
         if _keyword.iskeyword(symbol):
             raise SymbolException(
@@ -272,7 +272,7 @@ class _Imports(object):
         :Exceptions:
           - `SymbolException` : Import conflict
         """
-        if _util.py2 and not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, unicode):  # pragma: no cover
             name = str(name).decode('ascii')
         imports = dict(self._imports)
         if name in imports:

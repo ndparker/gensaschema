@@ -32,7 +32,6 @@ __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 
 import os as _os
-import sqlite3 as _sqlite3
 import sys as _sys
 
 import sqlalchemy as _sa
@@ -48,47 +47,57 @@ def test_schema(tmpdir):
     tmpdir = str(tmpdir)
     filename = _os.path.join(tmpdir, 'tabletest.db')
 
-    db = _sqlite3.connect(filename)
-    db.cursor().execute('''
-        CREATE TABLE names (
-            id  INT(11) PRIMARY KEY,
-            first  VARCHAR(128) DEFAULT NULL,
-            last   VARCHAR(129) NOT NULL
-        );
-    ''')
-    db.cursor().execute('''
-        CREATE TABLE emails (
-            id  INT(11) PRIMARY KEY,
-            address  VARCHAR(127) NOT NULL,
+    db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
+    try:
+        db.execute('''
+            CREATE TABLE names (
+                id  INT(11) PRIMARY KEY,
+                first  VARCHAR(128) DEFAULT NULL,
+                last   VARCHAR(129) NOT NULL
+            );
+        ''')
+        db.execute('''
+            CREATE TABLE emails (
+                id  INT(11) PRIMARY KEY,
+                address  VARCHAR(127) NOT NULL,
 
-            UNIQUE (address)
-        );
-    ''')
-    db.cursor().execute('''
-        CREATE TABLE addresses (
-            id  INT(11) PRIMARY KEY,
-            zip_code  VARCHAR(32) DEFAULT NULL,
-            place     VARCHAR(78) NOT NULL,
-            street    VARCHAR(64) DEFAULT NULL
-        );
-    ''')
-    db.cursor().execute('''
-        CREATE TABLE persons (
-            id  INT(11) PRIMARY KEY,
-            address  INT(11) NOT NULL,
-            name  INT(11) NOT NULL,
-            email  INT(11) DEFAULT NULL,
+                UNIQUE (address)
+            );
+        ''')
+        db.execute('''
+            CREATE TABLE addresses (
+                id  INT(11) PRIMARY KEY,
+                zip_code  VARCHAR(32) DEFAULT NULL,
+                place     VARCHAR(78) NOT NULL,
+                street    VARCHAR(64) DEFAULT NULL
+            );
+        ''')
+        db.execute('''
+            CREATE TABLE persons (
+                id  INT(11) PRIMARY KEY,
+                address  INT(11) NOT NULL,
+                name  INT(11) NOT NULL,
+                email  INT(11) DEFAULT NULL,
 
-            FOREIGN KEY (address) REFERENCES addresses (id),
-            FOREIGN KEY (name) REFERENCES names (id),
-            FOREIGN KEY (email) REFERENCES emails (id)
-        );
-    ''')
-    db.close()
-
-    db = _sa.create_engine('sqlite:///%s' % (filename,))
-    schema = _schema.Schema(db, [('persons', 'persons')], {},
-                            _symbols.Symbols(dict(type='t')), dbname='foo')
+                FOREIGN KEY (address) REFERENCES addresses (id),
+                FOREIGN KEY (name) REFERENCES names (id),
+                FOREIGN KEY (email) REFERENCES emails (id)
+            );
+        ''')
+        db.execute('''
+            ALTER TABLE addresses
+                ADD COLUMN owner INT(11) DEFAULT NULL REFERENCES persons (id);
+        ''')
+        db.execute('''
+            CREATE TABLE temp.blub (id INT PRIMARY KEY);
+        ''')
+        schema = _schema.Schema(
+            db, [('persons', 'persons'), ('blah', 'temp.blub')],
+            {'temp': 'foo.bar.baz'},
+            _symbols.Symbols(dict(type='t')), dbname='foo'
+        )
+    finally:
+        db.close()
 
     with open(_os.path.join(tmpdir, "schema.py"), 'w') as fp:
         schema.dump(fp)
@@ -111,6 +120,7 @@ __docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
 from sqlalchemy.dialects import sqlite as t
+from foo.bar import baz as _baz
 from gensaschema.constraints import ForeignKey as ForeignKey
 from gensaschema.constraints import PrimaryKey as PrimaryKey
 from gensaschema.constraints import Unique as Unique
@@ -126,14 +136,21 @@ addresses = T(u'addresses', m,
     C('zip_code', t.VARCHAR(32), server_default=D(u'NULL')),
     C('place', t.VARCHAR(78), nullable=False),
     C('street', t.VARCHAR(64), server_default=D(u'NULL')),
+    C('owner', t.INTEGER, server_default=D(u'NULL')),
 )
 PrimaryKey(addresses.c.id)
 
+# Defined at table 'persons':
+# ForeignKey(
+#     [addresses.c.owner],
+#     [persons.c.id],
+# )
+
 
 # Table "emails"
-emails = T(u\'emails\', m,
-    C(\'id\', t.INTEGER, nullable=False),
-    C(\'address\', t.VARCHAR(127), nullable=False),
+emails = T(u'emails', m,
+    C('id', t.INTEGER, nullable=False),
+    C('address', t.VARCHAR(127), nullable=False),
 )
 PrimaryKey(emails.c.id)
 Unique(emails.c.address)
@@ -169,6 +186,12 @@ ForeignKey(
     [names.c.id],
 )
 
+# Foreign key belongs to 'addresses':
+ForeignKey(
+    [addresses.c.owner],
+    [persons.c.id],
+)
+
 
 del _sa, T, C, D, m
 
@@ -178,6 +201,7 @@ del _sa, T, C, D, m
         expected = expected.replace("u'", "'")
     assert result == expected
 
+    result = result.replace('from foo.bar import baz as _baz', '')
     glob, loc = {}, {}
     code = compile(result, "schema.py", "exec")
     # pylint: disable = exec-used, eval-used

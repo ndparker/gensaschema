@@ -47,17 +47,14 @@ def test_table(tmpdir):
     tmpdir = str(tmpdir)
     filename = _os.path.join(tmpdir, 'tabletest.db')
 
-    db = _sqlite3.connect(filename)
-    db.cursor().execute('''
+    db = _sa.create_engine('sqlite:///%s' % (filename,))
+    meta = _sa.MetaData(db)
+    db.execute("""
         CREATE TABLE stocks
         (date DATE, trans text, symbol varchar(12), qty real, price real,
          primary key (date))
-    ''')
-    db.close()
-
-    db = _sa.create_engine('sqlite:///%s' % (filename,))
-    meta = _sa.MetaData(db)
-    table = _table.Table.by_name('stocks', 'STOCKS', meta, {},
+    """)
+    table = _table.Table.by_name('main.stocks', 'STOCKS', meta, {},
                                  _symbols.Symbols())
 
     expected = (
@@ -67,6 +64,7 @@ def test_table(tmpdir):
         "    C('symbol', t.VARCHAR(12)),\n"
         "    C('qty', t.REAL),\n"
         "    C('price', t.REAL),\n"
+        "    schema=u'main',\n"
         ")\n"
         "PrimaryKey(STOCKS.c.date)"
     )
