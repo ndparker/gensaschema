@@ -164,6 +164,10 @@ class Table(object):
                                              r'column definition')
             _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
                                      message=r'^Could not instantiate type ')
+            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
+                                     message=r'^Skipped unsupported '
+                                             r'reflection of expression-based'
+                                             r' index ')
 
             table = _sa.Table(name, metadata, autoload=True, **kwargs)
             # while 1:
