@@ -1,6 +1,7 @@
 Changes with version
 
  *) Ignore SA warning about expressional and partial index reflections
+    [@sebastianseitz]
 
 
 Changes with version 0.5.4
