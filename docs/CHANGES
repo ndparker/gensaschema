@@ -1,6 +1,6 @@
 Changes with version
 
- *) Ignore SA warning about expressional index reflection
+ *) Ignore SA warning about expressional and partial index reflections
 
 
 Changes with version 0.5.4
