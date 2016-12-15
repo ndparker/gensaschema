@@ -168,6 +168,8 @@ class Table(object):
                                      message=r'^Skipped unsupported '
                                              r'reflection of expression-based'
                                              r' index ')
+            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
+                                     message=r'^Predicate of partial index ')
 
             table = _sa.Table(name, metadata, autoload=True, **kwargs)
             # while 1:
