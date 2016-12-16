@@ -26,7 +26,7 @@ GenSASchema is a static SQLAlchemy schema generator.
 DEVELOPMENT STATUS
 ------------------
 
-Alpha.
+Beta.
 
 
 COPYRIGHT AND LICENSE

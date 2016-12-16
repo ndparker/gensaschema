@@ -1,4 +1,5 @@
 Makefile
+*.egg-info
 *.py[cod]
 *.so
 dist
