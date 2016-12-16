@@ -99,6 +99,23 @@ class Type(object):
         """
         # pylint: disable = too-many-branches, too-many-statements
 
+        try:
+            try:
+                custom_repr = self._symbols.types.instance_repr[self._ctype]
+            except (KeyError, TypeError):
+                try:
+                    custom_repr = self._symbols.types.instance_repr[
+                        self._ctype.__class__
+                    ]
+                except (KeyError, TypeError):
+                    custom_repr = self._symbols.types.instance_repr[
+                        self._ctype.__class__.__name__
+                    ]
+        except (KeyError, TypeError):
+            pass
+        else:
+            return custom_repr(self._ctype, self._dialect, self._symbols)
+
         mod = self._symbols.types.resolve(self._ctype, self._dialect)
         params = []
 

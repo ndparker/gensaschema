@@ -2,6 +2,24 @@ Changes with version
 
  *) First beta release
 
+ *) Allow for custom repr functions per type or type instance. This is most
+    useful for separated type definitions. This is modeled as a mapping from
+    type to repr function, where the type can be a type instance, a type class
+    or a type class name. The repr function is called with the type instance,
+    the dialect and the symbol table. It's expected to return a string.
+
+ *) Improved error handling for symbol injection. If a symbol is added multiple
+    times it only throws a conflict error on conflict (not always). Also allow
+    for `'symbol' in symbols` check.
+
+ *) Allow for custom type definitions on top of the table definitions. This is
+    modeled as a list of definer functions stored in symbols.types.defines (a
+    list). The functions are called in order with the dialect name and the
+    symbol table and are expected to return a list of lines to emit.
+
+ *) Added hook for unknown type injection, make the `Type` wrapper part of the
+    public API for that reason
+
  *) Ignore SA warning about expressional and partial index reflections
     [@sebastianseitz]
 

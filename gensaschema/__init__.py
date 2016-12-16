@@ -41,6 +41,7 @@ from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builti
 from gensaschema._config import Config  # noqa
 from gensaschema._schema import Schema  # noqa
 from gensaschema._symbols import Symbols, SymbolException  # noqa
+from gensaschema._type import Type  # noqa
 
 #: Version of the package
 version = _version.Version(*__version__)

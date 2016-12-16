@@ -89,7 +89,8 @@ class Schema(object):
         # vim: nowrap tw=0
     ''')
 
-    def __init__(self, conn, tables, schemas, symbols, dbname=None):
+    def __init__(self, conn, tables, schemas, symbols, dbname=None,
+                 types=None):
         """
         Initialization
 
@@ -109,11 +110,19 @@ class Schema(object):
           `dbname` : ``str``
             Optional db identifier. Used for informational purposes. If
             omitted or ``None``, the information just won't be emitted.
+
+          `types` : callable
+            Extra type loader. If the type reflection fails, because
+            SQLAlchemy cannot resolve it, the type loader will be called with
+            the type name, (bound) metadata and the symbol table. It is
+            responsible for modifying the symbols and imports *and* the
+            dialect's ``ischema_names``. If omitted or ``None``, the reflector
+            will always fail on unknown types.
         """
         metadata = _sa.MetaData(conn)
         self._dialect = metadata.bind.dialect.name
         self._tables = _table.TableCollection.by_names(
-            metadata, tables, schemas, symbols
+            metadata, tables, schemas, symbols, types=types
         )
         self._schemas = schemas
         self._symbols = symbols
@@ -132,6 +141,18 @@ class Schema(object):
             imports.sort()
             imports.append('')
         lines = []
+
+        defines = self._symbols.types.defines
+        if defines:
+            defined = []
+            for define in defines:
+                defined.extend(define(self._dialect, self._symbols))
+            if defined:
+                lines.append('')
+                lines.append('# Custom type definitions')
+                lines.extend(defined)
+                lines.append('')
+
         for table in self._tables:
             if table.is_reference:
                 continue

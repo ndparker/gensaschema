@@ -121,7 +121,8 @@ class Symbols(object):
                 "Cannot use keyword %r as symbol" % (symbol,)
             )
         elif symbol in list(self._symbols.values()):
-            raise SymbolException("Symbol conflict: %r" % (symbol,))
+            if name in self._symbols and self._symbols[name] != symbol:
+                raise SymbolException("Symbol conflict: %r" % (symbol,))
         elif name in self._symbols and self._symbols[name] != symbol:
             raise SymbolException("Symbol identifier conflict: %r" % (name,))
         self._symbols[name] = symbol
@@ -143,6 +144,24 @@ class Symbols(object):
         if _util.py2 and not isinstance(name, unicode):
             name = str(name).decode('ascii')
         return self._symbols[name]
+
+    def __contains__(self, name):
+        """
+        Check symbol table entry
+
+        :Parameters:
+          `name` : ``str``
+            Symbol identifier
+
+        :Return: The symbol
+        :Rtype: ``str``
+
+        :Exceptions:
+          - `KeyError` : Symbol not found
+        """
+        if _util.py2 and not isinstance(name, unicode):
+            name = str(name).decode('ascii')
+        return name in self._symbols
 
     def __iter__(self):
         """
@@ -176,6 +195,8 @@ class _Types(object):
         """
         self._types = {}
         self._symbols = symbols
+        self.instance_repr = {}
+        self.defines = []
 
     def __setitem__(self, class_, symbol):
         """

@@ -34,6 +34,7 @@ __docformat__ = "restructuredtext en"
 
 import logging as _logging
 import operator as _op
+import re as _re
 import warnings as _warnings
 
 import sqlalchemy as _sa
@@ -124,7 +125,7 @@ class Table(object):
         ) for con in table.constraints]))
 
     @classmethod
-    def by_name(cls, name, varname, metadata, schemas, symbols):
+    def by_name(cls, name, varname, metadata, schemas, symbols, types=None):
         """
         Construct by name
 
@@ -144,6 +145,14 @@ class Table(object):
           `symbols` : `Symbols`
             Symbol table
 
+          `types` : callable
+            Extra type loader. If the type reflection fails, because
+            SQLAlchemy cannot resolve it, the type loader will be called with
+            the type name, (bound) metadata and the symbol table. It is
+            responsible for modifying the symbols and imports *and* the
+            dialect's ``ischema_names``. If omitted or ``None``, the reflector
+            will always fail on unknown types.
+
         :Return: New Table instance
         :Rtype: `Table`
         """
@@ -153,6 +162,8 @@ class Table(object):
             kwargs['schema'] = schema
         else:
             schema = None
+
+        tmatch = _re.compile(u"^Did not recognize type (.+) of column").match
 
         with _warnings.catch_warnings():
             _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
@@ -171,15 +182,24 @@ class Table(object):
             _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
                                      message=r'^Predicate of partial index ')
 
-            table = _sa.Table(name, metadata, autoload=True, **kwargs)
-            # while 1:
-            #     try:
-            #         table = _sa.Table(name, metadata, autoload=True,
-            #                           **kwargs)
-            #     except _sa.exc.SATypeReflectionWarning, e:
-            #         _ext.load_extension(e, metadata, symbols)
-            #     else:
-            #         break
+            seen = set()
+            while True:
+                try:
+                    table = _sa.Table(name, metadata, autoload=True, **kwargs)
+                except _sa.exc.SAWarning as e:
+                    if types is not None:
+                        match = tmatch(e.args[0])
+                        if match:
+                            type_name = match.group(1).strip()
+                            if type_name.startswith(('"', "'")):
+                                type_name = type_name[1:-1]
+                            if type_name and type_name not in seen:
+                                types(type_name, metadata, symbols)
+                                seen.add(type_name)
+                                continue
+                    raise
+                else:
+                    break
 
         return cls(varname, table, schemas, symbols)
 
@@ -250,7 +270,7 @@ class TableCollection(tuple):
     """ Table collection """
 
     @classmethod
-    def by_names(cls, metadata, names, schemas, symbols):
+    def by_names(cls, metadata, names, schemas, symbols, types=None):
         """
         Construct by table names
 
@@ -264,11 +284,20 @@ class TableCollection(tuple):
           `symbols` : `Symbols`
             Symbol table
 
+          `types` : callable
+            Extra type loader. If the type reflection fails, because
+            SQLAlchemy cannot resolve it, the type loader will be called with
+            the type name, (bound) metadata and the symbol table. It is
+            responsible for modifying the symbols and imports *and* the
+            dialect's ``ischema_names``. If omitted or ``None``, the reflector
+            will always fail on unknown types.
+
         :Return: New table collection instance
         :Rtype: `TableCollection`
         """
         objects = dict((table.sa_table.key, table) for table in [
-            Table.by_name(name, varname, metadata, schemas, symbols)
+            Table.by_name(name, varname, metadata, schemas, symbols,
+                          types=types)
             for varname, name in names
         ])
 
