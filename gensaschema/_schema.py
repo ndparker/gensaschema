@@ -64,7 +64,8 @@ class Schema(object):
     """
 
     _MODULE_TPL = _template.Template('''
-        # -*- coding: ascii -*-  pylint: skip-file
+        # -*- coding: ascii -*-
+        # flake8: noqa pylint: skip-file
         """
         ==============================
          SQLAlchemy schema definition

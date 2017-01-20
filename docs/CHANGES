@@ -1,3 +1,8 @@
+Changes with version
+
+ *) Add flake8 hint to the template in order to ignore generated schema files
+
+
 Changes with version 0.6.0
 
  *) First beta release
