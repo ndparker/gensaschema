@@ -8,7 +8,7 @@ Table inspection and representation
 
 :Copyright:
 
- Copyright 2010 - 2016
+ Copyright 2010 - 2017
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -164,6 +164,14 @@ class Table(object):
             schema = None
 
         tmatch = _re.compile(u"^Did not recognize type (.+) of column").match
+        def type_name(e):
+            """ Extract type name from exception """
+            match = tmatch(e.args[0])
+            if match:
+                type_name = match.group(1).strip()
+                if type_name.startswith(('"', "'")):
+                    type_name = type_name[1:-1]
+                return type_name or None
 
         with _warnings.catch_warnings():
             _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
@@ -188,15 +196,22 @@ class Table(object):
                     table = _sa.Table(name, metadata, autoload=True, **kwargs)
                 except _sa.exc.SAWarning as e:
                     if types is not None:
-                        match = tmatch(e.args[0])
-                        if match:
-                            type_name = match.group(1).strip()
-                            if type_name.startswith(('"', "'")):
-                                type_name = type_name[1:-1]
-                            if type_name and type_name not in seen:
-                                types(type_name, metadata, symbols)
-                                seen.add(type_name)
-                                continue
+                        tname = type_name(e)
+                        if tname and tname not in seen:
+                            stack = [tname]
+                            while stack:
+                                try:
+                                    types(stack[-1], metadata, symbols)
+                                except _sa.exc.SAWarning as e:
+                                    tname = type_name(e)
+                                    if tname and tname not in stack and \
+                                            tname not in seen:
+                                        stack.append(tname)
+                                        continue
+                                    raise
+                                else:
+                                    seen.add(stack.pop())
+                            continue
                     raise
                 else:
                     break

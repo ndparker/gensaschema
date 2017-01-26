@@ -32,7 +32,7 @@ Beta.
 COPYRIGHT AND LICENSE
 ---------------------
 
-Copyright 2010 - 2016
+Copyright 2010 - 2017
 André Malo or his licensors, as applicable.
 
 The whole package is distributed under the Apache License Version 2.0.

@@ -32,7 +32,7 @@ if __doc__:  # pragma: no branch
 __author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
 __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
-__version__ = ('0.6.0', False, 7)
+__version__ = ('0.6.1', False, 8)
 
 from gensaschema import _util
 from gensaschema import _version

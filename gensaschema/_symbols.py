@@ -8,7 +8,7 @@ Symbol management.
 
 :Copyright:
 
- Copyright 2010 - 2016
+ Copyright 2010 - 2017
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -253,7 +253,13 @@ class _Types(object):
                     ))
                     return self._symbols['type']
                 except ImportError:
-                    pass
+                    try:
+                        _load_dotted('sqlalchemy.types.%s' % (
+                            type_.__class__.__name__,
+                        ))
+                        return "%s.types" % (self._symbols['sa'],)
+                    except ImportError:
+                        pass
         raise SymbolException(
             "Don't know how to address type %r" % (type_,)
         )

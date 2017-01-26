@@ -1,4 +1,8 @@
-Changes with version
+Changes with version 0.6.1
+
+ *) Add support for nested type reflection
+
+ *) Fall back to generic types module if dialect lookup fails
 
  *) Add flake8 hint to the template in order to ignore generated schema files
 
