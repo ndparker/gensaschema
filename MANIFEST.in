@@ -1,0 +1,7 @@
+include README.md LICENSE
+
+recursive-include docs *
+prune docs/_userdoc
+prune docs/coverage
+prune docs/gcov
+exclude docs/DEVELOPMENT.md docs/userdoc/.buildinfo

@@ -1,5 +1,5 @@
 .. license:
-    Copyright 2014 - 2016
+    Copyright 2014 - 2018
     André Malo or his licensors, as applicable
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,10 +30,11 @@ Documentation
 .. toctree::
     :hidden:
 
+    apidoc/index
 
 
 - :ref:`Documentation Search <search>` (needs javascript)
-- :gensaschema:`API Documentation </>` (generated)
+- :ref:`API Documentation <apidoc>` (generated)
 
 
 Rationale, Advocacy, Key Features

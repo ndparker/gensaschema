@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-r"""
+u"""
 :Copyright:
 
- Copyright 2014 - 2016
+ Copyright 2014 - 2018
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,24 +26,17 @@ r"""
 GenSASchema generates static schema definitions using SQLAlchemy's
 inspection capabilities.
 """
-if __doc__:  # pragma: no branch
-    # pylint: disable = redefined-builtin
-    __doc__ = __doc__.encode('ascii').decode('unicode_escape')
-__author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
+__author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
-__version__ = ('0.6.1', False, 8)
+__version__ = '0.6.1'
 
 from gensaschema import _util
-from gensaschema import _version
 from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
 
 from gensaschema._config import Config  # noqa
 from gensaschema._schema import Schema  # noqa
 from gensaschema._symbols import Symbols, SymbolException  # noqa
 from gensaschema._type import Type  # noqa
-
-#: Version of the package
-version = _version.Version(*__version__)
 
 __all__ = _util.find_public(globals())

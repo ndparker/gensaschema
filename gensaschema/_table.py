@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-r"""
+u"""
 =====================================
  Table inspection and representation
 =====================================
@@ -8,7 +8,7 @@ Table inspection and representation
 
 :Copyright:
 
- Copyright 2010 - 2017
+ Copyright 2010 - 2018
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,10 +26,7 @@ Table inspection and representation
  limitations under the License.
 
 """
-if __doc__:  # pragma: no branch
-    # pylint: disable = redefined-builtin
-    __doc__ = __doc__.encode('ascii').decode('unicode_escape')
-__author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
+__author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
 import logging as _logging
@@ -164,6 +161,7 @@ class Table(object):
             schema = None
 
         tmatch = _re.compile(u"^Did not recognize type (.+) of column").match
+
         def type_name(e):
             """ Extract type name from exception """
             match = tmatch(e.args[0])
@@ -172,6 +170,7 @@ class Table(object):
                 if type_name.startswith(('"', "'")):
                     type_name = type_name[1:-1]
                 return type_name or None
+            return None
 
         with _warnings.catch_warnings():
             _warnings.filterwarnings('error', category=_sa.exc.SAWarning,

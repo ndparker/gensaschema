@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-r"""
+u"""
 ==========================
  Schema module generation
 ==========================
@@ -8,7 +8,7 @@ Schema module generation code.
 
 :Copyright:
 
- Copyright 2010 - 2017
+ Copyright 2010 - 2018
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,10 +26,7 @@ Schema module generation code.
  limitations under the License.
 
 """
-if __doc__:  # pragma: no branch
-    # pylint: disable = redefined-builtin
-    __doc__ = __doc__.encode('ascii').decode('unicode_escape')
-__author__ = r"Andr\xe9 Malo".encode('ascii').decode('unicode_escape')
+__author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
