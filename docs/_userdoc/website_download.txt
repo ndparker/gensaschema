@@ -1,20 +1,19 @@
 Download
 ~~~~~~~~
 
-.. comment
-    .. begin stable
+.. begin stable
 
-    Current Stable Version
-    ''''''''''''''''''''''
+Current Stable Version
+''''''''''''''''''''''
 
-    - `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-0.6.3>`_
-    - `gensaschema-0.6.3.tar.xz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.xz>`_
-    - `gensaschema-0.6.3.tar.bz2 <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.bz2>`_
-    - `gensaschema-0.6.3.tar.gz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.gz>`_
-    - `gensaschema-0.6.3.zip <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.zip>`_
-    - `gensaschema-0.6.3.digests <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.digests>`_
+- `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-0.6.3>`_
+- `gensaschema-0.6.3.tar.xz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.xz>`_
+- `gensaschema-0.6.3.tar.bz2 <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.bz2>`_
+- `gensaschema-0.6.3.tar.gz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.gz>`_
+- `gensaschema-0.6.3.zip <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.zip>`_
+- `gensaschema-0.6.3.digests <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.digests>`_
 
-    .. end stable
+.. end stable
 
 
 .. begin dev

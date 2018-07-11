@@ -1,20 +1,19 @@
 Download
 ~~~~~~~~
 
-.. comment
-    .. begin stable
+.. begin stable
 
-    Current Stable Version
-    ''''''''''''''''''''''
+Current Stable Version
+''''''''''''''''''''''
 
-    - `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-@@VERSION@@>`_
-    - `gensaschema-@@VERSION@@.tar.xz <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.xz>`_
-    - `gensaschema-@@VERSION@@.tar.bz2 <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.bz2>`_
-    - `gensaschema-@@VERSION@@.tar.gz <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.gz>`_
-    - `gensaschema-@@VERSION@@.zip <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.zip>`_
-    - `gensaschema-@@VERSION@@.digests <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.digests>`_
+- `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-@@VERSION@@>`_
+- `gensaschema-@@VERSION@@.tar.xz <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.xz>`_
+- `gensaschema-@@VERSION@@.tar.bz2 <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.bz2>`_
+- `gensaschema-@@VERSION@@.tar.gz <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.tar.gz>`_
+- `gensaschema-@@VERSION@@.zip <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.zip>`_
+- `gensaschema-@@VERSION@@.digests <http://storage.perlig.de/gensaschema/gensaschema-@@VERSION@@.digests>`_
 
-    .. end stable
+.. end stable
 
 
 .. begin dev
