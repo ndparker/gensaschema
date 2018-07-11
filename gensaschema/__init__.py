@@ -29,7 +29,7 @@ inspection capabilities.
 __author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
-__version__ = '0.6.2'
+__version__ = '0.6.3'
 
 from gensaschema import _util
 from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
