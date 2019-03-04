@@ -8,7 +8,7 @@ Symbol management.
 
 :Copyright:
 
- Copyright 2010 - 2018
+ Copyright 2010 - 2019
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -111,7 +111,7 @@ class Symbols(object):
           - `SymbolException` : Symbol could not be set because of some
             conflict
         """
-        if _util.py2 and not isinstance(name, unicode):  # pragma: no cover
+        if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
             name = str(name).decode('ascii')
         if _keyword.iskeyword(symbol):
             raise SymbolException(
@@ -138,7 +138,7 @@ class Symbols(object):
         :Exceptions:
           - `KeyError` : Symbol not found
         """
-        if _util.py2 and not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, _util.unicode):
             name = str(name).decode('ascii')
         return self._symbols[name]
 
@@ -156,7 +156,7 @@ class Symbols(object):
         :Exceptions:
           - `KeyError` : Symbol not found
         """
-        if _util.py2 and not isinstance(name, unicode):
+        if _util.py2 and not isinstance(name, _util.unicode):
             name = str(name).decode('ascii')
         return name in self._symbols
 
@@ -296,7 +296,7 @@ class _Imports(object):
         :Exceptions:
           - `SymbolException` : Import conflict
         """
-        if _util.py2 and not isinstance(name, unicode):  # pragma: no cover
+        if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
             name = str(name).decode('ascii')
         imports = dict(self._imports)
         if name in imports:

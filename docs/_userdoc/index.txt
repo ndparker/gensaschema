@@ -1,5 +1,5 @@
 .. license:
-    Copyright 2014 - 2018
+    Copyright 2014 - 2019
     André Malo or his licensors, as applicable
 
     Licensed under the Apache License, Version 2.0 (the "License");

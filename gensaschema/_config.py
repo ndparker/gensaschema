@@ -8,7 +8,7 @@ Schema config management.
 
 :Copyright:
 
- Copyright 2010 - 2018
+ Copyright 2010 - 2019
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -31,8 +31,7 @@ __docformat__ = "restructuredtext en"
 
 import errno as _errno
 
-if 1:  # pylint: disable = using-constant-test
-    # pylint: disable = import-error
+if 1:
     try:
         import ConfigParser as _config_parser
     except ImportError:  # pragma: no cover
@@ -160,11 +159,11 @@ class Config(object):
         if bytes is str:
             parser = _config_parser.RawConfigParser()
             parser.optionxform = lambda x: x
+            # pylint: disable = deprecated-method
             parser.readfp(_TextIO('\n'.join(conf_lines)))
         else:
             parser = _config_parser.RawConfigParser(strict=False)
             parser.optionxform = lambda x: x
-            # pylint: disable = no-member
             parser.read_file(_TextIO('\n'.join(conf_lines)))
         return cls.from_parser(parser, lines=lines)
 

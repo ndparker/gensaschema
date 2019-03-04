@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GenSASchema'
-copyright = u'2015 - 2018 Andr\xe9 Malo'
+copyright = u'2015 - 2019 Andr\xe9 Malo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

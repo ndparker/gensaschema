@@ -8,7 +8,7 @@ Constraint inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2018
+ Copyright 2010 - 2019
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -121,8 +121,7 @@ class Constraint(object):
         :Return: The constraint repr
         :Rtype: ``str``
         """
-        # pylint: disable = R0912
-        # (too many branches)
+        # pylint: disable = too-many-branches
 
         params = []
         if self.constraint.name is not None:

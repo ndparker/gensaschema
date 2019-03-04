@@ -8,7 +8,7 @@ Type inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2018
+ Copyright 2010 - 2019
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -154,6 +154,7 @@ class Type(object):
 
         else:  # pragma: no cover
             try:
+                # pylint: disable = deprecated-method
                 spec = _inspect.getargspec(self._ctype.__init__)
             except TypeError:
                 pass
