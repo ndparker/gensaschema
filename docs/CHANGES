@@ -1,5 +1,7 @@
 Changes with version
 
+ *) Remove support for Python 3.3
+
  *) Docs are no longer installed locally
 
  *) Adapt to latest sphinx version

@@ -40,7 +40,7 @@ at: <http://www.apache.org/licenses/LICENSE-2.0>.
 
 ## SYSTEM REQUIREMENTS
 
-You need at least python 2.7 or Python 3 starting with version 3.3.
+You need at least python 2.7 or Python 3 starting with version 3.4.
 
 
 ## INSTALLATION

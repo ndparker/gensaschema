@@ -21,7 +21,7 @@
 
 **GenSASchema** is a static SQLAlchemy Schema Generator.
 
-Supported python versions are Python 2.7 and Python 3.3 and above.
+Supported python versions are Python 2.7 and Python 3.4 and above.
 
 
 Documentation
