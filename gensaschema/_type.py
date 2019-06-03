@@ -96,6 +96,8 @@ class Type(object):
         """
         # pylint: disable = too-many-branches, too-many-statements
 
+        unset = object()
+
         try:
             try:
                 custom_repr = self._symbols.types.instance_repr[self._ctype]
@@ -131,7 +133,10 @@ class Type(object):
                     elif arg.kind == arg.VAR_KEYWORD:
                         continue
 
-                    value = getattr(self._ctype, arg.name)
+                    value = getattr(self._ctype, arg.name, unset)
+                    if value is unset:
+                        continue
+
                     if arg.default is not arg.empty and arg.default == value:
                         kwds = arg.kind != arg.POSITIONAL_ONLY
                         continue
@@ -162,7 +167,10 @@ class Type(object):
                 defaults = dict(zip(spec[0][::-1], (spec[3] or ())[::-1]))
                 kwds = False
                 for arg in spec[0][1:]:
-                    value = getattr(self._ctype, arg)
+                    value = getattr(self._ctype, arg, unset)
+                    if value is unset:
+                        continue
+
                     if arg in defaults and defaults[arg] == value:
                         kwds = True
                         continue
