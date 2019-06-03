@@ -35,6 +35,7 @@ def clean(ctx, so=False, cache=False):
         'build',
         'dist',
         ctx.doc.userdoc,
+        'docs/_userdoc/_build',
         ctx.doc.website.source,
         ctx.doc.website.target,
     )
@@ -51,7 +52,7 @@ def cacheclean(ctx):
         '.tox',
         '.cache',
         'tests/.cache',
-        '.pytest_cache',
+        'tests/.pytest_cache',
         '.mypy_cache',
     )
 

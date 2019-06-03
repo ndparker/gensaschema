@@ -1,12 +1,20 @@
 Download
 ~~~~~~~~
 
+Change Log
+----------
+
+- `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-0.6.3>`_
+
+
+Source Packages
+---------------
+
 .. begin stable
 
 Current Stable Version
 ''''''''''''''''''''''
 
-- `CHANGES file <http://storage.perlig.de/gensaschema/CHANGES-0.6.3>`_
 - `gensaschema-0.6.3.tar.xz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.xz>`_
 - `gensaschema-0.6.3.tar.bz2 <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.bz2>`_
 - `gensaschema-0.6.3.tar.gz <http://storage.perlig.de/gensaschema/gensaschema-0.6.3.tar.gz>`_

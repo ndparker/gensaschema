@@ -20,6 +20,33 @@ def source(ctx):
         ctx.run('python setup.py sdist')
 
 
+# @_invoke.task()
+# def wheels(ctx):
+#     """ Build wheels """
+#     with ctx.shell.root_dir():
+#         ctx.shell.rm_rf('wheel/dist')
+#         ctx.run(ctx.c('''
+#             docker run --rm -it -v%s/wheel:/io
+#             quay.io/pypa/manylinux1_x86_64:latest
+#             /io/build.sh %s %s
+#         ''', _os.getcwd(), ctx.package, "27 34 35 36 37"), pty=True)
+#         ctx.run(ctx.c('''
+#             docker run --rm -it -v%s/wheel:/io
+#             quay.io/pypa/manylinux1_i686:latest
+#             linux32 /io/build.sh %s %s
+#         ''', _os.getcwd(), ctx.package, "27 34 35 36 37"), pty=True)
+
+
+@_invoke.task()
+def wheels(ctx):
+    """ Build wheels """
+    with ctx.shell.root_dir():
+        ctx.shell.rm_rf('wheel/dist')
+        ctx.run(ctx.c('''
+            pip wheel -w wheel/dist %s --build-option --universal
+        ''', ctx.package), pty=True)
+
+
 @_invoke.task(_doc.doc)
 def dist(ctx):
     """ Build distribution """

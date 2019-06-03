@@ -1,3 +1,10 @@
+Changes with version
+
+ *) Docs are no longer installed locally
+
+ *) Adapt to latest sphinx version
+
+
 Changes with version 0.6.3
 
  *) Fix setup in C locale

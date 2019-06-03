@@ -78,7 +78,7 @@ def _sphinx(ctx, build, source, target):
 
     with ctx.shell.root_dir():
         ctx.run(ctx.c(r'''
-            %(apidoc)s -f -stxt -e -o %(source)s/apidoc %(package)s
+            %(apidoc)s -f --private -stxt -e -o %(source)s/apidoc %(package)s
         ''', **dict(
             apidoc=apidoc,
             source=source,

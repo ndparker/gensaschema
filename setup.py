@@ -26,6 +26,7 @@ u"""
 
 GenSASchema - Static SQLAlchemy Schema Generator.
 """
+from __future__ import print_function
 __author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
@@ -65,17 +66,24 @@ package = dict(
     author=__author__,
     email='nd@perlig.de',
     license="Apache License, Version 2.0",
-    url='http://opensource.perlig.de/gensaschema/',
+    # keywords=_lines(_doc('KEYWORDS')),
+    url='http://opensource.perlig.de/rgensaschema/',
     classifiers=_lines(_doc('CLASSIFIERS') or ''),
 
-    install_requires=_lines("""
-    """),
+    packages=True,
+    # py_modules=[],
+    # version_file='__init__.py',
+    install_requires=[],
 )
 
 
 def setup():
     """ Main """
-    with open('%(pathname)s/__init__.py' % package) as fp:
+    # pylint: disable = too-many-branches
+
+    version_file = '%s/%s' % (package['pathname'],
+                              package.get('version_file', '__init__.py'))
+    with open(version_file) as fp:
         for line in fp:  # pylint: disable = redefined-outer-name
             if line.startswith('__version__'):
                 version = line.split('=', 1)[1].strip()
@@ -85,11 +93,16 @@ def setup():
         else:
             raise RuntimeError("Version not found")
 
-    packages = [package['top']] + [
-        '%s.%s' % (package['top'], item)
-        for item in
-        _setuptools.find_packages(package['pathname'])
-    ]
+    kwargs = {}
+
+    if package.get('packages', True):
+        kwargs['packages'] = [package['top']] + [
+            '%s.%s' % (package['top'], item)
+            for item in
+            _setuptools.find_packages(package['pathname'])
+        ]
+    if package.get('py_modules'):
+        kwargs['py_modules'] = package['py_modules']
 
     _core.setup(
         name=package['name'],
@@ -101,9 +114,9 @@ def setup():
         long_description=package['longdesc'],
         url=package['url'],
         install_requires=package['install_requires'],
-        packages=packages,
         version=version,
         zip_safe=False,
+        **kwargs
     )
 
 
