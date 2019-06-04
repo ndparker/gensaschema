@@ -43,7 +43,8 @@ def wheels(ctx):
     with ctx.shell.root_dir():
         ctx.shell.rm_rf('wheel/dist')
         ctx.run(ctx.c('''
-            pip wheel -w wheel/dist %s --build-option --universal
+            pip wheel --no-binary --no-cache -w wheel/dist %s
+            --build-option --universal
         ''', ctx.package), pty=True)
 
 
