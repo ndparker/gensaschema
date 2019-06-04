@@ -53,7 +53,8 @@ the PGP signature of that file. The file is signed by André Malo, Key-ID
 .. sourcecode:: console
 
     $ gpg --verify gensaschema-0.6.4.digests
-    gpg: Signature made Wed Jul 11 09:59:41 2018 CEST using DSA key ID 8103A37E
+    gpg: Signature made Tue Jun  4 21:42:32 2019 CEST
+    gpg:                using DSA key 92CCEF0AA7DD46AC3A0F498BCA6939748103A37E
     gpg: Good signature from "Andre Malo <nd@apache.org>"
     gpg:                 aka "Andr\xe9\x20Malo <nd@perlig.de>"
     gpg:                 aka "Andre Malo <ndparker@gmx.net>"
