@@ -29,6 +29,8 @@ Schema module generation code.
 __author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
+import functools as _ft
+
 import sqlalchemy as _sa
 
 from . import _table
@@ -119,6 +121,7 @@ class Schema(object):
         """
         metadata = _sa.MetaData(conn)
         self._dialect = metadata.bind.dialect.name
+        _reflect_enums(metadata, symbols)
         self._tables = _table.TableCollection.by_names(
             metadata, tables, schemas, symbols, types=types
         )
@@ -171,3 +174,52 @@ class Schema(object):
                      lines='\n'.join(lines))
         fp.write(self._MODULE_TPL.expand(**param))
         fp.write('\n')
+
+
+def _reflect_enums(metadata, symbols):
+    """
+    Add definers for enums, and add factory to ischema_names
+
+    :Parameters:
+      `metadata` : ``MetaData``
+        SQLAlchemy MetaData
+
+      `symbols` : ``Symbols``
+        Symbol table
+    """
+    enums = dict((
+        "%s.%s" % (rec['schema'], rec['name'])
+        if not rec['visible'] else rec['name'], rec
+    ) for rec in metadata.bind.dialect._load_enums(metadata.bind, schema='*'))
+
+    seen = set()
+
+    def factory(*args, **kwargs):
+        """
+        Make the enum and add a definer for it
+        """
+        from sqlalchemy.dialects import postgresql as t
+        ctype = t.ENUM(*args, **kwargs)
+        if ctype.name not in seen:
+            symbols.types.instance_repr[ctype] = lambda *_: ctype.name
+            symbols.types.defines.append(_definer(ctype))
+            seen.add(ctype.name)
+        return ctype
+
+    for name, enum in enums.items():
+        metadata.bind.dialect.ischema_names[name.lower()] = _ft.partial(
+            factory, *enum['labels'], name=enum['name'],
+            schema=enum['schema'] if not enum['visible'] else None
+        )
+
+
+def _definer(column_type):
+    """ Create schema definer """
+    # pylint: disable = protected-access
+
+    def definer(_, symbols):
+        """ Define type """
+        return [
+            '%s = %s.%r' % (column_type.name, symbols['type'], column_type)
+        ]
+    return definer
