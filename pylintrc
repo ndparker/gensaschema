@@ -76,6 +76,7 @@ disable=
     useless-object-inheritance,
     no-else-return,
     no-else-raise,
+    no-else-continue,
 
 
 # Enable the message, report, category or checker with the given id(s). You can

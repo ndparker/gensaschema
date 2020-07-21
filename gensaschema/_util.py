@@ -29,28 +29,27 @@ __author__ = u"Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
 
+# pylint: disable = redefined-builtin, invalid-name, self-assigning-variable
 try:
     unicode
 except NameError:  # pragma: no cover
-    # pylint: disable = redefined-builtin, invalid-name
     unicode = str
 else:  # pragma: no cover
-    unicode = unicode  # pylint: disable = invalid-name
+    unicode = unicode
 
 try:
     bytes
 except NameError:  # pragma: no cover
-    # pylint: disable = redefined-builtin, invalid-name
     bytes = str
 else:  # pragma: no cover
-    bytes = bytes  # pylint: disable = invalid-name
+    bytes = bytes
 
 py2 = bytes is str
 
 try:
     cmp
 except NameError:  # pragma: no cover
-    cmp = lambda a, b: (a > b) - (a < b)  # pylint: disable = redefined-builtin
+    cmp = lambda a, b: (a > b) - (a < b)
 else:  # pragma: no cover
     cmp = cmp
 

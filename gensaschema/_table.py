@@ -405,7 +405,12 @@ def _break_cycles(metadata):
 
     while True:
         try:
-            metadata.sorted_tables
+            with _warnings.catch_warnings():
+                _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
+                                         message=(r'^Cannot correctly sort '
+                                                  r'tables'))
+
+                metadata.sorted_tables  # pylint: disable = pointless-statement
         except _sa.exc.CircularDependencyError as e:
             break_cycle(e)
         else:

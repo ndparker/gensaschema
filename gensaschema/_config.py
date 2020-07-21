@@ -182,6 +182,7 @@ class Config(object):
         :Return: New Config instance
         :Rtype: `Config`
         """
+        # pylint: disable = unnecessary-comprehension
         tables = [(name, val) for name, val in parser.items('tables')]
         schemas = dict((name, val) for name, val in parser.items('schemas'))
         return cls(tables, schemas, lines=lines)

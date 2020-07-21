@@ -41,6 +41,9 @@ from gensaschema import _schema
 
 def test_schema(tmpdir):
     """ _schema.Schema() works as expected """
+    import warnings as _warnings
+    _warnings.simplefilter('error', _sa.exc.SAWarning)
+
     tmpdir = str(tmpdir)
     filename = _os.path.join(tmpdir, 'tabletest.db')
 
