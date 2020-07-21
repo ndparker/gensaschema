@@ -21,6 +21,8 @@
 
 Shell utilities.
 """
+from __future__ import absolute_import
+
 __author__ = "Andr\xe9 Malo"
 __docformat__ = "restructuredtext en"
 
@@ -411,6 +413,7 @@ def dirs(base, wildcard='[!.]*', recursive=1, prune=('.git', '.svn', 'CVS')):
     :Return: Iterator over matching pathnames
     :Rtype: iterable
     """
+    prune = tuple(prune or ())
     for dirpath, dirnames, _ in walk(native(base)):
         for item in prune:
             if item in dirnames:

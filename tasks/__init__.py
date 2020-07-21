@@ -79,6 +79,7 @@ def namespace():
             check,
             clean,
             compile,
+            deps,
             doc,
             test,
             upload,
