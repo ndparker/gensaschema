@@ -33,7 +33,6 @@ __docformat__ = "restructuredtext en"
 import os as _os
 
 # pylint: disable = no-name-in-module, import-error
-from distutils import core as _core
 import setuptools as _setuptools
 
 # pylint: disable = invalid-name
@@ -67,7 +66,7 @@ package = dict(
     email='nd@perlig.de',
     license="Apache License, Version 2.0",
     # keywords=_lines(_doc('KEYWORDS')),
-    url='http://opensource.perlig.de/rgensaschema/',
+    url='http://opensource.perlig.de/gensaschema/',
     classifiers=_lines(_doc('CLASSIFIERS') or ''),
 
     packages=True,
@@ -104,7 +103,7 @@ def setup():
     if package.get('py_modules'):
         kwargs['py_modules'] = package['py_modules']
 
-    _core.setup(
+    _setuptools.setup(
         name=package['name'],
         author=package['author'],
         author_email=package['email'],
