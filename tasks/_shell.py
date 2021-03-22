@@ -1,6 +1,6 @@
 # -*- coding: ascii -*-
 #
-# Copyright 2007 - 2020
+# Copyright 2007 - 2021
 # Andr\xe9 Malo or his licensors, as applicable
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

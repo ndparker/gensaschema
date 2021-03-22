@@ -8,7 +8,7 @@ Symbol management.
 
 :Copyright:
 
- Copyright 2010 - 2020
+ Copyright 2010 - 2021
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:

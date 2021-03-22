@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'GenSASchema'
-copyright = '2015 - 2020 Andr\xe9 Malo'
+copyright = '2015 - 2021 Andr\xe9 Malo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
