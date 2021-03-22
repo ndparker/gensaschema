@@ -38,6 +38,8 @@ from gensaschema import _table
 
 # pylint: disable = invalid-name
 
+sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
+
 
 def test_table(tmpdir):
     """ _table.Table() works as expected """
@@ -56,7 +58,7 @@ def test_table(tmpdir):
 
     expected = (
         "T(u'stocks', m,\n"
-        "    C('date', t.DATE, nullable=False),\n"
+        "    C('date', t.DATE%(nullable)s),\n"
         "    C('trans', t.TEXT),\n"
         "    C('symbol', t.VARCHAR(12)),\n"
         "    C('qty', t.REAL),\n"
@@ -67,4 +69,7 @@ def test_table(tmpdir):
     )
     if bytes is not str:
         expected = expected.replace("u'", "'")
+    expected %= dict(
+        nullable=("" if sa_version >= (1, 4) else ", nullable=False"),
+    )
     assert repr(table) == expected

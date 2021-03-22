@@ -350,5 +350,6 @@ def _load_dotted(name):
             try:
                 obj = getattr(obj, comp)
             except AttributeError:
+                # pylint: disable = raise-missing-from
                 raise ImportError('.'.join(path))
     return obj

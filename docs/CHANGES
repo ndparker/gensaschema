@@ -1,5 +1,9 @@
 Changes with version
 
+ *) Add support for SQLAlchemy 1.4
+
+ *) Add support for python 3.9
+
  *) Drop support for python 3.4 and 3.5
 
  *) Directly use setuptools

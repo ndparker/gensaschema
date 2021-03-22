@@ -30,6 +30,7 @@ __docformat__ = "restructuredtext en"
 
 import os as _os
 import sys as _sys
+import warnings as _warnings
 
 import sqlalchemy as _sa
 
@@ -38,10 +39,11 @@ from gensaschema import _schema
 
 # pylint: disable = invalid-name
 
+sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
+
 
 def test_schema(tmpdir):
     """ _schema.Schema() works as expected """
-    import warnings as _warnings
     _warnings.simplefilter('error', _sa.exc.SAWarning)
 
     tmpdir = str(tmpdir)
@@ -133,7 +135,7 @@ D = _sa.DefaultClause
 
 # Table "addresses"
 addresses = T(u'addresses', m,
-    C('id', t.INTEGER, nullable=False),
+    C('id', t.INTEGER%(nullable)s),
     C('zip_code', t.VARCHAR(32), server_default=D(u'NULL')),
     C('place', t.VARCHAR(78), nullable=False),
     C('street', t.VARCHAR(64), server_default=D(u'NULL')),
@@ -150,7 +152,7 @@ PrimaryKey(addresses.c.id)
 
 # Table "emails"
 emails = T(u'emails', m,
-    C('id', t.INTEGER, nullable=False),
+    C('id', t.INTEGER%(nullable)s),
     C('address', t.VARCHAR(127), nullable=False),
 )
 PrimaryKey(emails.c.id)
@@ -159,7 +161,7 @@ Unique(emails.c.address)
 
 # Table "names"
 names = T(u'names', m,
-    C('id', t.INTEGER, nullable=False),
+    C('id', t.INTEGER%(nullable)s),
     C('first', t.VARCHAR(128), server_default=D(u'NULL')),
     C('last', t.VARCHAR(129), nullable=False),
 )
@@ -168,7 +170,7 @@ PrimaryKey(names.c.id)
 
 # Table "persons"
 persons = T(u'persons', m,
-    C('id', t.INTEGER, nullable=False),
+    C('id', t.INTEGER%(nullable)s),
     C('address', t.INTEGER, nullable=False),
     C('name', t.INTEGER, nullable=False),
     C('email', t.INTEGER, server_default=D(u'NULL')),
@@ -200,6 +202,9 @@ del _sa, T, C, D, m
     '''.strip() + '\n'
     if bytes is not str:
         expected = expected.replace("u'", "'")
+    expected %= dict(
+        nullable=("" if sa_version >= (1, 4) else ", nullable=False")
+    )
     assert result == expected
 
     result = result.replace('from foo.bar import baz as _baz', '')
