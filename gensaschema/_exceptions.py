@@ -27,7 +27,6 @@ The module provides all exceptions and warnings used throughout the
 `gensaschema` package.
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import warnings as _warnings
 

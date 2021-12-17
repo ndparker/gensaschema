@@ -27,7 +27,6 @@ Schema config management.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import errno as _errno
 
@@ -49,11 +48,14 @@ class Config(object):
     """
     Schema config container
 
-    :IVariables:
-      `tables` : ``list``
+    Attributes:
+      tables (list):
         Table list
 
-      `_lines` : sequence
+      schemas (dict):
+        Alien schema mapping
+
+      _lines (list):
         Original config lines (or ``None``)
     """
 
@@ -81,44 +83,47 @@ class Config(object):
         """
         Initialization
 
-        :Parameters:
-          `tables` : ``list``
+        Parameters:
+          tables (list):
             Table list
 
-          `schemas` : ``dict``
+          schemas (dict):
             (Alien) Schema mapping
 
-          `lines` : sequence
+          lines (iterable):
             Original config lines. If omitted or ``None``, the config lines
             are not available.
         """
         self.tables = tables
         self.schemas = schemas
-        self._lines = lines
+        self._lines = None if lines is None else list(lines)
 
     @classmethod
     def from_file(cls, name_or_file):
         """
         Construct from config file
 
-        :Parameters:
-          `name_or_file` : ``str`` or ``file``
+        Parameters:
+          name_or_file (str or file):
             Config filename or file pointer
 
-        :Return: New Config instance
-        :Rtype: `Config`
+        Returns:
+          Config: New Config instance
 
-        :Exceptions:
-          - `IOError` : Error reading the file (except for ENOENT, which
-            treats the file as empty)
+        Raises:
+          IOError: Error reading the file (except for ENOENT, which
+                   treats the file as empty)
         """
         if name_or_file is None:
             lines = []
         else:
             read = getattr(name_or_file, 'read', None)
             if read is None:
+                kwargs = {} if str is bytes else {'encoding': 'utf-8'}
                 try:
-                    fp = open(name_or_file)
+                    # pylint: disable = bad-option-value, unspecified-encoding
+                    # pylint: disable = bad-option-value, consider-using-with
+                    fp = open(name_or_file, **kwargs)
                 except IOError as e:
                     if e.errno != _errno.ENOENT:
                         raise
@@ -137,12 +142,12 @@ class Config(object):
         """
         Create from config lines
 
-        :Parameters:
-          `lines` : sequence
+        Parameters:
+          lines (iterable)
             List of config lines
 
-        :Return: New Config instance
-        :Rtype: `Config`
+        Returns:
+          Config: New Config instance
         """
         conf_lines = ['[schemas]', '[tables]']
         for line in lines:
@@ -172,15 +177,15 @@ class Config(object):
         """
         Construct from config parser
 
-        :Parameters:
-          `parser` : ``ConfigParser.RawConfigParser``
+        Parameters:
+          parser (ConfigParser.RawConfigParser):
             Configparser instance
 
-          `lines` : sequence
+          lines (iterable):
             Original config lines
 
-        :Return: New Config instance
-        :Rtype: `Config`
+        Returns:
+          Config: New Config instance
         """
         # pylint: disable = unnecessary-comprehension
         tables = [(name, val) for name, val in parser.items('tables')]
@@ -191,8 +196,8 @@ class Config(object):
         """
         Dump config to a file
 
-        :Parameters:
-          `fp` : ``file``
+        Parameters:
+          fp (file):
             Stream to dump to
         """
         lines = self._lines

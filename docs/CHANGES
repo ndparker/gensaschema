@@ -2,11 +2,13 @@ Changes with version
 
  *) Add support for SQLAlchemy 1.4
 
- *) Add support for python 3.9
+ *) Update python support: 2.7, 3.6+
 
- *) Drop support for python 3.4 and 3.5
+ *) Add tests to source distribution
 
- *) Directly use setuptools
+ *) Update doc format
+
+ *) Update project boilerplate
 
 
 Changes with version 0.6.4

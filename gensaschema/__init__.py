@@ -27,7 +27,6 @@ GenSASchema generates static schema definitions using SQLAlchemy's
 inspection capabilities.
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 __license__ = "Apache License, Version 2.0"
 __version__ = '0.6.4'
 

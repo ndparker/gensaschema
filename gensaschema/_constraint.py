@@ -27,7 +27,6 @@ Constraint inspection and representation.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import keyword as _keyword
 import re as _re
@@ -40,8 +39,8 @@ class Constraint(object):
     """
     Reflected Constraint
 
-    :IVariables:
-      `constraint` : SA Constraint
+    Attributes:
+      constraint (SA Constraint):
         Constraint
     """
     _SYMBOL, _IMPORT = None, None
@@ -61,12 +60,18 @@ class Constraint(object):
         """
         Initialization
 
-        :Parameters:
-          `constraint` : SA Constraint
+        Parameters:
+          constraint (SA Constraint):
             Constraint
 
-          `table` : ``str``
+          table (str):
             Table varname
+
+          symbols (Symbols):
+            Symbol table
+
+          options (str):
+            Options
         """
         self.constraint = constraint
         self.table = table
@@ -114,12 +119,22 @@ class Constraint(object):
         """
         Base repr for all constraints
 
-        :Parameters:
-          `args` : iterable
+        Parameters:
+          symbol (str):
+            Symbol name
+
+          args (iterable):
             Positional arguments
 
-        :Return: The constraint repr
-        :Rtype: ``str``
+          keywords (iterable):
+            Keywords arguments to specify
+
+          short (bool):
+            Short representation (i.e. one-line)? Only applied if there are
+            not too many parameters.
+
+        Returns:
+          str: The constraint repr
         """
         # pylint: disable = too-many-branches
 
@@ -163,12 +178,12 @@ def access_col(col):
     """
     Generate column access string (either as attribute or via dict access)
 
-    :Parameters:
-      `col` : SA Column
+    Parameters:
+      col (SA Column):
         Column
 
-    :Return: Access string
-    :Rtype: ``str``
+    Returns:
+      str: Access string
     """
     try:
         name = col.name
@@ -198,8 +213,8 @@ class UniqueConstraint(Constraint):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Returns:
+          str: The string representation
         """
         empty = len(self.constraint.columns) == 0
         short = len(self.constraint.columns) <= 1
@@ -227,8 +242,8 @@ class ForeignKeyConstraint(Constraint):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Returns:
+          str: The string representation
         """
         columns = "[%s]" % ',\n    '.join([
             "%s%s" % (self.table, access_col(col))

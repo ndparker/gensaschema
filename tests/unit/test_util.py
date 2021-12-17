@@ -26,7 +26,6 @@ u"""
 Tests for gensaschema._util
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import types as _types
 

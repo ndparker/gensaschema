@@ -27,7 +27,6 @@ Table inspection and representation
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import logging as _logging
 import operator as _op
@@ -47,23 +46,23 @@ class Table(object):
     """
     Reflected table
 
-    :CVariables:
-      `is_reference` : ``bool``
-        Is it a table reference or a table?
 
-    :IVariables:
-      `varname` : ``str``
+    Attributes:
+      varname (str):
         Variable name
 
-      `sa_table` : ``sqlalchemy.Table``
+      sa_table (sqlalchemy.Table):
         Table
 
-      `constraints` : ``list``
+      constraints (list):
         Constraint list
 
-      `_symbols` : `Symbols`
+      _symbols (Symbols):
         Symbol table
     """
+    #: Is it a table reference (vs. a table)?
+    #:
+    #: :Type: bool
     is_reference = False
 
     def __new__(cls, varname, table, schemas, symbols):
@@ -72,21 +71,21 @@ class Table(object):
 
         This might actually return a table reference
 
-        :Parameters:
-          `varname` : ``str``
+        Parameters:
+          varname (str):
             Variable name
 
-          `table` : ``sqlalchemy.Table``
+          table (sqlalchemy.Table):
             Table
 
-          `schemas` : ``dict``
+          schemas (dict):
             Schema -> module mapping
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
 
-        :Return: `Table` or `TableReference` instance
-        :Rtype: ``Table`` or ``TableReference``
+        Returns:
+          Table or TableReference: New instance
         """
         if table.schema in schemas:
             return TableReference(
@@ -98,17 +97,17 @@ class Table(object):
         """
         Initialization
 
-        :Parameters:
-          `varname` : ``str``
+        Parameters:
+          varname (str):
             Variable name
 
-          `table` : ``sqlalchemy.Table``
+          table (sqlalchemy.Table):
             Table
 
-          `schemas` : ``dict``
+          schemas (dict):
             Schema -> module mapping
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
         """
         # pylint: disable = unused-argument
@@ -126,32 +125,29 @@ class Table(object):
         """
         Construct by name
 
-        :Parameters:
-          `name` : ``str``
+        Parameters:
+          name (str):
             Table name (possibly qualified)
 
-          `varname` : ``str``
+          varname (str):
             Variable name of the table
 
-          `metadata` : SA (bound) metadata
+          metadata (SA (bound) metadata):
             Metadata container
 
-          `schemas` : ``dict``
+          schemas (dict):
             Schema -> module mapping
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
 
-          `types` : callable
+          types (callable):
             Extra type loader. If the type reflection fails, because
             SQLAlchemy cannot resolve it, the type loader will be called with
             the type name, (bound) metadata and the symbol table. It is
             responsible for modifying the symbols and imports *and* the
             dialect's ``ischema_names``. If omitted or ``None``, the reflector
             will always fail on unknown types.
-
-        :Return: New Table instance
-        :Rtype: `Table`
         """
         kwargs = {}
         if '.' in name:
@@ -221,8 +217,8 @@ class Table(object):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Returns:
+          str: The string representation
         """
         args = [
             repr(_column.Column.from_sa(col, self._symbols))
@@ -248,21 +244,36 @@ class Table(object):
 
 
 class TableReference(object):
-    """ Referenced table """
+    """
+    Referenced table
+
+    Attributes:
+      varname (str):
+        Variable name
+
+      sa_table (sqlalchemy.Table):
+        Table
+
+      constraints (list):
+        Constraint list
+    """
+    #: Is it a table reference (vs. a table)?
+    #:
+    #: :Type: bool
     is_reference = True
 
     def __init__(self, varname, table, schema, symbols):
         """
         Initialization
 
-        :Parameters:
-          `varname` : ``str``
+        Parameters:
+          varname (str):
             Variable name
 
-          `table` : ``sqlalchemy.Table``
+          table (sqlalchemy.Table):
             Table
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
         """
         self.varname = varname
@@ -288,17 +299,17 @@ class TableCollection(tuple):
         """
         Construct by table names
 
-        :Parameters:
-          `metadata` : ``sqlalchemy.MetaData``
+        Parameters:
+          metadata (sqlalchemy.MetaData):
             Metadata
 
-          `names` : iterable
+          names (iterable):
             Name list (list of tuples (varname, name))
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
 
-          `types` : callable
+          types (callable):
             Extra type loader. If the type reflection fails, because
             SQLAlchemy cannot resolve it, the type loader will be called with
             the type name, (bound) metadata and the symbol table. It is
@@ -306,8 +317,8 @@ class TableCollection(tuple):
             dialect's ``ischema_names``. If omitted or ``None``, the reflector
             will always fail on unknown types.
 
-        :Return: New table collection instance
-        :Rtype: `TableCollection`
+        Returns:
+          TableCollection: New table collection instance
         """
         objects = dict((table.sa_table.key, table) for table in [
             Table.by_name(name, varname, metadata, schemas, symbols,
@@ -358,8 +369,8 @@ def _break_cycles(metadata):
     """
     Find foreign key cycles and break them apart
 
-    :Parameters:
-      `metadata` : ``sqlalchemy.MetaData``
+    Parameters:
+      metadata (sqlalchemy.MetaData):
         Metadata
     """
     def break_cycle(e):

@@ -1,11 +1,10 @@
 include README.md LICENSE
+recursive-include tests *
 
 prune tasks
 
 recursive-include docs *
-prune docs/userdoc
+prune docs/_userdoc
 prune docs/coverage
 prune docs/gcov
-prune docs/_userdoc/_build/
-exclude docs/_userdoc/website_download*
-exclude docs/DEVELOPMENT.md
+exclude docs/userdoc/website_download.html

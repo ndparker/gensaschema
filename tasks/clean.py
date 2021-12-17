@@ -34,8 +34,9 @@ def clean(ctx, so=False, cache=False):
         'docs/gcov',
         'build',
         'dist',
+        'wheel/dist',
         ctx.doc.userdoc,
-        'docs/_userdoc/_build',
+        ctx.doc.sphinx.build,
         ctx.doc.website.source,
         ctx.doc.website.target,
     )

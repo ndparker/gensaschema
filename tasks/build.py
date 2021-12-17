@@ -4,6 +4,11 @@ Build Tasks
 ~~~~~~~~~~~
 
 """
+from __future__ import print_function
+
+import os as _os
+import platform as _platform
+import re as _re
 
 import invoke as _invoke
 
@@ -20,32 +25,147 @@ def source(ctx):
         ctx.run('python setup.py sdist')
 
 
-# @_invoke.task()
-# def wheels(ctx):
-#     """ Build wheels """
-#     with ctx.shell.root_dir():
-#         ctx.shell.rm_rf('wheel/dist')
-#         ctx.run(ctx.c('''
-#             docker run --rm -it -v%s/wheel:/io
-#             quay.io/pypa/manylinux1_x86_64:latest
-#             /io/build.sh %s %s
-#         ''', _os.getcwd(), ctx.package, "27 34 35 36 37"), pty=True)
-#         ctx.run(ctx.c('''
-#             docker run --rm -it -v%s/wheel:/io
-#             quay.io/pypa/manylinux1_i686:latest
-#             linux32 /io/build.sh %s %s
-#         ''', _os.getcwd(), ctx.package, "27 34 35 36 37"), pty=True)
-
-
 @_invoke.task()
-def wheels(ctx):
-    """ Build wheels """
+def wheels(ctx, arches=None):
+    """
+    Build wheels
+
+    Parameters:
+      arches (str):
+        Space separated list of architectures. If not supplied it defaults to
+        the current machine type. Except if the current machine type is
+        "x86_64", then if defaults to "x86_64 i686 aarch64" (using
+        binfmt_misc in combination with multiarch/qemu-user-static for the
+        latter).
+    """
+    # pylint: disable = unused-argument
+
+    return _build_universal(ctx)
+
+
+def _build_universal(ctx):
+    """ Build universal wheel """
     with ctx.shell.root_dir():
         ctx.shell.rm_rf('wheel/dist')
+
+        for package in ctx.shell.files('dist/',
+                                       "%s-*.tar.gz" % (ctx.package,)):
+            ctx.run(ctx.c('''
+                pip wheel --no-binary :all: --no-cache -w wheel/dist %s
+                --build-option --universal
+            ''', package), pty=True)
+
+
+def _build_binary(ctx, arches=None):
+    """
+    Build binary wheels
+
+    Parameters:
+      arches (str):
+        Space separated list of architectures. If not supplied it defaults to
+        the current machine type. Except if the current machine type is
+        "x86_64", then if defaults to "x86_64 i686 aarch64" (using
+        binfmt_misc in combination with multiarch/qemu-user-static for the
+        latter).
+    """
+    # pylint: disable = too-many-branches
+
+    path = 'wheel/dist'
+
+    machine = _platform.machine()
+    if arches is None:
+        if machine == 'x86_64':
+            arches = "x86_64 i686 aarch64"
+        else:
+            arches = machine
+    arches = arches.split()
+    for arch in arches:
+        if machine == arch:
+            continue
+        if machine == 'x86_64' and arch == 'i686':
+            continue
         ctx.run(ctx.c('''
-            pip wheel --no-binary --no-cache -w wheel/dist %s
-            --build-option --universal
-        ''', ctx.package), pty=True)
+            docker run --rm --privileged multiarch/qemu-user-static
+            --reset -p yes
+        '''), echo=True, pty=True)
+        break
+
+    with ctx.shell.root_dir():
+        ctx.shell.rm_rf(path)
+        pythons = "36 37 38 39 310"
+
+        for package in ctx.shell.files('dist/',
+                                       "%s-*.tar.gz" % (ctx.package,)):
+            ppath = '/io/%s' % (_os.path.basename(package))
+
+            ctx.shell.cp(package, ctx.shell.native('wheel/'))
+            try:
+                for arch in arches:
+                    if arch in ("x86_64", "i686"):
+                        ctx.run(
+                            ctx.c('''
+                                docker run --rm -it -v%s/wheel:/io
+                                quay.io/pypa/manylinux1_%s:latest
+                            ''' + (arch == "i686" and "linux32" or "") + '''
+                                /io/build.sh %s %s
+                            ''', _os.getcwd(), arch, ppath, "27"),
+                            echo=True, pty=True,
+                        )
+                    v = "2014" if arch == "aarch64" else "1"
+                    ctx.run(
+                        ctx.c('''
+                            docker run --rm -it -v%s/wheel:/io
+                            quay.io/pypa/manylinux%s_%s:latest
+                            ''' + (arch == "i686" and "linux32" or "") + '''
+                            /io/build.sh %s %s
+                        ''', _os.getcwd(), v, arch, ppath, pythons),
+                        echo=True, pty=True,
+                    )
+            finally:
+                _os.unlink(ctx.shell.native('wheel/%s'
+                                            % (_os.path.basename(package),)))
+
+        # strip file names
+        multi_sub = _re.compile(r'(?:[.-]manylinux[^.]+)+').sub
+        tomove = []
+        for name in _os.listdir(path):
+            if not name.endswith('.whl'):
+                continue
+            pick = _best_manylinux(name)
+            if pick:
+                tomove.append((
+                    name, multi_sub((lambda _, p=pick: '-' + p), name)
+                ))
+        for old, new in tomove:
+            if old == new:
+                continue
+
+            print("%s -> %s" % (old, new))
+            _os.rename(_os.path.join(path, old), _os.path.join(path, new))
+
+
+def _best_manylinux(name):
+    """ Find best manylinux variant produced by auditwheel """
+    tag_list_search = _re.compile(r'(?:[.-]manylinux[^.]+)+').search
+
+    tags = tag_list_search(name)
+    if not tags:
+        return None
+    sortable = []
+    for tag in tags.group(0).strip('-.').split('.'):
+        assert tag.startswith('manylinux')
+        ver = tag[len('manylinux'):]
+        if ver.startswith(("1_", "2010_", "2014_")):
+            sortable.append(((1, int(ver.split('_')[0])), tag))
+            continue
+        assert ver.startswith('_')
+        ver = tuple(map(int, ver[1:].split('_')[:2]))
+        assert ver[0] > 1
+        sortable.append((ver, tag))
+    if not sortable:
+        return None
+
+    return min(sortable)[-1]
 
 
 @_invoke.task(_doc.doc)

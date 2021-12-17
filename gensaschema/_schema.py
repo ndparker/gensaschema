@@ -27,7 +27,6 @@ Schema module generation code.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
 
@@ -39,27 +38,26 @@ class Schema(object):
     """
     Schema container
 
-    :CVariables:
-      `_MODULE_TPL` : ``Template``
-        Template for the module
-
-    :IVariables:
-      `_dialect` : ``str``
+    Attributes:
+      _dialect (str):
         Dialect name
 
-      `_tables` : `TableCollection`
+      _tables (TableCollection):
         Table collection
 
-      `_schemas` : ``dict``
+      _schemas (dict):
         Schema -> module mapping
 
-      `_symbols` : `Symbols`
+      _symbols (Symbols):
         Symbol table
 
-      `_dbname` : ``str`` or ``None``
+      _dbname (str or None):
         DB identifier
     """
 
+    #: Template for the module
+    #:
+    #: :Type: Template
     _MODULE_TPL = _template.Template('''
         # -*- coding: ascii -*-
         # flake8: noqa pylint: skip-file
@@ -72,7 +70,6 @@ class Schema(object):
 
         :Warning: DO NOT EDIT, this file is generated
         """
-        __docformat__ = "restructuredtext en"
 
         import sqlalchemy as %(sa)s
         from sqlalchemy.dialects import %(dialect)s as %(type)s
@@ -92,24 +89,24 @@ class Schema(object):
         """
         Initialization
 
-        :Parameters:
-          `conn` : ``Connection`` or ``Engine``
+        Parameters:
+          conn (Connection or Engine):
             SQLAlchemy connection or engine
 
-          `tables` : ``list``
+          tables (list):
             List of tables to reflect, (local name, table name) pairs
 
-          `schemas` : ``dict``
+          schemas (dict):
             schema -> module mapping
 
-          `symbols` : `Symbols`
+          symbols (Symbols):
             Symbol table
 
-          `dbname` : ``str``
+          dbname (str):
             Optional db identifier. Used for informational purposes. If
             omitted or ``None``, the information just won't be emitted.
 
-          `types` : callable
+          types (callable):
             Extra type loader. If the type reflection fails, because
             SQLAlchemy cannot resolve it, the type loader will be called with
             the type name, (bound) metadata and the symbol table. It is
@@ -130,8 +127,8 @@ class Schema(object):
         """
         Dump schema module to fp
 
-        :Parameters:
-          `fp` : ``file``
+        Parameters:
+          fp (file):
             File to write to
         """
         imports = [item % self._symbols for item in self._symbols.imports]

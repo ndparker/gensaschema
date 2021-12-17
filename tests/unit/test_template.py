@@ -26,7 +26,6 @@ u"""
 Tests for gensaschema._template
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 from pytest import raises
 

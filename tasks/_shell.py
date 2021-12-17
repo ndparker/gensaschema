@@ -24,7 +24,6 @@ Shell utilities.
 from __future__ import absolute_import
 
 __author__ = "Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import contextlib as _contextlib
 import errno as _errno
@@ -44,6 +43,8 @@ root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 @_contextlib.contextmanager
 def root_dir():
     """ Context manager to change into the root directory """
+    assert root is not None
+
     old = _os.getcwd()
     try:
         _os.chdir(root)

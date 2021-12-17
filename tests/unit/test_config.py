@@ -26,7 +26,6 @@ u"""
 Tests for gensaschema._config
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import os as _os
 import tempfile as _tempfile

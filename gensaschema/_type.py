@@ -27,7 +27,6 @@ Type inspection and representation.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import inspect as _inspect
 
@@ -40,14 +39,14 @@ class Type(object):
     """
     Type container
 
-    :IVariables:
-      `_ctype` : SA type
+    Attributes:
+      _ctype (SA type):
         Column type
 
-      `_dialect` : ``str``
+      _dialect (str):
         Dialect name
 
-      `_symbols` : ``Symbols``
+      _symbols (Symbols):
         Symbol table
     """
 
@@ -55,14 +54,14 @@ class Type(object):
         """
         Initialization
 
-        :Parameters:
-          `ctype` : SA type
+        Parameters:
+          ctype (SA type):
             Column type
 
-          `dialect_name` : ``str``
+          dialect_name (str):
             Dialect name
 
-          `symbols` : ``Symbols``
+          symbols (Symbols):
             Symbol table
         """
         self._ctype = ctype
@@ -74,12 +73,12 @@ class Type(object):
         """
         Construct by SA column
 
-        :Parameters:
-          `column` : SA column
+        Parameters:
+          column (SA column):
             SA column
 
-        :Return: New Type instance
-        :Rtype: `Type`
+        Returns:
+          Type: New Type instance
         """
         return cls(
             column.type,
@@ -91,8 +90,8 @@ class Type(object):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Returns:
+          str: The string representation
         """
         # pylint: disable = too-many-branches, too-many-statements
 
@@ -200,15 +199,15 @@ def _find_class(first_cls, name):
     """
     Find class where a method is defined
 
-    :Parameters:
-      `first_cls` : type
+    Parameters:
+      first_cls (type):
         Class to start with
 
-      `name` : ``str``
+      name (str):
         Method name
 
-    :Return: class or ``None``
-    :Rtype: ``type``
+    Returns:
+      type: class or ``None``
     """
     if not isinstance(first_cls, type):
         first_cls = first_cls.__class__

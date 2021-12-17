@@ -23,11 +23,20 @@ sys.path.append(os.path.abspath('../../'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.viewcode',
 ]
 
 
 def setup(app):
-    app.add_stylesheet('ci.css')
+    app.add_css_file('ci.css')
+
+
+# https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html#configuration
+napoleon_preprocess_types = True
+napoleon_type_aliases = {
+    'Symbols': 'gensaschema.Symbols',
+}
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -43,8 +52,8 @@ source_suffix = '.txt'
 master_doc = 'index'
 
 # General information about the project.
-project = 'GenSASchema'
-copyright = '2015 - 2021 Andr\xe9 Malo'
+project = u'GenSASchema'
+copyright = u'2015 - 2021 Andr\xe9 Malo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -102,7 +111,7 @@ rst_prolog = """
 .. role:: productb(strong)
     :class: ci
 
-.. |**genSASchema**| replace:: :productb:`GenSASchema`
+.. |**GenSASchema**| replace:: :productb:`GenSASchema`
 """
 
 # -- Options for HTML output ---------------------------------------------------
@@ -134,7 +143,6 @@ html_theme_options = dict(
 #     html_theme_options = dict(
 #         rightsidebar=True,
 #     )
-
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -210,8 +218,8 @@ htmlhelp_basename = 'GenSASchemadoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'gensaschema.tex', 'GenSASchema Documentation',
-   'Andr\xe9 "nd" Malo', 'manual'),
+  ('index', 'gensaschema.tex', u'GenSASchema Documentation',
+   u'Andr\xe9 "nd" Malo', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

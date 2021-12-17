@@ -26,5 +26,3 @@ r"""
 GenSASchema Unit Tests.
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
-__license__ = "Apache License, Version 2.0"

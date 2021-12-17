@@ -26,7 +26,6 @@ u"""
 Tests for gensaschema._column
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
 from sqlalchemy.dialects import mysql as _mysql

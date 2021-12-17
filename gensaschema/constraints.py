@@ -29,20 +29,19 @@ configurable.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
 
 
 def Unique(*columns, **kwargs):  # pylint: disable = invalid-name
-    """
+    r"""
     Append unique constraint
 
-    :Parameters:
-      `columns` : ``tuple``
+    Parameters:
+      *columns:
         Constraint columns
 
-      `kwargs` : ``dict``
+      \*\*kwargs:
         Additional arguments
     """
     columns[0].table.append_constraint(_sa.UniqueConstraint(
@@ -51,14 +50,14 @@ def Unique(*columns, **kwargs):  # pylint: disable = invalid-name
 
 
 def PrimaryKey(*columns, **kwargs):  # pylint: disable = invalid-name
-    """
+    r"""
     Append primary key
 
-    :Parameters:
-      `columns` : ``tuple``
+    Parameters:
+      \*columns:
         Constraint columns
 
-      `kwargs` : ``dict``
+      \*\*kwargs:
         Additional parameters
     """
     columns[0].table.append_constraint(_sa.PrimaryKeyConstraint(
@@ -67,17 +66,17 @@ def PrimaryKey(*columns, **kwargs):  # pylint: disable = invalid-name
 
 
 def ForeignKey(columns, refcolumns, **kwargs):  # noqa pylint: disable = invalid-name
-    """
+    r"""
     Append foreign key
 
-    :Parameters:
-      `columns` : sequence
+    Parameters:
+      columns (sequence):
         Source columns
 
-      `refcolumns` : sequence
+      refcolumns (sequence):
         Referred columns
 
-      `kwargs` : ``dict``
+      \*\*kwargs:
         Additional parameters
     """
     columns[0].table.append_constraint(_sa.ForeignKeyConstraint(

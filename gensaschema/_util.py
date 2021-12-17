@@ -26,7 +26,6 @@ r"""
 Misc utilities.
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 
 # pylint: disable = redefined-builtin, invalid-name, self-assigning-variable
@@ -62,12 +61,12 @@ def find_public(space):
     list). Otherwise, all symbol names not starting with an underscore are
     listed.
 
-    :Parameters:
-      `space` : ``dict``
+    Parameters:
+      space (dict):
         Name space to inspect
 
-    :Return: List of public names
-    :Rtype: ``list``
+    Returns:
+      list: List of public names
     """
     if '__all__' in space:
         return list(space['__all__'])

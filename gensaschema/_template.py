@@ -27,7 +27,6 @@ Simple template abstraction.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import textwrap as _textwrap
 
@@ -36,8 +35,8 @@ class Template(object):
     """
     Template container
 
-    :IVariables:
-      `_template` : ``str``
+    Attributes:
+      _template (str):
         Template string
     """
 
@@ -45,14 +44,14 @@ class Template(object):
         """
         Initialization
 
-        :Parameters:
-          `template` : ``str``
+        Parameters:
+          template (str):
             Template string
 
-          `dedent` : ``bool``
+          dedent (bool):
             Dedent automatically?
 
-          `rstrip` : ``bool``
+          rstrip (bool):
             rstrip the template automatically?
         """
         if dedent:
@@ -68,17 +67,17 @@ class Template(object):
         Either `args` or `kwargs` may be given, but not both. If nothing is
         given, nothing will be expanded.
 
-        :Parameters:
-          `args` : ``tuple``
+        Parameters:
+          args (tuple):
             Positional parameters to expand
 
-          `kwargs` : ``dict``
+          kwargs (dict):
             Keyword arguments to expand
 
-        :Return: The expanded string
-        :Rtype: ``str``
+        Returns:
+          str: The expanded string
 
-        :Exceptions:
+        Raises:
           - `TypeError` : Both args and kwargs given
         """
         if args:

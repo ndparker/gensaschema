@@ -26,8 +26,6 @@ u"""
 GenSASchema Integration Tests.
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
-__license__ = "Apache License, Version 2.0"
 
 # enable to disable integration tests:
 if 0:  # pylint: disable = using-constant-test

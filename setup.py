@@ -26,13 +26,12 @@ u"""
 
 GenSASchema - Static SQLAlchemy Schema Generator.
 """
-from __future__ import print_function
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import os as _os
+import posixpath as _posixpath
 
-# pylint: disable = no-name-in-module, import-error
+# pylint: disable = no-name-in-module, import-error, raise-missing-from
 import setuptools as _setuptools
 
 # pylint: disable = invalid-name
@@ -40,6 +39,7 @@ import setuptools as _setuptools
 
 def _doc(filename):
     """ Read docs file """
+    # pylint: disable = unspecified-encoding
     args = {} if str is bytes else dict(encoding='utf-8')
     try:
         with open(_os.path.join('docs', filename), **args) as fp:
@@ -79,10 +79,12 @@ package = dict(
 def setup():
     """ Main """
     # pylint: disable = too-many-branches
+    # pylint: disable = unspecified-encoding
 
+    args = {} if str is bytes else dict(encoding='utf-8')
     version_file = '%s/%s' % (package['pathname'],
                               package.get('version_file', '__init__.py'))
-    with open(version_file) as fp:
+    with open(version_file, **args) as fp:
         for line in fp:  # pylint: disable = redefined-outer-name
             if line.startswith('__version__'):
                 version = line.split('=', 1)[1].strip()

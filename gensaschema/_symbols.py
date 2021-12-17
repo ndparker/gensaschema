@@ -27,16 +27,16 @@ Symbol management.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import keyword as _keyword
 import operator as _op
 import weakref as _weakref
 
+from . import _exceptions
 from . import _util
 
 
-class SymbolException(Exception):
+class SymbolException(_exceptions.Error):
     """ Symbol error """
 
 
@@ -44,14 +44,14 @@ class Symbols(object):
     """
     Symbol table
 
-    :IVariables:
-      `_symbols` : ``dict``
+    Attributes:
+      _symbols (dict):
         Symbols
 
-      `imports` : `_Imports`
+      imports (_Imports):
         Import container
 
-      `types` : `_Types`
+      types (_Types):
         Type container
     """
 
@@ -59,9 +59,13 @@ class Symbols(object):
         """
         Initialization
 
-        :Parameters:
-          `symbols` : ``dict``
+        Parameters:
+          symbols (dict):
             Initial symbols
+
+          imports (iterable):
+            List of initial (id, import statement) tuples. If omitted or
+            ``None``, it's empty.
         """
         self._symbols = {}
         defaults = dict(
@@ -90,7 +94,13 @@ class Symbols(object):
             self[name] = symbol
 
     def __delitem__(self, name):
-        """ Remove symbol entry if available """
+        """
+        Remove symbol entry if available
+
+        Parameters:
+          name (str):
+            Symbol identifier
+        """
         try:
             del self._symbols[name]
         except KeyError:
@@ -100,16 +110,15 @@ class Symbols(object):
         """
         Set symbol table entry
 
-        :Parameters:
-          `name` : ``str``
+        Parameters:
+          name (str):
             Symbol identifier
 
-          `symbol` : ``str``
+          symbol (str):
             Symbol
 
-        :Exceptions:
-          - `SymbolException` : Symbol could not be set because of some
-            conflict
+        Raises:
+          SymbolException: Symbol could not be set because of some conflict
         """
         if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
             name = str(name).decode('ascii')
@@ -128,15 +137,15 @@ class Symbols(object):
         """
         Get symbol table entry
 
-        :Parameters:
-          `name` : ``str``
+        Parameters:
+          name (str):
             Symbol identifier
 
-        :Return: The symbol
-        :Rtype: ``str``
+        Returns:
+          str: The symbol
 
-        :Exceptions:
-          - `KeyError` : Symbol not found
+        Raises:
+          KeyError: Symbol not found
         """
         if _util.py2 and not isinstance(name, _util.unicode):
             name = str(name).decode('ascii')
@@ -146,15 +155,12 @@ class Symbols(object):
         """
         Check symbol table entry
 
-        :Parameters:
-          `name` : ``str``
+        Parameters:
+          name (str):
             Symbol identifier
 
-        :Return: The symbol
-        :Rtype: ``str``
-
-        :Exceptions:
-          - `KeyError` : Symbol not found
+        Returns:
+          bool: Does the symbol entry exist?
         """
         if _util.py2 and not isinstance(name, _util.unicode):
             name = str(name).decode('ascii')
@@ -162,10 +168,10 @@ class Symbols(object):
 
     def __iter__(self):
         """
-        Make item iterator
+        Make item iterator (id, value)
 
-        :Return: The iterator
-        :Rtype: iterable
+        Returns:
+          iterable: The iterator
         """
         return iter(list(self._symbols.items()))
 
@@ -174,11 +180,11 @@ class _Types(object):
     """
     Type container
 
-    :IVariables:
-      `_types` : ``dict``
+    Attributes:
+      _types (dict):
         Type map
 
-      `_symbols` : `Symbols`
+      _symbols (Symbols):
         Symbol table
     """
 
@@ -186,8 +192,8 @@ class _Types(object):
         """
         Initialization
 
-        :Parameters:
-          `symbols` : `Symbols`
+        Parameters:
+          symbols (Symbols):
             Symbol table
         """
         self._types = {}
@@ -199,15 +205,15 @@ class _Types(object):
         """
         Set type
 
-        :Parameters:
-          `class_` : ``type``
+        Parameters:
+          class_ (type):
             Type to match
 
-          `symbol` : ``str``
+          symbol (str):
             Type module symbol
 
-        :Exceptions:
-          - `SymbolException` : Type conflict
+        Raises:
+          SymbolException: Type conflict
         """
         if class_ in self._types:
             if self._types[class_] != symbol:
@@ -219,18 +225,18 @@ class _Types(object):
         """
         Resolve type to module symbol
 
-        :Parameters:
-          `type_` : ``object``
+        Parameters:
+          type_ (object):
             Type to resolve
 
-          `dialect` : ``str``
+          dialect (str):
             Dialect name
 
-        :Return: Resolved symbol
-        :Rtype: ``str``
+        Returns:
+          str: Resolved symbol
 
-        :Exceptions:
-          - `SymbolException` : Type could not be resolved
+        Raises:
+          SymbolException: Type could not be resolved
         """
         if type_.__class__ in self._types:
             return self._symbols[self._types[type_.__class__]]
@@ -266,17 +272,33 @@ class _Imports(object):
     """
     Import table
 
-    :IVariables:
-      `_imports` : ``list``
+    Attributes:
+      _imports (list):
         Import list
     """
 
     def __init__(self, imports=None):
-        """ Initialization """
+        """
+        Initialization
+
+        Parameters:
+          imports (iterable):
+            List of initial (id, import statement) tuples. If omitted or
+            ``None``, it's empty.
+        """
         self._imports = list(imports or ())
 
     def __contains__(self, name):
-        """ Check if name is in imports """
+        """
+        Check if name is in imports
+
+        Parameters:
+          name (str):
+            Import identifier
+
+        Returns:
+          bool: Does an import with that identifier exist?
+        """
         for key, _ in self._imports:
             if key == name:
                 return True
@@ -286,15 +308,15 @@ class _Imports(object):
         """
         Set import
 
-        :Parameters:
-          `name` : ``str``
+        Parameters:
+          name (str):
             Symbolic name (to support import uniqueness)
 
-          `import_` : ``str``
+          import_ (str):
             Import statement
 
-        :Exceptions:
-          - `SymbolException` : Import conflict
+        Raises:
+          SymbolException: Import conflict
         """
         if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
             name = str(name).decode('ascii')
@@ -311,8 +333,8 @@ class _Imports(object):
         """
         Make iterator over the import statements
 
-        :Return: The iterator
-        :Rtype: iterable
+        Returns:
+          iterable: The iterator
         """
         return iter(map(_op.itemgetter(1), self._imports))
 
@@ -327,15 +349,15 @@ def _load_dotted(name):
     (i.e. without the invocation of a class to get their attributes or
     the like).
 
-    :Parameters:
-      `name` : ``str``
+    Parameters:
+      name (str):
         The dotted name to load
 
-    :Return: The loaded object
-    :Rtype: any
+    Returns:
+      any: The loaded object
 
-    :Exceptions:
-      - `ImportError` : A module in the path could not be loaded
+    Raises:
+      ImportError: A module in the path could not be loaded
     """
     components = name.split('.')
     path = [components.pop(0)]

@@ -27,7 +27,6 @@ Column inspection and generation.
 
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 from . import _type
 from . import _util
@@ -37,18 +36,24 @@ class ServerDefault(object):
     """
     Default clause container
 
-    :IVariables:
-      `_default` : Default clause
+    Attributes:
+      _default (Default clause):
         Default clause
+
+      _symbols (Symbols):
+        Symbol table
     """
 
     def __init__(self, default, symbols):
         """
         Initialization
 
-        :Parameters:
-          `default` : Default clause
+        Parameters:
+          default (Default clause):
             Default clause
+
+          symbols (Symbols):
+            Symbol table
         """
         self._default = default
         self._symbols = symbols
@@ -57,8 +62,8 @@ class ServerDefault(object):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Return:
+          str: The string representation
         """
         if self._default.for_update:
             for_update = ", for_update=%r" % (True,)
@@ -75,24 +80,27 @@ class Column(object):
     """
     Column container
 
-    :IVariables:
-      `_name` : ``unicode``
+    Attributes:
+      _name (unicode):
         Name
 
-      `_ctype` : SA type
+      _ctype (SA type):
         Column type
 
-      `_nullable` : ``bool``
+      _nullable (bool):
         Nullable?
 
-      `_primary_key` : ``bool``
+      _primary_key (bool):
         Part of a primary key?
 
-      `_autoincrement` : ``bool``
+      _autoincrement (bool):
         Possible autoincrement?
 
-      `_server_default` : Default clause
+      _server_default (Default clause):
         Default clause
+
+      _symbols (Symbols):
+        Symbol table
     """
 
     def __init__(self, name, ctype, nullable, primary_key, autoincrement,
@@ -100,24 +108,27 @@ class Column(object):
         """
         Initialization
 
-        :Parameters:
-          `name` : ``unicode``
+        Parameters:
+          name (unicode):
             Column name
 
-          `ctype` : SA type
+          ctype (SA type):
             Column type
 
-          `nullable` : ``bool``
+          nullable (bool):
             Nullable?
 
-          `primary_key` : ``bool``
+          primary_key (bool):
             Part of a primary key?
 
-          `autoincrement` : ``bool``
+          autoincrement (bool):
             Possible autoincrement?
 
-          `server_default` : Default clause
+          server_default (Default clause):
             Default clause
+
+          symbols (Symbols):
+            Symbol table
         """
         self._name = name
         self._ctype = ctype
@@ -133,11 +144,14 @@ class Column(object):
         Construct from SA column
 
         :Parameters:
-          `column` : SA column
+          column (SA column):
             SA column
 
-        :Return: New column instance
-        :Rtype: `Column`
+          symbols (Symbols):
+            Symbol table
+
+        Returns:
+          Column: New column instance
         """
         return cls(
             column.name,
@@ -153,8 +167,8 @@ class Column(object):
         """
         Make string representation
 
-        :Return: The string representation
-        :Rtype: ``str``
+        Returns:
+          str: The string representation
         """
         params = list(map(repr, (self._name, self._ctype)))
         if not self._nullable:

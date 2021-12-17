@@ -26,7 +26,6 @@ u"""
 Tests for gensaschema._table
 """
 __author__ = u"Andr\xe9 Malo"
-__docformat__ = "restructuredtext en"
 
 import os as _os
 import sys as _sys
@@ -119,7 +118,6 @@ SQLAlchemy schema definition for foo.
 
 :Warning: DO NOT EDIT, this file is generated
 """
-__docformat__ = "restructuredtext en"
 
 import sqlalchemy as _sa
 from sqlalchemy.dialects import sqlite as t
