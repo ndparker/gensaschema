@@ -30,14 +30,14 @@ __author__ = u"Andr\xe9 Malo"
 
 # pylint: disable = redefined-builtin, invalid-name, self-assigning-variable
 try:
-    unicode
+    unicode  # pylint: disable = used-before-assignment
 except NameError:  # pragma: no cover
     unicode = str
 else:  # pragma: no cover
     unicode = unicode
 
 try:
-    bytes
+    bytes  # pylint: disable = used-before-assignment
 except NameError:  # pragma: no cover
     bytes = str
 else:  # pragma: no cover
@@ -46,7 +46,7 @@ else:  # pragma: no cover
 py2 = bytes is str
 
 try:
-    cmp
+    cmp  # pylint: disable = used-before-assignment
 except NameError:  # pragma: no cover
     cmp = lambda a, b: (a > b) - (a < b)
 else:  # pragma: no cover

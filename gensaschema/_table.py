@@ -197,8 +197,8 @@ class Table(object):
                             while stack:
                                 try:
                                     types(stack[-1], metadata, symbols)
-                                except _sa.exc.SAWarning as e:
-                                    tname = type_name(e)
+                                except _sa.exc.SAWarning as exc:
+                                    tname = type_name(exc)
                                     if tname and tname not in stack and \
                                             tname not in seen:
                                         stack.append(tname)
