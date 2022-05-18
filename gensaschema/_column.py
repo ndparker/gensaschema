@@ -28,6 +28,8 @@ Column inspection and generation.
 """
 __author__ = u"Andr\xe9 Malo"
 
+import sqlalchemy as _sa
+
 from . import _type
 from . import _util
 
@@ -65,10 +67,19 @@ class ServerDefault(object):
         Return:
           str: The string representation
         """
+        identity = getattr(_sa, 'Identity', None)
+        if identity is not None \
+                and isinstance(self._default, identity):
+            return "%s.%s" % (
+                self._symbols['sa'],
+                _util.unicode(self._default),
+            )
+
         if self._default.for_update:
             for_update = ", for_update=%r" % (True,)
         else:
             for_update = ""
+
         return "%s(%r%s)" % (
             self._symbols['default'],
             _util.unicode(self._default.arg),

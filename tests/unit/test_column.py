@@ -27,6 +27,8 @@ Tests for gensaschema._column
 """
 __author__ = u"Andr\xe9 Malo"
 
+from pytest import skip
+
 import sqlalchemy as _sa
 from sqlalchemy.dialects import mysql as _mysql
 
@@ -77,6 +79,36 @@ def test_Column():
     else:
         assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
                               'server_default=D(\'""\'))')
+
+    inst = _column.Column.from_sa(table.c.lolo, symbols)
+    assert repr(inst) == ("C('lolo', TT.INTEGER, nullable=False, "
+                          "autoincrement=False)")
+
+
+def test_Column_identity():
+    """ _column.Column() works ith identity """
+    if not getattr(_sa, 'Identity', None):
+        skip("Identity not defined")
+
+    meta = _sa.MetaData()
+    table = _sa.Table(
+        u'mytable', meta,
+        _sa.Column(u'Lala', _mysql.VARCHAR(255), _sa.Identity()),
+        _sa.Column(u'lolo', _mysql.INTEGER, primary_key=True,
+                   autoincrement=False),
+    )
+    meta.bind = _test.Bunch(dialect=_test.Bunch(name='mysql'))
+    symbols = _symbols.Symbols(symbols=dict(type="TT"))
+
+    inst = _column.Column.from_sa(table.c.Lala, symbols)
+    if bytes is str:
+        assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
+                              'nullable=False, '
+                              'server_default=_sa.Identity())')
+    else:
+        assert repr(inst) == ('C(\'Lala\', TT.VARCHAR(255), '
+                              'nullable=False, '
+                              'server_default=_sa.Identity())')
 
     inst = _column.Column.from_sa(table.c.lolo, symbols)
     assert repr(inst) == ("C('lolo', TT.INTEGER, nullable=False, "
