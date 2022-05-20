@@ -8,7 +8,7 @@ Schema module generation code.
 
 :Copyright:
 
- Copyright 2010 - 2021
+ Copyright 2010 - 2022
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
