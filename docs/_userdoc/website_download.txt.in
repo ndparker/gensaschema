@@ -64,7 +64,7 @@ the PGP signature of that file. The file is signed by André Malo, Key-ID
 .. sourcecode:: console
 
     $ gpg --verify gensaschema-@@VERSION@@.digests
-    gpg: Signature made Sat Dec 18 18:36:53 2021 CET
+    gpg: Signature made Fri May 20 10:03:36 2022 CEST
     gpg:                using RSA key 21B65583FF640D34E8662B6B3DED446369F2EE1A
     gpg: Good signature from "André Malo <nd@perlig.de>"
 
