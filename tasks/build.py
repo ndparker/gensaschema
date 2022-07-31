@@ -6,6 +6,7 @@ Build Tasks
 """
 from __future__ import print_function
 
+import itertools as _it
 import os as _os
 import platform as _platform
 import re as _re
@@ -40,6 +41,10 @@ def wheels(ctx, arches=None):
     """
     # pylint: disable = unused-argument
 
+    if ctx.wheels.build == 'binary':
+        return _build_binary(ctx, arches=arches)
+
+    assert not arches
     return _build_universal(ctx)
 
 
@@ -82,18 +87,18 @@ def _build_binary(ctx, arches=None):
     for arch in arches:
         if machine == arch:
             continue
-        if machine == 'x86_64' and arch == 'i686':
-            continue
-        ctx.run(ctx.c('''
-            docker run --rm --privileged multiarch/qemu-user-static
-            --reset -p yes
-        '''), echo=True, pty=True)
-        break
+        if machine == 'x86_64':
+            if arch == 'i686':
+                continue
+
+            ctx.run(ctx.c('''
+                docker run --rm --privileged multiarch/qemu-user-static
+                --reset -p yes
+            '''), echo=True, pty=True)
+            break
 
     with ctx.shell.root_dir():
         ctx.shell.rm_rf(path)
-        pythons = "36 37 38 39 310"
-
         for package in ctx.shell.files('dist/',
                                        "%s-*.tar.gz" % (ctx.package,)):
             ppath = '/io/%s' % (_os.path.basename(package))
@@ -101,26 +106,22 @@ def _build_binary(ctx, arches=None):
             ctx.shell.cp(package, ctx.shell.native('wheel/'))
             try:
                 for arch in arches:
-                    if arch in ("x86_64", "i686"):
+                    spec = ctx.wheels.specs[arch]
+                    prefix = "linux32" if arch == "i686" else ""
+                    groups = sorted(spec.items(), key=lambda x: (x[1], x[0]))
+                    for v, group in _it.groupby(groups, key=lambda x: x[1]):
+                        pythons = " ".join(sorted(item[0] for item in group))
+                        if "_" in v:
+                            v = "_" + v
                         ctx.run(
                             ctx.c('''
                                 docker run --rm -it -v%s/wheel:/io
-                                quay.io/pypa/manylinux1_%s:latest
-                            ''' + (arch == "i686" and "linux32" or "") + '''
+                                quay.io/pypa/manylinux%s_%s:latest
+                            ''' + prefix + '''
                                 /io/build.sh %s %s
-                            ''', _os.getcwd(), arch, ppath, "27"),
+                            ''', _os.getcwd(), v, arch, ppath, pythons),
                             echo=True, pty=True,
                         )
-                    v = "2014" if arch == "aarch64" else "1"
-                    ctx.run(
-                        ctx.c('''
-                            docker run --rm -it -v%s/wheel:/io
-                            quay.io/pypa/manylinux%s_%s:latest
-                            ''' + (arch == "i686" and "linux32" or "") + '''
-                            /io/build.sh %s %s
-                        ''', _os.getcwd(), v, arch, ppath, pythons),
-                        echo=True, pty=True,
-                    )
             finally:
                 _os.unlink(ctx.shell.native('wheel/%s'
                                             % (_os.path.basename(package),)))

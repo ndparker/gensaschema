@@ -55,6 +55,9 @@ def namespace():
                 source='docs/_userdoc',
             ),
         ),
+        wheels=dict(
+            build="universal",
+        ),
         pypi=adict(
             # repository='https://test.pypi.org/legacy/',
             repository='https://upload.pypi.org/legacy/',

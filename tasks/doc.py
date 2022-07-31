@@ -6,7 +6,6 @@ Doc Tasks
 """
 
 import os as _os
-import re as _re
 
 import invoke as _invoke
 
