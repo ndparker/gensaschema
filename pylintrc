@@ -161,6 +161,7 @@ disable=
     no-else-raise,
     no-else-continue,
     redundant-u-string-prefix,
+    unnecessary-lambda-assignment,
 
 
 # Enable the message, report, category or checker with the given id(s). You can

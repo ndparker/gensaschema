@@ -340,7 +340,7 @@ class TableCollection(tuple):
             return objects[sa_table.key]
 
         tables = list(map(map_table, metadata.tables.values()))
-        tables.sort(key=lambda x: (not(x.is_reference), x.varname))
+        tables.sort(key=lambda x: (not (x.is_reference), x.varname))
 
         _break_cycles(metadata)
         seen = set()
