@@ -40,6 +40,14 @@ from gensaschema import _schema
 
 sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
 
+def runner(db):
+    """ Create runner """
+    def run(stmt):
+        """ Run """
+        with db.begin():
+            db.execute(_sa.text(stmt))
+    return run
+
 
 def test_schema(tmpdir):
     """ _schema.Schema() works as expected """
@@ -50,14 +58,15 @@ def test_schema(tmpdir):
 
     db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
     try:
-        db.execute('''
+        run = runner(db)
+        run('''
             CREATE TABLE names (
                 id  INT(11) PRIMARY KEY,
                 first  VARCHAR(128) DEFAULT NULL,
                 last   VARCHAR(129) NOT NULL
             );
         ''')
-        db.execute('''
+        run('''
             CREATE TABLE emails (
                 id  INT(11) PRIMARY KEY,
                 address  VARCHAR(127) NOT NULL,
@@ -65,7 +74,7 @@ def test_schema(tmpdir):
                 UNIQUE (address)
             );
         ''')
-        db.execute('''
+        run('''
             CREATE TABLE addresses (
                 id  INT(11) PRIMARY KEY,
                 zip_code  VARCHAR(32) DEFAULT NULL,
@@ -73,7 +82,7 @@ def test_schema(tmpdir):
                 street    VARCHAR(64) DEFAULT NULL
             );
         ''')
-        db.execute('''
+        run('''
             CREATE TABLE persons (
                 id  INT(11) PRIMARY KEY,
                 address  INT(11) NOT NULL,
@@ -85,11 +94,11 @@ def test_schema(tmpdir):
                 FOREIGN KEY (email) REFERENCES emails (id)
             );
         ''')
-        db.execute('''
+        run('''
             ALTER TABLE addresses
                 ADD COLUMN owner INT(11) DEFAULT NULL REFERENCES persons (id);
         ''')
-        db.execute('''
+        run('''
             CREATE TABLE temp.blub (id INT PRIMARY KEY);
         ''')
         schema = _schema.Schema(

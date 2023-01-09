@@ -188,7 +188,8 @@ class Table(object):
             seen = set()
             while True:
                 try:
-                    table = _sa.Table(name, metadata, autoload=True, **kwargs)
+                    table = _sa.Table(name, metadata,
+                                      autoload_with=metadata.bind, **kwargs)
                 except _sa.exc.SAWarning as e:
                     if types is not None:
                         tname = type_name(e)

@@ -28,10 +28,10 @@ Tests for gensaschema._table
 __author__ = u"Andr\xe9 Malo"
 
 import os as _os
-import sqlite3 as _sqlite3
 
 import sqlalchemy as _sa
 
+from gensaschema import _meta
 from gensaschema import _symbols
 from gensaschema import _table
 
@@ -45,13 +45,14 @@ def test_table(tmpdir):
     tmpdir = str(tmpdir)
     filename = _os.path.join(tmpdir, 'tabletest.db')
 
-    db = _sa.create_engine('sqlite:///%s' % (filename,))
-    meta = _sa.MetaData(db)
-    db.execute("""
-        CREATE TABLE stocks
-        (date DATE, trans text, symbol varchar(12), qty real, price real,
-         primary key (date))
-    """)
+    db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
+    meta = _meta.BoundMetaData(db)
+    with db.begin():
+        db.execute(_sa.text("""
+            CREATE TABLE stocks
+            (date DATE, trans text, symbol varchar(12), qty real, price real,
+            primary key (date))
+        """))
     table = _table.Table.by_name('main.stocks', 'STOCKS', meta, {},
                                  _symbols.Symbols())
 

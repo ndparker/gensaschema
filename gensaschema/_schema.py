@@ -28,8 +28,7 @@ Schema module generation code.
 """
 __author__ = u"Andr\xe9 Malo"
 
-import sqlalchemy as _sa
-
+from . import _meta
 from . import _table
 from . import _template
 
@@ -114,7 +113,7 @@ class Schema(object):
             dialect's ``ischema_names``. If omitted or ``None``, the reflector
             will always fail on unknown types.
         """
-        metadata = _sa.MetaData(conn)
+        metadata = _meta.BoundMetaData(conn)
         self._dialect = metadata.bind.dialect.name
         self._tables = _table.TableCollection.by_names(
             metadata, tables, schemas, symbols, types=types
