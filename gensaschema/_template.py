@@ -8,7 +8,7 @@ Simple template abstraction.
 
 :Copyright:
 
- Copyright 2010 - 2022
+ Copyright 2010 - 2023
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
