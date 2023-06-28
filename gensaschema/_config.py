@@ -62,7 +62,8 @@ class Config(object):
     #: Template for empty config file
     #:
     #: :Type: `Template`
-    _CONFIG_TPL = _template.Template('''
+    _CONFIG_TPL = _template.Template(
+        '''
         # This is a comment. I love comments.
         #
         # This files contains table names, one per line
@@ -77,7 +78,8 @@ class Config(object):
         #
         # The basename of this file (modulo .schema extension) is used as
         # basename for the python file.
-    ''')
+    '''
+    )
 
     def __init__(self, tables, schemas, lines=None):
         """
@@ -208,8 +210,10 @@ class Config(object):
                 if tables:
                     result.append('')
                     result.extend(tables)
-                schemas = ['%s = %s' % (key, value)
-                           for key, value in self.schemas.items()]
+                schemas = [
+                    '%s = %s' % (key, value)
+                    for key, value in self.schemas.items()
+                ]
                 if schemas:
                     result.append('')
                     result.append('[schemas]')

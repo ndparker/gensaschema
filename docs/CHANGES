@@ -1,3 +1,10 @@
+Changes with version
+
+ *) Run black formatter
+
+ *) Update project boilerplate
+
+
 Changes with version 0.6.7
 
  *) Adaptions for SA 2.0

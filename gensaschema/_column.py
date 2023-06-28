@@ -68,8 +68,7 @@ class ServerDefault(object):
           str: The string representation
         """
         identity = getattr(_sa, 'Identity', None)
-        if identity is not None \
-                and isinstance(self._default, identity):
+        if identity is not None and isinstance(self._default, identity):
             return "%s.%s" % (
                 self._symbols['sa'],
                 _util.unicode(self._default),
@@ -114,8 +113,16 @@ class Column(object):
         Symbol table
     """
 
-    def __init__(self, name, ctype, nullable, primary_key, autoincrement,
-                 server_default, symbols):
+    def __init__(
+        self,
+        name,
+        ctype,
+        nullable,
+        primary_key,
+        autoincrement,
+        server_default,
+        symbols,
+    ):
         """
         Initialization
 
@@ -187,9 +194,8 @@ class Column(object):
         if not self._autoincrement and self._primary_key:
             params.append('autoincrement=%r' % (False,))
         if self._server_default is not None:
-            params.append('server_default=%r' % (
-                ServerDefault(self._server_default, self._symbols),
-            ))
-        return "%s(%s)" % (
-            self._symbols['column'], ', '.join(params)
-        )
+            params.append(
+                'server_default=%r'
+                % (ServerDefault(self._server_default, self._symbols),)
+            )
+        return "%s(%s)" % (self._symbols['column'], ', '.join(params))

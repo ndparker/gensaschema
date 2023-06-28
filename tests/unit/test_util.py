@@ -35,7 +35,7 @@ from gensaschema import _util
 
 
 def test_find_public_symbols():
-    """ find_public finds all non underscored symbols """
+    """find_public finds all non underscored symbols"""
     mod = _types.ModuleType('lala')
     mod.a = 1
     mod._b = 2
@@ -44,7 +44,7 @@ def test_find_public_symbols():
 
 
 def test_find_public_all():
-    """ find_public passes __all__ """
+    """find_public passes __all__"""
     mod = _types.ModuleType('lala')
     mod.__all__ = ['_b', 'c']
 

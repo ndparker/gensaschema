@@ -60,6 +60,7 @@ class Table(object):
       _symbols (Symbols):
         Symbol table
     """
+
     #: Is it a table reference (vs. a table)?
     #:
     #: :Type: bool
@@ -116,9 +117,19 @@ class Table(object):
         self._symbols = symbols
         self.varname = varname
         self.sa_table = table
-        self.constraints = list(filter(None, [_constraint.Constraint(
-            con, self.varname, self._symbols,
-        ) for con in table.constraints]))
+        self.constraints = list(
+            filter(
+                None,
+                [
+                    _constraint.Constraint(
+                        con,
+                        self.varname,
+                        self._symbols,
+                    )
+                    for con in table.constraints
+                ],
+            )
+        )
 
     @classmethod
     def by_name(cls, name, varname, metadata, schemas, symbols, types=None):
@@ -159,7 +170,7 @@ class Table(object):
         tmatch = _re.compile(u"^Did not recognize type (.+) of column").match
 
         def type_name(e):
-            """ Extract type name from exception """
+            """Extract type name from exception"""
             match = tmatch(e.args[0])
             if match:
                 type_name = match.group(1).strip()
@@ -169,27 +180,45 @@ class Table(object):
             return None
 
         with _warnings.catch_warnings():
-            _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
-                                     message=r'^Did not recognize type ')
-            _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
-                                     message=r'^Unknown column definition ')
-            _warnings.filterwarnings('error', category=_sa.exc.SAWarning,
-                                     message=r'^Incomplete reflection of '
-                                             r'column definition')
-            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
-                                     message=r'^Could not instantiate type ')
-            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
-                                     message=r'^Skipped unsupported '
-                                             r'reflection of expression-based'
-                                             r' index ')
-            _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
-                                     message=r'^Predicate of partial index ')
+            _warnings.filterwarnings(
+                'error',
+                category=_sa.exc.SAWarning,
+                message=r'^Did not recognize type ',
+            )
+            _warnings.filterwarnings(
+                'error',
+                category=_sa.exc.SAWarning,
+                message=r'^Unknown column definition ',
+            )
+            _warnings.filterwarnings(
+                'error',
+                category=_sa.exc.SAWarning,
+                message=r'^Incomplete reflection of ' r'column definition',
+            )
+            _warnings.filterwarnings(
+                'ignore',
+                category=_sa.exc.SAWarning,
+                message=r'^Could not instantiate type ',
+            )
+            _warnings.filterwarnings(
+                'ignore',
+                category=_sa.exc.SAWarning,
+                message=r'^Skipped unsupported '
+                r'reflection of expression-based'
+                r' index ',
+            )
+            _warnings.filterwarnings(
+                'ignore',
+                category=_sa.exc.SAWarning,
+                message=r'^Predicate of partial index ',
+            )
 
             seen = set()
             while True:
                 try:
-                    table = _sa.Table(name, metadata,
-                                      autoload_with=metadata.bind, **kwargs)
+                    table = _sa.Table(
+                        name, metadata, autoload_with=metadata.bind, **kwargs
+                    )
                 except _sa.exc.SAWarning as e:
                     if types is not None:
                         tname = type_name(e)
@@ -200,8 +229,11 @@ class Table(object):
                                     types(stack[-1], metadata, symbols)
                                 except _sa.exc.SAWarning as exc:
                                     tname = type_name(exc)
-                                    if tname and tname not in stack and \
-                                            tname not in seen:
+                                    if (
+                                        tname
+                                        and tname not in stack
+                                        and tname not in seen
+                                    ):
                                         stack.append(tname)
                                         continue
                                     raise
@@ -238,9 +270,9 @@ class Table(object):
             args,
         )
         if self.constraints:
-            result = "\n".join((
-                result, '\n'.join(map(repr, sorted(self.constraints)))
-            ))
+            result = "\n".join(
+                (result, '\n'.join(map(repr, sorted(self.constraints))))
+            )
         return result
 
 
@@ -258,6 +290,7 @@ class TableReference(object):
       constraints (list):
         Constraint list
     """
+
     #: Is it a table reference (vs. a table)?
     #:
     #: :Type: bool
@@ -284,7 +317,9 @@ class TableReference(object):
         if not mod.startswith('_'):
             modas = '_' + mod
             symbols.imports[schema] = 'from %s import %s as %s' % (
-                pkg, mod, modas
+                pkg,
+                mod,
+                modas,
             )
             mod = modas
         else:
@@ -293,7 +328,7 @@ class TableReference(object):
 
 
 class TableCollection(tuple):
-    """ Table collection """
+    """Table collection"""
 
     @classmethod
     def by_names(cls, metadata, names, schemas, symbols, types=None):
@@ -321,19 +356,23 @@ class TableCollection(tuple):
         Returns:
           TableCollection: New table collection instance
         """
-        objects = dict((table.sa_table.key, table) for table in [
-            Table.by_name(name, varname, metadata, schemas, symbols,
-                          types=types)
-            for varname, name in names
-        ])
+        objects = dict(
+            (table.sa_table.key, table)
+            for table in [
+                Table.by_name(
+                    name, varname, metadata, schemas, symbols, types=types
+                )
+                for varname, name in names
+            ]
+        )
 
         def map_table(sa_table):
-            """ Map SA table to table object """
+            """Map SA table to table object"""
             if sa_table.key not in objects:
                 varname = sa_table.name
-                if _util.py2 and \
-                        isinstance(varname,
-                                   _util.unicode):  # pragma: no cover
+                if _util.py2 and isinstance(
+                    varname, _util.unicode
+                ):  # pragma: no cover
                     varname = varname.encode('ascii')
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols
@@ -374,8 +413,9 @@ def _break_cycles(metadata):
       metadata (sqlalchemy.MetaData):
         Metadata
     """
+
     def break_cycle(e):
-        """ Break foreign key cycle """
+        """Break foreign key cycle"""
         cycle_keys = set(map(_op.attrgetter('key'), e.cycles))
         cycle_path = [
             (parent, child)
@@ -401,26 +441,33 @@ def _break_cycles(metadata):
         while first_dep != deps[-1]:
             deps = [deps[-1]] + deps[:-1]
         deps.reverse()
-        logger.debug("Found foreign key cycle: %s", " -> ".join([
-            repr(table.name) for table in deps + [deps[0]]
-        ]))
+        logger.debug(
+            "Found foreign key cycle: %s",
+            " -> ".join([repr(table.name) for table in deps + [deps[0]]]),
+        )
 
         def visit_foreign_key(fkey):
-            """ Visit foreign key """
+            """Visit foreign key"""
             if fkey.column.table == deps[1]:
                 fkey.use_alter = True
                 fkey.constraint.use_alter = True
 
-        _sa.sql.visitors.traverse(deps[0], dict(schema_visitor=True), dict(
-            foreign_key=visit_foreign_key,
-        ))
+        _sa.sql.visitors.traverse(
+            deps[0],
+            dict(schema_visitor=True),
+            dict(
+                foreign_key=visit_foreign_key,
+            ),
+        )
 
     while True:
         try:
             with _warnings.catch_warnings():
-                _warnings.filterwarnings('ignore', category=_sa.exc.SAWarning,
-                                         message=(r'^Cannot correctly sort '
-                                                  r'tables'))
+                _warnings.filterwarnings(
+                    'ignore',
+                    category=_sa.exc.SAWarning,
+                    message=(r'^Cannot correctly sort ' r'tables'),
+                )
 
                 metadata.sorted_tables  # pylint: disable = pointless-statement
         except _sa.exc.CircularDependencyError as e:

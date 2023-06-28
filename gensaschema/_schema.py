@@ -57,7 +57,8 @@ class Schema(object):
     #: Template for the module
     #:
     #: :Type: Template
-    _MODULE_TPL = _template.Template('''
+    _MODULE_TPL = _template.Template(
+        '''
         # -*- coding: ascii -*-
         # flake8: noqa pylint: skip-file
         """
@@ -81,10 +82,12 @@ class Schema(object):
         del %(sa)s, %(table)s, %(column)s, %(default)s, %(meta)s
 
         # vim: nowrap tw=0
-    ''')
+    '''
+    )
 
-    def __init__(self, conn, tables, schemas, symbols, dbname=None,
-                 types=None):
+    def __init__(
+        self, conn, tables, schemas, symbols, dbname=None, types=None
+    ):
         """
         Initialization
 
@@ -160,10 +163,12 @@ class Schema(object):
             lines.append('')
             lines.append('')
 
-        param = dict(((str(key), value) for key, value in self._symbols),
-                     dbspec=" for %s" % self._dbname if self._dbname else "",
-                     dialect=self._dialect,
-                     imports='\n'.join(imports),
-                     lines='\n'.join(lines))
+        param = dict(
+            ((str(key), value) for key, value in self._symbols),
+            dbspec=" for %s" % self._dbname if self._dbname else "",
+            dialect=self._dialect,
+            imports='\n'.join(imports),
+            lines='\n'.join(lines),
+        )
         fp.write(self._MODULE_TPL.expand(**param))
         fp.write('\n')
