@@ -35,6 +35,7 @@ class BoundMetaData(object):
     """
     Bound metadata proxy - SA 2.0 removed the bind, but it's part of our APIs
     """
+
     def __init__(self, bind):
         self._metadata = _sa.MetaData()
         self.bind = bind

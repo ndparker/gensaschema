@@ -44,9 +44,9 @@ def Unique(*columns, **kwargs):  # pylint: disable = invalid-name
       \*\*kwargs:
         Additional arguments
     """
-    columns[0].table.append_constraint(_sa.UniqueConstraint(
-        *columns, **kwargs
-    ))
+    columns[0].table.append_constraint(
+        _sa.UniqueConstraint(*columns, **kwargs)
+    )
 
 
 def PrimaryKey(*columns, **kwargs):  # pylint: disable = invalid-name
@@ -60,12 +60,14 @@ def PrimaryKey(*columns, **kwargs):  # pylint: disable = invalid-name
       \*\*kwargs:
         Additional parameters
     """
-    columns[0].table.append_constraint(_sa.PrimaryKeyConstraint(
-        *columns, **kwargs
-    ))
+    columns[0].table.append_constraint(
+        _sa.PrimaryKeyConstraint(*columns, **kwargs)
+    )
 
 
-def ForeignKey(columns, refcolumns, **kwargs):  # noqa pylint: disable = invalid-name
+def ForeignKey(
+    columns, refcolumns, **kwargs
+):  # noqa pylint: disable = invalid-name
     r"""
     Append foreign key
 
@@ -79,6 +81,11 @@ def ForeignKey(columns, refcolumns, **kwargs):  # noqa pylint: disable = invalid
       \*\*kwargs:
         Additional parameters
     """
-    columns[0].table.append_constraint(_sa.ForeignKeyConstraint(
-        [col.name for col in columns], refcolumns, link_to_name=True, **kwargs
-    ))
+    columns[0].table.append_constraint(
+        _sa.ForeignKeyConstraint(
+            [col.name for col in columns],
+            refcolumns,
+            link_to_name=True,
+            **kwargs
+        )
+    )

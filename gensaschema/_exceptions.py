@@ -32,10 +32,12 @@ import warnings as _warnings
 
 
 class Error(Exception):
-    """ Base exception for this package """
+    """Base exception for this package"""
 
 
-class Warning(Warning):  # noqa pylint: disable = redefined-builtin, undefined-variable
+class Warning(
+    Warning
+):  # noqa pylint: disable = redefined-builtin, undefined-variable
     """
     Base warning for this package
 

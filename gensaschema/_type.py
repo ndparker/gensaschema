@@ -140,8 +140,11 @@ class Type(object):
                         kwds = arg.kind != arg.POSITIONAL_ONLY
                         continue
                     if isinstance(value, _sa.types.TypeEngine):
-                        rvalue = repr(self.__class__(value, self._dialect,
-                                                     self._symbols))
+                        rvalue = repr(
+                            self.__class__(
+                                value, self._dialect, self._symbols
+                            )
+                        )
                     else:
                         rvalue = repr(value)
 
@@ -150,11 +153,18 @@ class Type(object):
                     else:
                         params.append(rvalue)
                 if not kwds and varargs is not None:
-                    if _find_class(self._ctype, '__init__') is not \
-                            _sa.types.TypeEngine:
-                        params.extend(list(
-                            map(repr, getattr(self._ctype, varargs.name, ()))
-                        ))
+                    if (
+                        _find_class(self._ctype, '__init__')
+                        is not _sa.types.TypeEngine
+                    ):
+                        params.extend(
+                            list(
+                                map(
+                                    repr,
+                                    getattr(self._ctype, varargs.name, ()),
+                                )
+                            )
+                        )
 
         else:  # pragma: no cover
             try:
@@ -175,8 +185,11 @@ class Type(object):
                         kwds = True
                         continue
                     if isinstance(value, _sa.types.TypeEngine):
-                        rvalue = repr(self.__class__(value, self._dialect,
-                                                     self._symbols))
+                        rvalue = repr(
+                            self.__class__(
+                                value, self._dialect, self._symbols
+                            )
+                        )
                     else:
                         rvalue = repr(value)
                     if kwds:
@@ -184,11 +197,13 @@ class Type(object):
                     else:
                         params.append(rvalue)
                 if not kwds and spec[1] is not None:
-                    if _find_class(self._ctype, '__init__') is not \
-                            _sa.types.TypeEngine:
-                        params.extend(list(
-                            map(repr, getattr(self._ctype, spec[1]))
-                        ))
+                    if (
+                        _find_class(self._ctype, '__init__')
+                        is not _sa.types.TypeEngine
+                    ):
+                        params.extend(
+                            list(map(repr, getattr(self._ctype, spec[1])))
+                        )
 
         params = ', '.join(params)
         if params:

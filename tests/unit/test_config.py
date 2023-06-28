@@ -36,7 +36,7 @@ from gensaschema import _config
 
 
 def fixture(name):
-    """ Find fixture """
+    """Find fixture"""
     return _os.path.join(
         _os.path.dirname(_os.path.normpath(_os.path.abspath(__file__))),
         'fixtures',
@@ -45,7 +45,7 @@ def fixture(name):
 
 
 def test_init():
-    """ Config initialization works as expected """
+    """Config initialization works as expected"""
     inst = _config.Config.from_file(fixture('config1.schema'))
     assert inst.tables == [
         ('Yo', 'Yo'),
@@ -56,27 +56,40 @@ def test_init():
     ]
     assert inst.schemas == {'foo': 'bar'}
     assert inst._lines == [
-        '# This is a comment. I love comments.\n', '#\n', '\n', 'Yo\n',
-        'some = table\n', 'somethingElse\n', 'x.y\n', 'a = b.c\n', '\n',
-        '[schemas]\n', 'foo = bar\n',
+        '# This is a comment. I love comments.\n',
+        '#\n',
+        '\n',
+        'Yo\n',
+        'some = table\n',
+        'somethingElse\n',
+        'x.y\n',
+        'a = b.c\n',
+        '\n',
+        '[schemas]\n',
+        'foo = bar\n',
     ]
 
 
 def test_dump():
-    """ Config dumps properly """
-    inst = _config.Config(tables=[
-        ('Yo', 'Yo'),
-        ('some', 'table'),
-        ('somethingElse', 'somethingElse'),
-        ('y', 'x.y'),
-        ('a', 'b.c'),
-    ], schemas={'foo': 'bar'})
+    """Config dumps properly"""
+    inst = _config.Config(
+        tables=[
+            ('Yo', 'Yo'),
+            ('some', 'table'),
+            ('somethingElse', 'somethingElse'),
+            ('y', 'x.y'),
+            ('a', 'b.c'),
+        ],
+        schemas={'foo': 'bar'},
+    )
 
     fp = _tempfile.TemporaryFile(mode="w+")
     inst.dump(fp)
     fp.seek(0, 0)
 
-    assert fp.read() == """
+    assert (
+        fp.read()
+        == """
 # This is a comment. I love comments.
 #
 # This files contains table names, one per line
@@ -100,5 +113,7 @@ a = b.c
 
 [schemas]
 foo = bar
-    """.strip() + '\n'
+    """.strip()
+        + '\n'
+    )
     fp.close()

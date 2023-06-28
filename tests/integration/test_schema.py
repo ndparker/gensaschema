@@ -40,17 +40,20 @@ from gensaschema import _schema
 
 sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
 
+
 def runner(db):
-    """ Create runner """
+    """Create runner"""
+
     def run(stmt):
-        """ Run """
+        """Run"""
         with db.begin():
             db.execute(_sa.text(stmt))
+
     return run
 
 
 def test_schema(tmpdir):
-    """ _schema.Schema() works as expected """
+    """_schema.Schema() works as expected"""
     _warnings.simplefilter('error', _sa.exc.SAWarning)
 
     tmpdir = str(tmpdir)
@@ -59,30 +62,37 @@ def test_schema(tmpdir):
     db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
     try:
         run = runner(db)
-        run('''
+        run(
+            '''
             CREATE TABLE names (
                 id  INT(11) PRIMARY KEY,
                 first  VARCHAR(128) DEFAULT NULL,
                 last   VARCHAR(129) NOT NULL
             );
-        ''')
-        run('''
+        '''
+        )
+        run(
+            '''
             CREATE TABLE emails (
                 id  INT(11) PRIMARY KEY,
                 address  VARCHAR(127) NOT NULL,
 
                 UNIQUE (address)
             );
-        ''')
-        run('''
+        '''
+        )
+        run(
+            '''
             CREATE TABLE addresses (
                 id  INT(11) PRIMARY KEY,
                 zip_code  VARCHAR(32) DEFAULT NULL,
                 place     VARCHAR(78) NOT NULL,
                 street    VARCHAR(64) DEFAULT NULL
             );
-        ''')
-        run('''
+        '''
+        )
+        run(
+            '''
             CREATE TABLE persons (
                 id  INT(11) PRIMARY KEY,
                 address  INT(11) NOT NULL,
@@ -93,18 +103,25 @@ def test_schema(tmpdir):
                 FOREIGN KEY (name) REFERENCES names (id),
                 FOREIGN KEY (email) REFERENCES emails (id)
             );
-        ''')
-        run('''
+        '''
+        )
+        run(
+            '''
             ALTER TABLE addresses
                 ADD COLUMN owner INT(11) DEFAULT NULL REFERENCES persons (id);
-        ''')
-        run('''
+        '''
+        )
+        run(
+            '''
             CREATE TABLE temp.blub (id INT PRIMARY KEY);
-        ''')
+        '''
+        )
         schema = _schema.Schema(
-            db, [('persons', 'persons'), ('blah', 'temp.blub')],
+            db,
+            [('persons', 'persons'), ('blah', 'temp.blub')],
             {'temp': 'foo.bar.baz'},
-            _symbols.Symbols(dict(type='t')), dbname='foo'
+            _symbols.Symbols(dict(type='t')),
+            dbname='foo',
         )
     finally:
         db.close()
@@ -115,7 +132,8 @@ def test_schema(tmpdir):
     with open(_os.path.join(tmpdir, "schema.py")) as fp:
         result = fp.read()
 
-    expected = '''
+    expected = (
+        '''
 # -*- coding: ascii -*-
 # flake8: noqa pylint: skip-file
 """
@@ -206,7 +224,9 @@ ForeignKey(
 del _sa, T, C, D, m
 
 # vim: nowrap tw=0
-    '''.strip() + '\n'
+    '''.strip()
+        + '\n'
+    )
     if bytes is not str:
         expected = expected.replace("u'", "'")
     expected %= dict(

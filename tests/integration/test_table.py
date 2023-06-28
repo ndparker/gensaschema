@@ -41,20 +41,25 @@ sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
 
 
 def test_table(tmpdir):
-    """ _table.Table() works as expected """
+    """_table.Table() works as expected"""
     tmpdir = str(tmpdir)
     filename = _os.path.join(tmpdir, 'tabletest.db')
 
     db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
     meta = _meta.BoundMetaData(db)
     with db.begin():
-        db.execute(_sa.text("""
+        db.execute(
+            _sa.text(
+                """
             CREATE TABLE stocks
             (date DATE, trans text, symbol varchar(12), qty real, price real,
             primary key (date))
-        """))
-    table = _table.Table.by_name('main.stocks', 'STOCKS', meta, {},
-                                 _symbols.Symbols())
+        """
+            )
+        )
+    table = _table.Table.by_name(
+        'main.stocks', 'STOCKS', meta, {}, _symbols.Symbols()
+    )
 
     expected = (
         "T(u'stocks', m,\n"

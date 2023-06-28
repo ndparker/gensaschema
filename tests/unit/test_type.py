@@ -33,11 +33,13 @@ from gensaschema import _type
 
 
 def test_find_class():
-    """ _find_class() works as expected """
+    """_find_class() works as expected"""
+
     class Sub(_type.Type):
-        """ Subtype """
+        """Subtype"""
+
         def __repr__(self):
-            """ repr"""
+            """repr"""
             return "Sub"
 
     assert _type._find_class(_type.Type, '__init__') is _type.Type

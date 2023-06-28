@@ -37,7 +37,7 @@ from . import _util
 
 
 class SymbolException(_exceptions.Error):
-    """ Symbol error """
+    """Symbol error"""
 
 
 class Symbols(object):
@@ -69,16 +69,16 @@ class Symbols(object):
         """
         self._symbols = {}
         defaults = dict(
-            sa="_sa",          # SQLAlchemy shortname
-            meta="m",          # MetaData shortname
-            table="T",         # Table shortname
-            type="t",          # Type module shortname
-            column="C",        # Column shortname
-            default="D",       # DefaultClause shortname
-            pk="PrimaryKey",   # PrimaryKey function name
-            fk="ForeignKey",   # ForeignKey function name
-            uk="Unique",       # UniqueKey function name
-            constraints=(      # constraint function module
+            sa="_sa",  # SQLAlchemy shortname
+            meta="m",  # MetaData shortname
+            table="T",  # Table shortname
+            type="t",  # Type module shortname
+            column="C",  # Column shortname
+            default="D",  # DefaultClause shortname
+            pk="PrimaryKey",  # PrimaryKey function name
+            fk="ForeignKey",  # ForeignKey function name
+            uk="Unique",  # UniqueKey function name
+            constraints=(  # constraint function module
                 __name__.rsplit('.', 1)[0] + '.constraints'
             ),
         )
@@ -120,7 +120,9 @@ class Symbols(object):
         Raises:
           SymbolException: Symbol could not be set because of some conflict
         """
-        if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
+        if _util.py2 and not isinstance(
+            name, _util.unicode
+        ):  # pragma: no cover
             name = str(name).decode('ascii')
         if _keyword.iskeyword(symbol):
             raise SymbolException(
@@ -251,21 +253,21 @@ class _Types(object):
                 return self._symbols['type']
             else:
                 try:
-                    _load_dotted('sqlalchemy.dialects.%s.%s' % (
-                        dialect, type_.__class__.__name__
-                    ))
+                    _load_dotted(
+                        'sqlalchemy.dialects.%s.%s'
+                        % (dialect, type_.__class__.__name__)
+                    )
                     return self._symbols['type']
                 except ImportError:
                     try:
-                        _load_dotted('sqlalchemy.types.%s' % (
-                            type_.__class__.__name__,
-                        ))
+                        _load_dotted(
+                            'sqlalchemy.types.%s'
+                            % (type_.__class__.__name__,)
+                        )
                         return "%s.types" % (self._symbols['sa'],)
                     except ImportError:
                         pass
-        raise SymbolException(
-            "Don't know how to address type %r" % (type_,)
-        )
+        raise SymbolException("Don't know how to address type %r" % (type_,))
 
 
 class _Imports(object):
@@ -318,14 +320,17 @@ class _Imports(object):
         Raises:
           SymbolException: Import conflict
         """
-        if _util.py2 and not isinstance(name, _util.unicode):  # pragma: no cover
+        if _util.py2 and not isinstance(
+            name, _util.unicode
+        ):  # pragma: no cover
             name = str(name).decode('ascii')
         imports = dict(self._imports)
         if name in imports:
             if imports[name] != import_:
-                raise SymbolException("Import conflict: %r: %r vs. %r" % (
-                    name, imports[name], import_
-                ))
+                raise SymbolException(
+                    "Import conflict: %r: %r vs. %r"
+                    % (name, imports[name], import_)
+                )
         else:
             self._imports.append((name, import_))
 

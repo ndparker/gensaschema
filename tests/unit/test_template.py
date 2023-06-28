@@ -35,31 +35,40 @@ from gensaschema import _template
 
 
 def test_Template_init():
-    """ _template.Template initializes properly """
-    inst = _template.Template("""
+    """_template.Template initializes properly"""
+    inst = _template.Template(
+        """
         lalala
 
          lolo
-    """)
+    """
+    )
     assert inst._template == 'lalala\n\n lolo'
 
-    inst = _template.Template("""
+    inst = _template.Template(
+        """
         lalala
 
          lolo
-    """, dedent=False)
+    """,
+        dedent=False,
+    )
     assert inst._template == '\n        lalala\n\n         lolo'
 
-    inst = _template.Template("""
+    inst = _template.Template(
+        """
         lalala
 
          lolo
-    """, dedent=False, rstrip=False)
+    """,
+        dedent=False,
+        rstrip=False,
+    )
     assert inst._template == '\n        lalala\n\n         lolo\n    '
 
 
 def test_Template_expand():
-    """ _template.Template().expand() works as expected """
+    """_template.Template().expand() works as expected"""
     inst = _template.Template("""%s xxx %d""")
     assert inst.expand() == '%s xxx %d'
     assert inst.expand('blah', 12) == 'blah xxx 12'

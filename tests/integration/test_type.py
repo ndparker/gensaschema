@@ -41,7 +41,7 @@ from gensaschema import _type
 
 
 def test_find_class():
-    """ _find_class() works as expected """
+    """_find_class() works as expected"""
     if _sa is None or _mysql is None:
         skip("SA not installed")
 
