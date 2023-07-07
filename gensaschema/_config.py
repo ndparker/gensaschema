@@ -33,12 +33,12 @@ import errno as _errno
 if 1:
     try:
         import ConfigParser as _config_parser
-    except ImportError:  # pragma: no cover
+    except ImportError:
         import configparser as _config_parser
 
     try:
         from cStringIO import StringIO as _TextIO
-    except ImportError:  # pragma: no cover
+    except ImportError:
         from io import StringIO as _TextIO
 
 from . import _template

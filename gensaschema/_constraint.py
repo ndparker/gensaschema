@@ -196,7 +196,7 @@ def access_col(col):
     except AttributeError:
         name = col
     try:
-        if _util.py2 and isinstance(name, _util.bytes):  # pragma: no cover
+        if _util.py2 and isinstance(name, _util.bytes):
             name.decode('ascii')
         else:
             name.encode('ascii')

@@ -31,25 +31,25 @@ __author__ = u"Andr\xe9 Malo"
 # pylint: disable = redefined-builtin, invalid-name, self-assigning-variable
 try:
     unicode  # pylint: disable = used-before-assignment
-except NameError:  # pragma: no cover
+except NameError:
     unicode = str
-else:  # pragma: no cover
+else:
     unicode = unicode
 
 try:
     bytes  # pylint: disable = used-before-assignment
-except NameError:  # pragma: no cover
+except NameError:
     bytes = str
-else:  # pragma: no cover
+else:
     bytes = bytes
 
 py2 = bytes is str
 
 try:
     cmp  # pylint: disable = used-before-assignment
-except NameError:  # pragma: no cover
+except NameError:
     cmp = lambda a, b: (a > b) - (a < b)
-else:  # pragma: no cover
+else:
     cmp = cmp
 
 
