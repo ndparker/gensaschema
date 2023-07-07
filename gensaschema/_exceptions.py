@@ -55,7 +55,7 @@ class Warning(
     """
 
     @classmethod
-    def emit(cls, message, stacklevel=1):  # pragma: no cover
+    def emit(cls, message, stacklevel=1):
         """
         Emit a warning of this very category
 

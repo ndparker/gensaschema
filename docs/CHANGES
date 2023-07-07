@@ -1,5 +1,7 @@
 Changes with version
 
+ *) Emit separate PG enum objects. Thanks to happyraul and armonge for the PRs.
+
  *) Run black formatter
 
  *) Update project boilerplate

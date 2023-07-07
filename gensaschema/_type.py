@@ -64,7 +64,7 @@ class Type(object):
           symbols (Symbols):
             Symbol table
         """
-        self._ctype = ctype
+        self._ctype = _finalize_type(ctype, dialect_name, symbols)
         self._dialect = dialect_name
         self._symbols = symbols
 
@@ -117,7 +117,7 @@ class Type(object):
         mod = self._symbols.types.resolve(self._ctype, self._dialect)
         params = []
 
-        if _have_signature:  # pragma: no cover
+        if _have_signature:
             try:
                 # pylint: disable = no-member
                 sign = _inspect.signature(self._ctype.__init__)
@@ -166,7 +166,7 @@ class Type(object):
                             )
                         )
 
-        else:  # pragma: no cover
+        else:
             try:
                 # pylint: disable = deprecated-method
                 # pylint: disable = no-member
@@ -209,6 +209,37 @@ class Type(object):
         if params:
             params = "(%s)" % (params,)
         return "%s.%s%s" % (mod, self._ctype.__class__.__name__, params)
+
+
+def _finalize_type(ctype, dialect, symbols):
+    """
+    Finalize type definitions and modifications
+
+    :TODO: should be generalized at some point in the future.
+    """
+
+    if dialect == 'postgresql':
+        if ctype.__class__.__name__ == 'ENUM':
+            _add_postgres_enum(ctype, symbols)
+
+    return ctype
+
+
+def _add_postgres_enum(ctype, symbols):
+    """Add postgres enum"""
+    if ctype in symbols.types.instance_repr:
+        return
+
+    esymbol = "enum_%s" % (ctype.name,)
+
+    def define(_, symbols):
+        return ["%s = %s.%r" % (esymbol, symbols["type"], ctype)]
+
+    def custom_repr(*_):
+        return esymbol
+
+    symbols.types.defines.append(define)
+    symbols.types.instance_repr[ctype] = custom_repr
 
 
 def _find_class(first_cls, name):

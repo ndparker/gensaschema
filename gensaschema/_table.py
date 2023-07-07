@@ -159,6 +159,9 @@ class Table(object):
             responsible for modifying the symbols and imports *and* the
             dialect's ``ischema_names``. If omitted or ``None``, the reflector
             will always fail on unknown types.
+
+        Returns:
+          Table: new Table instance
         """
         kwargs = {}
         if '.' in name:
@@ -370,9 +373,7 @@ class TableCollection(tuple):
             """Map SA table to table object"""
             if sa_table.key not in objects:
                 varname = sa_table.name
-                if _util.py2 and isinstance(
-                    varname, _util.unicode
-                ):  # pragma: no cover
+                if _util.py2 and isinstance(varname, _util.unicode):
                     varname = varname.encode('ascii')
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols
