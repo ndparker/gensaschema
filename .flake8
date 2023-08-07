@@ -15,6 +15,9 @@ ignore =
     E501,
     # continuation line unaligned for hanging indent
     E131,
+    #  do not compare types
+    E721,
+
 
 exclude =
     setup.py

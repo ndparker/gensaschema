@@ -1,3 +1,8 @@
+Changes with version
+
+ *) Update project boilerplate
+
+
 Changes with version 0.6.8
 
  *) Emit separate PG enum objects. Thanks to happyraul and armonge for the PRs.
