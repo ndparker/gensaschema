@@ -18,8 +18,8 @@ legacy_tox_ini = """
 skip_missing_interpreters = True
 skipsdist = True
 envlist =
-    {py27,py36,py37,py38,py39,py310,py311,py312}-sa{13,14}
-    {py37,py38,py39,py310,py311,py312}-sa{20}
+    {py27,py36,py37,py38,py39,py310,py311,py312,py313}-sa{13,14}
+    {py37,py38,py39,py310,py311,py312,py313}-sa{20}
     cov-report
 
 [testenv]
@@ -68,6 +68,7 @@ commands =
 doctest_optionflags = "IGNORE_EXCEPTION_DETAIL ALLOW_UNICODE ALLOW_BYTES ELLIPSIS"
 filterwarnings = [
     "error",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
 
     "ignore:datetime.datetime.utcfromtimestamp:DeprecationWarning:sqlalchemy.*",
 ]
