@@ -17,7 +17,7 @@ TABLE OF CONTENTS
 
 **GenSASchema** is a static SQLAlchemy schema generator.
 
-* [Change Log](docs/CHANGES)
+* [Change Log](CHANGES)
 * [Development](docs/DEVELOPMENT.md)
 
 

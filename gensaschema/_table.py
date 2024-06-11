@@ -163,6 +163,8 @@ class Table(object):
         Returns:
           Table: new Table instance
         """
+        # pylint: disable = too-many-locals
+
         kwargs = {}
         if '.' in name:
             schema, name = name.split('.')
