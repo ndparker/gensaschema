@@ -8,7 +8,7 @@ Table inspection and representation
 
 :Copyright:
 
- Copyright 2010 - 2023
+ Copyright 2010 - 2024
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
