@@ -1,12 +1,15 @@
 [tool.black]
 skip-string-normalization = true
+# skip-magic-trailing-comma = true
 line-length = 78
-# target-version = ['py39']
+# target-version = ['py312']
 include='''
 (
     gensaschema/.*\.py
 |   tests/.*\.py
+|   tasks/.*\.py
 )$
 '''
-# extend-exclude='''
-# '''
+extend-exclude='''
+    tasks/_shell.py
+'''
