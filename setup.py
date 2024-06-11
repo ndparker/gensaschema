@@ -29,7 +29,6 @@ GenSASchema - Static SQLAlchemy Schema Generator.
 __author__ = u"Andr\xe9 Malo"
 
 import os as _os
-import posixpath as _posixpath
 
 # pylint: disable = no-name-in-module, import-error, raise-missing-from
 import setuptools as _setuptools
@@ -48,31 +47,48 @@ def _doc(filename):
         return None
 
 
-def _lines(multiline):
-    """ Split multiline string into single line % empty and comments """
-    return [line for line in (
-        line.strip() for line in multiline.splitlines(False)
-    ) if line and not line.startswith('#')]
-
-
 package = dict(
     name='gensaschema',
     top='gensaschema',
     pathname='gensaschema',
     provides=_doc('PROVIDES'),
-    desc=_doc('SUMMARY').strip(),
+    desc="Static SQLAlchemy Schema Generator",
     longdesc=_doc('DESCRIPTION'),
     author=__author__,
     email='nd@perlig.de',
-    license="Apache License, Version 2.0",
-    # keywords=_lines(_doc('KEYWORDS')),
     url='http://opensource.perlig.de/gensaschema/',
-    classifiers=_lines(_doc('CLASSIFIERS') or ''),
+    license="Apache License, Version 2.0",
+    license_files=["LICENSE"],
 
     packages=True,
     # py_modules=[],
     # version_file='__init__.py',
     install_requires=[],
+
+    entry_points={},
+
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Utilities",
+        "Topic :: Database",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
 )
 
 
@@ -102,15 +118,22 @@ def setup():
             for item in
             _setuptools.find_packages(package['pathname'])
         ]
+
     if package.get('py_modules'):
         kwargs['py_modules'] = package['py_modules']
+    if package.get("license_files"):
+        kwargs["license_files"] = package["license_files"]
+    if package.get("license"):
+        kwargs["license"] = package["license"]
+    if package.get("classifiers"):
+        kwargs["classifiers"] = package["classifiers"]
+    if package.get("entry_points"):
+        kwargs["entry_points"] = package["entry_points"]
 
     _setuptools.setup(
         name=package['name'],
         author=package['author'],
         author_email=package['email'],
-        license=package['license'],
-        classifiers=package['classifiers'],
         description=package['desc'],
         long_description=package['longdesc'],
         url=package['url'],
