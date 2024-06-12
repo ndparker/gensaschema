@@ -3,7 +3,7 @@
 
 # Packaging
 pip ~= 24.0.0; python_version >= "3.7"
-setuptools == 70.0.0; python_version >= "3.8"
+setuptools == 65.5.1; python_version >= "3.8"
 twine == 5.1.0; python_version >= "3.8"
 
 # Testing
