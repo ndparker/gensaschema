@@ -1,6 +1,6 @@
 Changes with version
 
- *) Add support for postgres 16
+ *) Add support for postgres 16 and 17, drop support for postgres 11
 
  *) Add support for python 3.12
 
