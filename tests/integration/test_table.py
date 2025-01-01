@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2016 - 2024
+ Copyright 2016 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -37,15 +37,15 @@ from gensaschema import _table
 
 # pylint: disable = invalid-name
 
-sa_version = tuple(map(int, _sa.__version__.split('.')[:3]))
+sa_version = tuple(map(int, _sa.__version__.split(".")[:3]))
 
 
 def test_table(tmpdir):
     """_table.Table() works as expected"""
     tmpdir = str(tmpdir)
-    filename = _os.path.join(tmpdir, 'tabletest.db')
+    filename = _os.path.join(tmpdir, "tabletest.db")
 
-    db = _sa.create_engine('sqlite:///%s' % (filename,)).connect()
+    db = _sa.create_engine("sqlite:///%s" % (filename,)).connect()
     meta = _meta.BoundMetaData(db)
     with db.begin():
         db.execute(
@@ -58,7 +58,7 @@ def test_table(tmpdir):
             )
         )
     table = _table.Table.by_name(
-        'main.stocks', 'STOCKS', meta, {}, _symbols.Symbols()
+        "main.stocks", "STOCKS", meta, {}, _symbols.Symbols()
     )
 
     expected = (

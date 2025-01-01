@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2016 - 2024
+ Copyright 2016 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -43,7 +43,7 @@ def test_Template_init():
          lolo
     """
     )
-    assert inst._template == 'lalala\n\n lolo'
+    assert inst._template == "lalala\n\n lolo"
 
     inst = _template.Template(
         """
@@ -53,7 +53,7 @@ def test_Template_init():
     """,
         dedent=False,
     )
-    assert inst._template == '\n        lalala\n\n         lolo'
+    assert inst._template == "\n        lalala\n\n         lolo"
 
     inst = _template.Template(
         """
@@ -64,23 +64,23 @@ def test_Template_init():
         dedent=False,
         rstrip=False,
     )
-    assert inst._template == '\n        lalala\n\n         lolo\n    '
+    assert inst._template == "\n        lalala\n\n         lolo\n    "
 
 
 def test_Template_expand():
     """_template.Template().expand() works as expected"""
     inst = _template.Template("""%s xxx %d""")
-    assert inst.expand() == '%s xxx %d'
-    assert inst.expand('blah', 12) == 'blah xxx 12'
+    assert inst.expand() == "%s xxx %d"
+    assert inst.expand("blah", 12) == "blah xxx 12"
     with raises(TypeError):
-        inst.expand(foo='blah', bar=12)
+        inst.expand(foo="blah", bar=12)
 
     inst = _template.Template("""%(foo)s xxx %(bar)d""")
-    assert inst.expand() == '%(foo)s xxx %(bar)d'
-    assert inst.expand(foo='blah', bar=12) == 'blah xxx 12'
+    assert inst.expand() == "%(foo)s xxx %(bar)d"
+    assert inst.expand(foo="blah", bar=12) == "blah xxx 12"
     with raises(TypeError):
-        inst.expand('blah', 12)
+        inst.expand("blah", 12)
 
     with raises(TypeError) as e:
-        inst.expand('blah', bar=12)
-    assert e.value.args == ('Both args and kwargs given',)
+        inst.expand("blah", bar=12)
+    assert e.value.args == ("Both args and kwargs given",)

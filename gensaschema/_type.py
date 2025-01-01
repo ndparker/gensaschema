@@ -8,7 +8,7 @@ Type inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -32,7 +32,7 @@ import inspect as _inspect
 
 import sqlalchemy as _sa
 
-_have_signature = hasattr(_inspect, 'signature')
+_have_signature = hasattr(_inspect, "signature")
 
 
 class Type(object):
@@ -149,12 +149,12 @@ class Type(object):
                         rvalue = repr(value)
 
                     if kwds:
-                        params.append('%s=%s' % (arg.name, rvalue))
+                        params.append("%s=%s" % (arg.name, rvalue))
                     else:
                         params.append(rvalue)
                 if not kwds and varargs is not None:
                     if (
-                        _find_class(self._ctype, '__init__')
+                        _find_class(self._ctype, "__init__")
                         is not _sa.types.TypeEngine
                     ):
                         params.extend(
@@ -193,19 +193,19 @@ class Type(object):
                     else:
                         rvalue = repr(value)
                     if kwds:
-                        params.append('%s=%s' % (arg, rvalue))
+                        params.append("%s=%s" % (arg, rvalue))
                     else:
                         params.append(rvalue)
                 if not kwds and spec[1] is not None:
                     if (
-                        _find_class(self._ctype, '__init__')
+                        _find_class(self._ctype, "__init__")
                         is not _sa.types.TypeEngine
                     ):
                         params.extend(
                             list(map(repr, getattr(self._ctype, spec[1])))
                         )
 
-        params = ', '.join(params)
+        params = ", ".join(params)
         if params:
             params = "(%s)" % (params,)
         return "%s.%s%s" % (mod, self._ctype.__class__.__name__, params)
@@ -218,8 +218,8 @@ def _finalize_type(ctype, dialect, symbols):
     :TODO: should be generalized at some point in the future.
     """
 
-    if dialect == 'postgresql':
-        if ctype.__class__.__name__ == 'ENUM':
+    if dialect == "postgresql":
+        if ctype.__class__.__name__ == "ENUM":
             _add_postgres_enum(ctype, symbols)
 
     return ctype

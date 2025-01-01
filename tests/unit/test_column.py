@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2014 - 2024
+ Copyright 2014 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -43,19 +43,19 @@ from .. import _util as _test
 def test_ServerDefault():
     """_column.ServerDefault() works as expected"""
     default = _test.Bunch(for_update=None, arg=12)
-    symbols = dict(default='DEF')
+    symbols = dict(default="DEF")
 
     if bytes is str:
         inst = _column.ServerDefault(default, symbols)
         assert repr(inst) == "DEF(u'12')"
 
-        default.for_update = u'lalala'
+        default.for_update = u"lalala"
         assert repr(inst) == "DEF(u'12', for_update=True)"
     else:
         inst = _column.ServerDefault(default, symbols)
         assert repr(inst) == "DEF('12')"
 
-        default.for_update = u'lalala'
+        default.for_update = u"lalala"
         assert repr(inst) == "DEF('12', for_update=True)"
 
 
@@ -63,26 +63,26 @@ def test_Column():
     """_column.Column() works as expected"""
     meta = _sa.MetaData()
     table = _sa.Table(
-        u'mytable',
+        u"mytable",
         meta,
         _sa.Column(
-            u'Lala', _mysql.VARCHAR(255), nullable=True, server_default='""'
+            u"Lala", _mysql.VARCHAR(255), nullable=True, server_default='""'
         ),
         _sa.Column(
-            u'lolo', _mysql.INTEGER, primary_key=True, autoincrement=False
+            u"lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
         ),
     )
-    meta.bind = _test.Bunch(dialect=_test.Bunch(name='mysql'))
+    meta.bind = _test.Bunch(dialect=_test.Bunch(name="mysql"))
     symbols = _symbols.Symbols(symbols=dict(type="TT"))
 
     inst = _column.Column.from_sa(table.c.Lala, symbols)
     if bytes is str:
         assert repr(inst) == (
-            'C(\'Lala\', TT.VARCHAR(255), ' 'server_default=D(u\'""\'))'
+            "C('Lala', TT.VARCHAR(255), " "server_default=D(u'\"\"'))"
         )
     else:
         assert repr(inst) == (
-            'C(\'Lala\', TT.VARCHAR(255), ' 'server_default=D(\'""\'))'
+            "C('Lala', TT.VARCHAR(255), " "server_default=D('\"\"'))"
         )
 
     inst = _column.Column.from_sa(table.c.lolo, symbols)
@@ -93,33 +93,33 @@ def test_Column():
 
 def test_Column_identity():
     """_column.Column() works ith identity"""
-    if not getattr(_sa, 'Identity', None):
+    if not getattr(_sa, "Identity", None):
         skip("Identity not defined")
 
     meta = _sa.MetaData()
     table = _sa.Table(
-        u'mytable',
+        u"mytable",
         meta,
-        _sa.Column(u'Lala', _mysql.VARCHAR(255), _sa.Identity()),
+        _sa.Column(u"Lala", _mysql.VARCHAR(255), _sa.Identity()),
         _sa.Column(
-            u'lolo', _mysql.INTEGER, primary_key=True, autoincrement=False
+            u"lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
         ),
     )
-    meta.bind = _test.Bunch(dialect=_test.Bunch(name='mysql'))
+    meta.bind = _test.Bunch(dialect=_test.Bunch(name="mysql"))
     symbols = _symbols.Symbols(symbols=dict(type="TT"))
 
     inst = _column.Column.from_sa(table.c.Lala, symbols)
     if bytes is str:
         assert repr(inst) == (
-            'C(\'Lala\', TT.VARCHAR(255), '
-            'nullable=False, '
-            'server_default=_sa.Identity())'
+            "C('Lala', TT.VARCHAR(255), "
+            "nullable=False, "
+            "server_default=_sa.Identity())"
         )
     else:
         assert repr(inst) == (
-            'C(\'Lala\', TT.VARCHAR(255), '
-            'nullable=False, '
-            'server_default=_sa.Identity())'
+            "C('Lala', TT.VARCHAR(255), "
+            "nullable=False, "
+            "server_default=_sa.Identity())"
         )
 
     inst = _column.Column.from_sa(table.c.lolo, symbols)

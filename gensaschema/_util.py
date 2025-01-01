@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-r"""
+u"""
 :Copyright:
 
- Copyright 2014 - 2024
+ Copyright 2014 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -68,6 +68,6 @@ def find_public(space):
     Returns:
       list: List of public names
     """
-    if '__all__' in space:
-        return list(space['__all__'])
-    return [key for key in space.keys() if not key.startswith('_')]
+    if "__all__" in space:
+        return list(space["__all__"])
+    return [key for key in space.keys() if not key.startswith("_")]

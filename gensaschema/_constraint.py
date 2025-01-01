@@ -8,7 +8,7 @@ Constraint inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -50,7 +50,7 @@ class Constraint(object):
         """Constraint factory"""
         if cls == Constraint:
             name = constraint.__class__.__name__
-            if name == 'CheckConstraint':
+            if name == "CheckConstraint":
                 return None
             return globals()[name](
                 constraint, table, symbols, options=options
@@ -89,10 +89,10 @@ class Constraint(object):
     def __cmp__(self, other):
         """Compare"""
         names = [
-            'PrimaryKeyConstraint',
-            'UniqueConstraint',
-            'ForeignKeyConstraint',
-            'CheckConstraint',
+            "PrimaryKeyConstraint",
+            "UniqueConstraint",
+            "ForeignKeyConstraint",
+            "CheckConstraint",
         ]
 
         def bytype(const):
@@ -146,11 +146,11 @@ class Constraint(object):
 
         params = []
         if self.constraint.name is not None:
-            params.append('name=%r' % (self.constraint.name,))
+            params.append("name=%r" % (self.constraint.name,))
         if self.constraint.deferrable is not None:
-            params.append('deferrable=%r' % (self.constraint.deferrable,))
+            params.append("deferrable=%r" % (self.constraint.deferrable,))
         if self.constraint.initially is not None:
-            params.append('initially=%r' % (self.constraint.initially,))
+            params.append("initially=%r" % (self.constraint.initially,))
         for keyword in keywords:
             if getattr(self.constraint, keyword) is not None:
                 params.append(
@@ -160,22 +160,22 @@ class Constraint(object):
             short = False
         if args:
             if short:
-                args = ', '.join(args)
+                args = ", ".join(args)
             else:
-                args = '\n    ' + ',\n    '.join(args) + ','
+                args = "\n    " + ",\n    ".join(args) + ","
         else:
-            args = ''
+            args = ""
 
         if short:
-            params = ', '.join(params)
+            params = ", ".join(params)
             if args and params:
-                params = ', ' + params
+                params = ", " + params
         else:
-            params = ',\n    '.join(params)
+            params = ",\n    ".join(params)
             if params:
-                params = '\n    ' + params + ','
+                params = "\n    " + params + ","
             if args or params:
-                params += '\n'
+                params += "\n"
 
         return "%s(%s%s)" % (self._symbols[symbol], args, params)
 
@@ -197,9 +197,9 @@ def access_col(col):
         name = col
     try:
         if _util.py2 and isinstance(name, _util.bytes):
-            name.decode('ascii')
+            name.decode("ascii")
         else:
-            name.encode('ascii')
+            name.encode("ascii")
     except UnicodeError:
         is_ascii = False
     else:
@@ -207,7 +207,7 @@ def access_col(col):
     if (
         is_ascii
         and not _keyword.iskeyword(name)
-        and _re.match(_tokenize.Name + '$', name)
+        and _re.match(_tokenize.Name + "$", name)
     ):
         return ".c.%s" % name
     return ".c[%r]" % name
@@ -216,8 +216,8 @@ def access_col(col):
 class UniqueConstraint(Constraint):
     """Unique constraint"""
 
-    _SYMBOL = 'uk'
-    _IMPORT = 'from %(constraints)s import Unique as %(uk)s'
+    _SYMBOL = "uk"
+    _IMPORT = "from %(constraints)s import Unique as %(uk)s"
 
     def __repr__(self):
         """
@@ -244,15 +244,15 @@ class UniqueConstraint(Constraint):
 class PrimaryKeyConstraint(UniqueConstraint):
     """Primary Key constraint"""
 
-    _SYMBOL = 'pk'
-    _IMPORT = 'from %(constraints)s import PrimaryKey as %(pk)s'
+    _SYMBOL = "pk"
+    _IMPORT = "from %(constraints)s import PrimaryKey as %(pk)s"
 
 
 class ForeignKeyConstraint(Constraint):
     """ForeignKey constraint"""
 
-    _SYMBOL = 'fk'
-    _IMPORT = 'from %(constraints)s import ForeignKey as %(fk)s'
+    _SYMBOL = "fk"
+    _IMPORT = "from %(constraints)s import ForeignKey as %(fk)s"
 
     def __repr__(self):
         """
@@ -261,48 +261,48 @@ class ForeignKeyConstraint(Constraint):
         Returns:
           str: The string representation
         """
-        columns = "[%s]" % ',\n    '.join(
+        columns = "[%s]" % ",\n    ".join(
             [
                 "%s%s" % (self.table, access_col(col))
                 for col in self.constraint.columns
             ]
         )
-        refcolumns = "[%s]" % ',\n    '.join(
+        refcolumns = "[%s]" % ",\n    ".join(
             [
                 "%s%s"
                 % (
-                    self._symbols[u'table_%s' % key.column.table.name],
+                    self._symbols[u"table_%s" % key.column.table.name],
                     access_col(key.column),
                 )
                 for key in self.constraint.elements
             ]
         )
-        keywords = ['onupdate', 'ondelete']
+        keywords = ["onupdate", "ondelete"]
         if self.constraint.use_alter:
-            keywords.append('use_alter')
-        result = self.repr('fk', [columns, refcolumns], keywords)
+            keywords.append("use_alter")
+        result = self.repr("fk", [columns, refcolumns], keywords)
 
         if self.options:
             cyclic = self.constraint.use_alter
-            if self.options.startswith('seen:'):
+            if self.options.startswith("seen:"):
                 table = self.options.split(None, 1)[1]
                 if cyclic:
-                    result = '\n# Cyclic foreign key:\n' + result
+                    result = "\n# Cyclic foreign key:\n" + result
                 else:
-                    result = '\n# Foreign key belongs to %r:\n%s' % (
+                    result = "\n# Foreign key belongs to %r:\n%s" % (
                         table,
                         result,
                     )
-            elif self.options.startswith('unseen:'):
+            elif self.options.startswith("unseen:"):
                 table = self.options.split(None, 1)[1]
                 result = result.splitlines(True)
                 if cyclic:
                     result.insert(
                         0,
-                        'Cyclic foreign key, defined at table %r:\n' % table,
+                        "Cyclic foreign key, defined at table %r:\n" % table,
                     )
                 else:
-                    result.insert(0, 'Defined at table %r:\n' % table)
-                result = '\n' + ''.join(['# %s' % item for item in result])
+                    result.insert(0, "Defined at table %r:\n" % table)
+                result = "\n" + "".join(["# %s" % item for item in result])
 
         return result

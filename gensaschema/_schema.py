@@ -8,7 +8,7 @@ Schema module generation code.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -137,18 +137,18 @@ class Schema(object):
         for table in self._tables:
             if table.is_reference:
                 continue
-            name = table.sa_table.name.encode('ascii', 'backslashescape')
+            name = table.sa_table.name.encode("ascii", "backslashescape")
             if bytes is not str:
-                name = name.decode('ascii')
+                name = name.decode("ascii")
             lines.append('# Table "%s"' % (name,))
-            lines.append('%s = %r' % (table.varname, table))
-            lines.append('')
-            lines.append('')
+            lines.append("%s = %r" % (table.varname, table))
+            lines.append("")
+            lines.append("")
 
         imports = [item % self._symbols for item in self._symbols.imports]
         if imports:  # pragma: no branch
             imports.sort()
-            imports.append('')
+            imports.append("")
 
         defines = self._symbols.types.defines
         if defines:
@@ -160,17 +160,17 @@ class Schema(object):
                         defined.append(item)
                         seen.add(item)
             if defined:
-                dlines = ['', '# Custom type definitions'] + defined
+                dlines = ["", "# Custom type definitions"] + defined
 
         if lines:
-            dlines.append('')
+            dlines.append("")
 
         param = dict(
             ((str(key), value) for key, value in self._symbols),
             dbspec=" for %s" % self._dbname if self._dbname else "",
             dialect=self._dialect,
-            imports='\n'.join(imports),
-            lines='\n'.join(dlines + lines),
+            imports="\n".join(imports),
+            lines="\n".join(dlines + lines),
         )
         fp.write(self._MODULE_TPL.expand(**param))
-        fp.write('\n')
+        fp.write("\n")

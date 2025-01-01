@@ -3,7 +3,7 @@
 u"""
 :Copyright:
 
- Copyright 2015 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -37,26 +37,26 @@ import setuptools as _setuptools
 
 
 def _doc(filename):
-    """ Read docs file """
+    """Read docs file"""
     # pylint: disable = unspecified-encoding
-    args = {} if str is bytes else dict(encoding='utf-8')
+    args = {} if str is bytes else dict(encoding="utf-8")
     try:
-        with open(_os.path.join('docs', filename), **args) as fp:
+        with open(_os.path.join("docs", filename), **args) as fp:
             return fp.read()
     except IOError:
         return None
 
 
 package = dict(
-    name='gensaschema',
-    top='gensaschema',
-    pathname='gensaschema',
-    provides=_doc('PROVIDES'),
+    name="gensaschema",
+    top="gensaschema",
+    pathname="gensaschema",
+    provides=_doc("PROVIDES"),
     desc="Static SQLAlchemy Schema Generator",
-    longdesc=_doc('DESCRIPTION'),
+    longdesc=_doc("DESCRIPTION"),
     author=__author__,
-    email='nd@perlig.de',
-    url='http://opensource.perlig.de/gensaschema/',
+    email="nd@perlig.de",
+    url="https://opensource.perlig.de/gensaschema/",
     license="Apache License, Version 2.0",
     license_files=["LICENSE"],
 
@@ -94,17 +94,19 @@ package = dict(
 
 
 def setup():
-    """ Main """
+    """Main"""
     # pylint: disable = too-many-branches
     # pylint: disable = unspecified-encoding
 
-    args = {} if str is bytes else dict(encoding='utf-8')
-    version_file = '%s/%s' % (package['pathname'],
-                              package.get('version_file', '__init__.py'))
+    args = {} if str is bytes else dict(encoding="utf-8")
+    version_file = "%s/%s" % (
+        package["pathname"],
+        package.get("version_file", "__init__.py"),
+    )
     with open(version_file, **args) as fp:
         for line in fp:  # pylint: disable = redefined-outer-name
-            if line.startswith('__version__'):
-                version = line.split('=', 1)[1].strip()
+            if line.startswith("__version__"):
+                version = line.split("=", 1)[1].strip()
                 if version.startswith(("'", '"')):
                     version = version[1:-1].strip()
                 break
@@ -113,15 +115,14 @@ def setup():
 
     kwargs = {}
 
-    if package.get('packages', True):
-        kwargs['packages'] = [package['top']] + [
-            '%s.%s' % (package['top'], item)
-            for item in
-            _setuptools.find_packages(package['pathname'])
+    if package.get("packages", True):
+        kwargs["packages"] = [package["top"]] + [
+            "%s.%s" % (package["top"], item)
+            for item in _setuptools.find_packages(package["pathname"])
         ]
 
-    if package.get('py_modules'):
-        kwargs['py_modules'] = package['py_modules']
+    if package.get("py_modules"):
+        kwargs["py_modules"] = package["py_modules"]
     if package.get("license_files"):
         kwargs["license_files"] = package["license_files"]
     if package.get("license"):
@@ -132,18 +133,18 @@ def setup():
         kwargs["entry_points"] = package["entry_points"]
 
     _setuptools.setup(
-        name=package['name'],
-        author=package['author'],
-        author_email=package['email'],
-        description=package['desc'],
-        long_description=package['longdesc'],
-        url=package['url'],
-        install_requires=package['install_requires'],
+        name=package["name"],
+        author=package["author"],
+        author_email=package["email"],
+        description=package["desc"],
+        long_description=package["longdesc"],
+        url=package["url"],
+        install_requires=package["install_requires"],
         version=version,
         zip_safe=False,
         **kwargs
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     setup()

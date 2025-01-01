@@ -8,7 +8,7 @@ Table inspection and representation
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -113,7 +113,7 @@ class Table(object):
         """
         # pylint: disable = unused-argument
 
-        symbols[u'table_%s' % table.name] = varname
+        symbols[u"table_%s" % table.name] = varname
         self._symbols = symbols
         self.varname = varname
         self.sa_table = table
@@ -166,9 +166,9 @@ class Table(object):
         # pylint: disable = too-many-locals
 
         kwargs = {}
-        if '.' in name:
-            schema, name = name.split('.')
-            kwargs['schema'] = schema
+        if "." in name:
+            schema, name = name.split(".")
+            kwargs["schema"] = schema
         else:
             schema = None
 
@@ -186,36 +186,36 @@ class Table(object):
 
         with _warnings.catch_warnings():
             _warnings.filterwarnings(
-                'error',
+                "error",
                 category=_sa.exc.SAWarning,
-                message=r'^Did not recognize type ',
+                message=r"^Did not recognize type ",
             )
             _warnings.filterwarnings(
-                'error',
+                "error",
                 category=_sa.exc.SAWarning,
-                message=r'^Unknown column definition ',
+                message=r"^Unknown column definition ",
             )
             _warnings.filterwarnings(
-                'error',
+                "error",
                 category=_sa.exc.SAWarning,
-                message=r'^Incomplete reflection of ' r'column definition',
+                message=r"^Incomplete reflection of " r"column definition",
             )
             _warnings.filterwarnings(
-                'ignore',
+                "ignore",
                 category=_sa.exc.SAWarning,
-                message=r'^Could not instantiate type ',
+                message=r"^Could not instantiate type ",
             )
             _warnings.filterwarnings(
-                'ignore',
+                "ignore",
                 category=_sa.exc.SAWarning,
-                message=r'^Skipped unsupported '
-                r'reflection of expression-based'
-                r' index ',
+                message=r"^Skipped unsupported "
+                r"reflection of expression-based"
+                r" index ",
             )
             _warnings.filterwarnings(
-                'ignore',
+                "ignore",
                 category=_sa.exc.SAWarning,
-                message=r'^Predicate of partial index ',
+                message=r"^Predicate of partial index ",
             )
 
             seen = set()
@@ -263,20 +263,20 @@ class Table(object):
             for col in self.sa_table.columns
         ]
         if self.sa_table.schema is not None:
-            args.append('schema=%r' % (_util.unicode(self.sa_table.schema),))
+            args.append("schema=%r" % (_util.unicode(self.sa_table.schema),))
 
-        args = ',\n    '.join(args)
+        args = ",\n    ".join(args)
         if args:
-            args = ',\n    %s,\n' % args
+            args = ",\n    %s,\n" % args
         result = "%s(%r, %s%s)" % (
-            self._symbols['table'],
+            self._symbols["table"],
             _util.unicode(self.sa_table.name),
-            self._symbols['meta'],
+            self._symbols["meta"],
             args,
         )
         if self.constraints:
             result = "\n".join(
-                (result, '\n'.join(map(repr, sorted(self.constraints))))
+                (result, "\n".join(map(repr, sorted(self.constraints))))
             )
         return result
 
@@ -318,18 +318,18 @@ class TableReference(object):
         self.varname = varname
         self.sa_table = table
         self.constraints = []
-        pkg, mod = schema.rsplit('.', 1)
-        if not mod.startswith('_'):
-            modas = '_' + mod
-            symbols.imports[schema] = 'from %s import %s as %s' % (
+        pkg, mod = schema.rsplit(".", 1)
+        if not mod.startswith("_"):
+            modas = "_" + mod
+            symbols.imports[schema] = "from %s import %s as %s" % (
                 pkg,
                 mod,
                 modas,
             )
             mod = modas
         else:
-            symbols.imports[schema] = 'from %s import %s' % (pkg, mod)
-        symbols[u'table_%s' % table.name] = "%s.%s" % (mod, varname)
+            symbols.imports[schema] = "from %s import %s" % (pkg, mod)
+        symbols[u"table_%s" % table.name] = "%s.%s" % (mod, varname)
 
 
 class TableCollection(tuple):
@@ -376,7 +376,7 @@ class TableCollection(tuple):
             if sa_table.key not in objects:
                 varname = sa_table.name
                 if _util.py2 and isinstance(varname, _util.unicode):
-                    varname = varname.encode('ascii')
+                    varname = varname.encode("ascii")
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols
                 )
@@ -393,16 +393,16 @@ class TableCollection(tuple):
             for con in table.constraints:
                 # pylint: disable = unidiomatic-typecheck
                 if type(con) == _constraint.ForeignKeyConstraint:
-                    if con.options == 'seen':
+                    if con.options == "seen":
                         continue
 
                     remote_key = con.constraint.elements[0].column.table.key
                     if remote_key not in seen:
-                        con.options = 'unseen: %s' % (
+                        con.options = "unseen: %s" % (
                             objects[remote_key].varname,
                         )
                         remote_con = con.copy()
-                        remote_con.options = 'seen: %s' % (table.varname,)
+                        remote_con.options = "seen: %s" % (table.varname,)
                         objects[remote_key].constraints.append(remote_con)
 
         return cls(tables)
@@ -419,7 +419,7 @@ def _break_cycles(metadata):
 
     def break_cycle(e):
         """Break foreign key cycle"""
-        cycle_keys = set(map(_op.attrgetter('key'), e.cycles))
+        cycle_keys = set(map(_op.attrgetter("key"), e.cycles))
         cycle_path = [
             (parent, child)
             for parent, child in e.edges
@@ -440,7 +440,7 @@ def _break_cycles(metadata):
             raise AssertionError("Could not construct sorted cycle path")
 
         deps = list(map(_op.itemgetter(0), deps))
-        first_dep = list(sorted(deps, key=_op.attrgetter('name')))[0]
+        first_dep = list(sorted(deps, key=_op.attrgetter("name")))[0]
         while first_dep != deps[-1]:
             deps = [deps[-1]] + deps[:-1]
         deps.reverse()
@@ -467,9 +467,9 @@ def _break_cycles(metadata):
         try:
             with _warnings.catch_warnings():
                 _warnings.filterwarnings(
-                    'ignore',
+                    "ignore",
                     category=_sa.exc.SAWarning,
-                    message=(r'^Cannot correctly sort ' r'tables'),
+                    message=(r"^Cannot correctly sort " r"tables"),
                 )
 
                 metadata.sorted_tables  # pylint: disable = pointless-statement

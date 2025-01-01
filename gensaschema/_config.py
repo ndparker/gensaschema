@@ -8,7 +8,7 @@ Schema config management.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -62,7 +62,7 @@ class Config(object):
     #:
     #: :Type: `Template`
     _CONFIG_TPL = _template.Template(
-        '''
+        """
         # This is a comment. I love comments.
         #
         # This files contains table names, one per line
@@ -77,7 +77,7 @@ class Config(object):
         #
         # The basename of this file (modulo .schema extension) is used as
         # basename for the python file.
-    '''
+    """
     )
 
     def __init__(self, tables, schemas, lines=None):
@@ -118,9 +118,9 @@ class Config(object):
         if name_or_file is None:
             lines = []
         else:
-            read = getattr(name_or_file, 'read', None)
+            read = getattr(name_or_file, "read", None)
             if read is None:
-                kwargs = {} if str is bytes else {'encoding': 'utf-8'}
+                kwargs = {} if str is bytes else {"encoding": "utf-8"}
                 try:
                     # pylint: disable = bad-option-value, unspecified-encoding
                     # pylint: disable = bad-option-value, consider-using-with
@@ -150,27 +150,27 @@ class Config(object):
         Returns:
           Config: New Config instance
         """
-        conf_lines = ['[schemas]', '[tables]']
+        conf_lines = ["[schemas]", "[tables]"]
         for line in lines:
             line = line.rstrip()
-            if not line or line.lstrip().startswith('#'):
+            if not line or line.lstrip().startswith("#"):
                 continue
-            if '=' in line or ('[' in line and ']' in line):
+            if "=" in line or ("[" in line and "]" in line):
                 conf_lines.append(line)
             else:
                 name = line
-                if '.' in name:
-                    name = name.rsplit('.', 1)[1]
-                conf_lines.append('%s = %s' % (name, line))
+                if "." in name:
+                    name = name.rsplit(".", 1)[1]
+                conf_lines.append("%s = %s" % (name, line))
         if bytes is str:
             parser = _config_parser.RawConfigParser()
             parser.optionxform = lambda x: x
             # pylint: disable = deprecated-method
-            parser.readfp(_TextIO('\n'.join(conf_lines)))
+            parser.readfp(_TextIO("\n".join(conf_lines)))
         else:
             parser = _config_parser.RawConfigParser(strict=False)
             parser.optionxform = lambda x: x
-            parser.read_file(_TextIO('\n'.join(conf_lines)))
+            parser.read_file(_TextIO("\n".join(conf_lines)))
         return cls.from_parser(parser, lines=lines)
 
     @classmethod
@@ -189,8 +189,8 @@ class Config(object):
           Config: New Config instance
         """
         # pylint: disable = unnecessary-comprehension
-        tables = [(name, val) for name, val in parser.items('tables')]
-        schemas = dict((name, val) for name, val in parser.items('schemas'))
+        tables = [(name, val) for name, val in parser.items("tables")]
+        schemas = dict((name, val) for name, val in parser.items("schemas"))
         return cls(tables, schemas, lines=lines)
 
     def dump(self, fp):
@@ -205,24 +205,24 @@ class Config(object):
         if not lines:
             result = self._CONFIG_TPL.expand().splitlines(False)
             if lines is None:
-                tables = ['%s = %s' % table for table in self.tables]
+                tables = ["%s = %s" % table for table in self.tables]
                 if tables:
-                    result.append('')
+                    result.append("")
                     result.extend(tables)
                 schemas = [
-                    '%s = %s' % (key, value)
+                    "%s = %s" % (key, value)
                     for key, value in self.schemas.items()
                 ]
                 if schemas:
-                    result.append('')
-                    result.append('[schemas]')
+                    result.append("")
+                    result.append("[schemas]")
                     result.extend(schemas)
         else:
             result = lines
 
-        content = '\n'.join([line.rstrip() for line in result]) + '\n'
+        content = "\n".join([line.rstrip() for line in result]) + "\n"
         try:
-            fp.write('')
+            fp.write("")
         except TypeError:
-            content = content.encode('utf-8')
+            content = content.encode("utf-8")
         fp.write(content)

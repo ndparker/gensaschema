@@ -8,7 +8,7 @@ Symbol management.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -79,7 +79,7 @@ class Symbols(object):
             fk="ForeignKey",  # ForeignKey function name
             uk="Unique",  # UniqueKey function name
             constraints=(  # constraint function module
-                __name__.rsplit('.', 1)[0] + '.constraints'
+                __name__.rsplit(".", 1)[0] + ".constraints"
             ),
         )
         self.imports = _Imports(imports=imports)
@@ -123,7 +123,7 @@ class Symbols(object):
         if _util.py2 and not isinstance(
             name, _util.unicode
         ):  # pragma: no cover
-            name = str(name).decode('ascii')
+            name = str(name).decode("ascii")
         if _keyword.iskeyword(symbol):
             raise SymbolException(
                 "Cannot use keyword %r as symbol" % (symbol,)
@@ -150,7 +150,7 @@ class Symbols(object):
           KeyError: Symbol not found
         """
         if _util.py2 and not isinstance(name, _util.unicode):
-            name = str(name).decode('ascii')
+            name = str(name).decode("ascii")
         return self._symbols[name]
 
     def __contains__(self, name):
@@ -165,7 +165,7 @@ class Symbols(object):
           bool: Does the symbol entry exist?
         """
         if _util.py2 and not isinstance(name, _util.unicode):
-            name = str(name).decode('ascii')
+            name = str(name).decode("ascii")
         return name in self._symbols
 
     def __iter__(self):
@@ -247,24 +247,24 @@ class _Types(object):
                 return self._symbols[symbol]
 
         mod = type_.__module__
-        if mod.startswith('sqlalchemy.'):
-            mod = '.'.join(mod.split('.')[:3])
-            if mod == 'sqlalchemy.dialects.%s' % dialect:
-                return self._symbols['type']
+        if mod.startswith("sqlalchemy."):
+            mod = ".".join(mod.split(".")[:3])
+            if mod == "sqlalchemy.dialects.%s" % dialect:
+                return self._symbols["type"]
             else:
                 try:
                     _load_dotted(
-                        'sqlalchemy.dialects.%s.%s'
+                        "sqlalchemy.dialects.%s.%s"
                         % (dialect, type_.__class__.__name__)
                     )
-                    return self._symbols['type']
+                    return self._symbols["type"]
                 except ImportError:
                     try:
                         _load_dotted(
-                            'sqlalchemy.types.%s'
+                            "sqlalchemy.types.%s"
                             % (type_.__class__.__name__,)
                         )
-                        return "%s.types" % (self._symbols['sa'],)
+                        return "%s.types" % (self._symbols["sa"],)
                     except ImportError:
                         pass
         raise SymbolException("Don't know how to address type %r" % (type_,))
@@ -323,7 +323,7 @@ class _Imports(object):
         if _util.py2 and not isinstance(
             name, _util.unicode
         ):  # pragma: no cover
-            name = str(name).decode('ascii')
+            name = str(name).decode("ascii")
         imports = dict(self._imports)
         if name in imports:
             if imports[name] != import_:
@@ -364,7 +364,7 @@ def _load_dotted(name):
     Raises:
       ImportError: A module in the path could not be loaded
     """
-    components = name.split('.')
+    components = name.split(".")
     path = [components.pop(0)]
     obj = __import__(path[0])
     while components:
@@ -373,10 +373,10 @@ def _load_dotted(name):
         try:
             obj = getattr(obj, comp)
         except AttributeError:
-            __import__('.'.join(path))
+            __import__(".".join(path))
             try:
                 obj = getattr(obj, comp)
             except AttributeError:
                 # pylint: disable = raise-missing-from
-                raise ImportError('.'.join(path))
+                raise ImportError(".".join(path))
     return obj

@@ -8,7 +8,7 @@ Column inspection and generation.
 
 :Copyright:
 
- Copyright 2010 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -67,10 +67,10 @@ class ServerDefault(object):
         Return:
           str: The string representation
         """
-        identity = getattr(_sa, 'Identity', None)
+        identity = getattr(_sa, "Identity", None)
         if identity is not None and isinstance(self._default, identity):
             return "%s.%s" % (
-                self._symbols['sa'],
+                self._symbols["sa"],
                 _util.unicode(self._default),
             )
 
@@ -80,7 +80,7 @@ class ServerDefault(object):
             for_update = ""
 
         return "%s(%r%s)" % (
-            self._symbols['default'],
+            self._symbols["default"],
             _util.unicode(self._default.arg),
             for_update,
         )
@@ -190,12 +190,12 @@ class Column(object):
         """
         params = list(map(repr, (self._name, self._ctype)))
         if not self._nullable:
-            params.append('nullable=%r' % (False,))
+            params.append("nullable=%r" % (False,))
         if not self._autoincrement and self._primary_key:
-            params.append('autoincrement=%r' % (False,))
+            params.append("autoincrement=%r" % (False,))
         if self._server_default is not None:
             params.append(
-                'server_default=%r'
+                "server_default=%r"
                 % (ServerDefault(self._server_default, self._symbols),)
             )
-        return "%s(%s)" % (self._symbols['column'], ', '.join(params))
+        return "%s(%s)" % (self._symbols["column"], ", ".join(params))

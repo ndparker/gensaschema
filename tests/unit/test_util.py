@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2014 - 2024
+ Copyright 2014 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -36,16 +36,16 @@ from gensaschema import _util
 
 def test_find_public_symbols():
     """find_public finds all non underscored symbols"""
-    mod = _types.ModuleType('lala')
+    mod = _types.ModuleType("lala")
     mod.a = 1
     mod._b = 2
 
-    assert _util.find_public(vars(mod)) == ['a']
+    assert _util.find_public(vars(mod)) == ["a"]
 
 
 def test_find_public_all():
     """find_public passes __all__"""
-    mod = _types.ModuleType('lala')
-    mod.__all__ = ['_b', 'c']
+    mod = _types.ModuleType("lala")
+    mod.__all__ = ["_b", "c"]
 
-    assert _util.find_public(vars(mod)) == ['_b', 'c']
+    assert _util.find_public(vars(mod)) == ["_b", "c"]

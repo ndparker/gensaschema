@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2016 - 2024
+ Copyright 2016 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -42,7 +42,7 @@ def test_find_class():
             """repr"""
             return "Sub"
 
-    assert _type._find_class(_type.Type, '__init__') is _type.Type
-    assert _type._find_class(_type.Type, '__repr__') is _type.Type
-    assert _type._find_class(Sub, '__init__') is _type.Type
-    assert _type._find_class(Sub, '__repr__') is Sub
+    assert _type._find_class(_type.Type, "__init__") is _type.Type
+    assert _type._find_class(_type.Type, "__repr__") is _type.Type
+    assert _type._find_class(Sub, "__init__") is _type.Type
+    assert _type._find_class(Sub, "__repr__") is Sub

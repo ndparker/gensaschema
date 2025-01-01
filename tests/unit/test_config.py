@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2014 - 2024
+ Copyright 2014 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -39,34 +39,34 @@ def fixture(name):
     """Find fixture"""
     return _os.path.join(
         _os.path.dirname(_os.path.normpath(_os.path.abspath(__file__))),
-        'fixtures',
+        "fixtures",
         name,
     )
 
 
 def test_init():
     """Config initialization works as expected"""
-    inst = _config.Config.from_file(fixture('config1.schema'))
+    inst = _config.Config.from_file(fixture("config1.schema"))
     assert inst.tables == [
-        ('Yo', 'Yo'),
-        ('some', 'table'),
-        ('somethingElse', 'somethingElse'),
-        ('y', 'x.y'),
-        ('a', 'b.c'),
+        ("Yo", "Yo"),
+        ("some", "table"),
+        ("somethingElse", "somethingElse"),
+        ("y", "x.y"),
+        ("a", "b.c"),
     ]
-    assert inst.schemas == {'foo': 'bar'}
+    assert inst.schemas == {"foo": "bar"}
     assert inst._lines == [
-        '# This is a comment. I love comments.\n',
-        '#\n',
-        '\n',
-        'Yo\n',
-        'some = table\n',
-        'somethingElse\n',
-        'x.y\n',
-        'a = b.c\n',
-        '\n',
-        '[schemas]\n',
-        'foo = bar\n',
+        "# This is a comment. I love comments.\n",
+        "#\n",
+        "\n",
+        "Yo\n",
+        "some = table\n",
+        "somethingElse\n",
+        "x.y\n",
+        "a = b.c\n",
+        "\n",
+        "[schemas]\n",
+        "foo = bar\n",
     ]
 
 
@@ -74,13 +74,13 @@ def test_dump():
     """Config dumps properly"""
     inst = _config.Config(
         tables=[
-            ('Yo', 'Yo'),
-            ('some', 'table'),
-            ('somethingElse', 'somethingElse'),
-            ('y', 'x.y'),
-            ('a', 'b.c'),
+            ("Yo", "Yo"),
+            ("some", "table"),
+            ("somethingElse", "somethingElse"),
+            ("y", "x.y"),
+            ("a", "b.c"),
         ],
-        schemas={'foo': 'bar'},
+        schemas={"foo": "bar"},
     )
 
     fp = _tempfile.TemporaryFile(mode="w+")
@@ -114,6 +114,6 @@ a = b.c
 [schemas]
 foo = bar
     """.strip()
-        + '\n'
+        + "\n"
     )
     fp.close()

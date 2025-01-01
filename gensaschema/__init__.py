@@ -2,7 +2,7 @@
 u"""
 :Copyright:
 
- Copyright 2014 - 2024
+ Copyright 2010 - 2025
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -28,7 +28,7 @@ inspection capabilities.
 """
 __author__ = u"Andr\xe9 Malo"
 __license__ = "Apache License, Version 2.0"
-__version__ = '0.6.8'
+__version__ = "0.6.8"
 
 from gensaschema import _util
 from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
