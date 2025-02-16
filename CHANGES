@@ -1,4 +1,4 @@
-Changes with version
+Changes with version 0.6.9
 
  *) Add support for postgres 16 and 17, drop support for postgres 11
 
