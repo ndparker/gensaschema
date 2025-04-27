@@ -30,8 +30,8 @@ __author__ = u"Andr\xe9 Malo"
 from pytest import skip
 
 try:
-    from sqlalchemy.dialects import mysql as _mysql
     import sqlalchemy as _sa
+    from sqlalchemy.dialects import mysql as _mysql
 except ImportError:
     _sa, _mysql = None, None
 

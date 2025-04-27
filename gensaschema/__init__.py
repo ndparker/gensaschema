@@ -31,11 +31,13 @@ __license__ = "Apache License, Version 2.0"
 __version__ = "0.6.9"
 
 from gensaschema import _util
-from gensaschema._exceptions import *  # noqa pylint: disable = redefined-builtin, wildcard-import
-
 from gensaschema._config import Config  # noqa
+
+# pylint: disable-next = redefined-builtin, wildcard-import
+from gensaschema._exceptions import *  # noqa
 from gensaschema._schema import Schema  # noqa
-from gensaschema._symbols import Symbols, SymbolException  # noqa
+from gensaschema._symbols import SymbolException  # noqa
+from gensaschema._symbols import Symbols  # noqa
 from gensaschema._type import Type  # noqa
 
 __all__ = _util.find_public(globals())

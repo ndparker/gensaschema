@@ -27,9 +27,8 @@ Tests for gensaschema._column
 """
 __author__ = u"Andr\xe9 Malo"
 
-from pytest import skip
-
 import sqlalchemy as _sa
+from pytest import skip
 from sqlalchemy.dialects import mysql as _mysql
 
 from gensaschema import _column

@@ -198,7 +198,7 @@ class Table(object):
             _warnings.filterwarnings(
                 "error",
                 category=_sa.exc.SAWarning,
-                message=r"^Incomplete reflection of " r"column definition",
+                message=r"^Incomplete reflection of column definition",
             )
             _warnings.filterwarnings(
                 "ignore",
@@ -469,7 +469,7 @@ def _break_cycles(metadata):
                 _warnings.filterwarnings(
                     "ignore",
                     category=_sa.exc.SAWarning,
-                    message=(r"^Cannot correctly sort " r"tables"),
+                    message=r"^Cannot correctly sort tables",
                 )
 
                 metadata.sorted_tables  # pylint: disable = pointless-statement

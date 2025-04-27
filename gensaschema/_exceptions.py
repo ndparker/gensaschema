@@ -42,9 +42,10 @@ class Warning(
     Base warning for this package
 
     >>> with _warnings.catch_warnings(record=True) as record:
+    ...     _warnings.resetwarnings()
     ...     Warning.emit('my message')
-    ...     assert len(record) == 1
-    ...     str(record[0].message)
+    >>> assert len(record) == 1
+    >>> str(record[0].message)
     'my message'
 
     >>> _warnings.simplefilter('error')

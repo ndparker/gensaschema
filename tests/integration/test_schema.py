@@ -34,8 +34,8 @@ import warnings as _warnings
 
 import sqlalchemy as _sa
 
-from gensaschema import _symbols
 from gensaschema import _schema
+from gensaschema import _symbols
 
 # pylint: disable = invalid-name
 
