@@ -58,7 +58,7 @@ def _wait_for_postgres_init(container):
 
 @_pytest.fixture(
     name="postgres_docker",
-    params=[12, 13, 14, 15, 16, 17],
+    params=[12, 13, 14, 15, 16, 17, 18],
     ids=[
         "postgres_v12",
         "postgres_v13",
@@ -66,6 +66,7 @@ def _wait_for_postgres_init(container):
         "postgres_v15",
         "postgres_v16",
         "postgres_v17",
+        "postgres_v18",
     ],
 )
 def postgres_docker_fixture(request):
