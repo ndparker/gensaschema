@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2014 - 2025
+ Copyright 2014 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ u"""
 The module provides all exceptions and warnings used throughout the
 `gensaschema` package.
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import warnings as _warnings
 
@@ -36,7 +37,7 @@ class Error(Exception):
 
 
 class Warning(
-    Warning
+    Warning  # type: ignore
 ):  # noqa pylint: disable = redefined-builtin, undefined-variable
     """
     Base warning for this package

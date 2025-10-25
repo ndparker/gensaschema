@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ========================
  Constraint Declarators
 ========================
@@ -10,7 +10,7 @@ configurable.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -28,7 +28,8 @@ configurable.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import sqlalchemy as _sa
 

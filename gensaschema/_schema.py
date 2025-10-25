@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ==========================
  Schema module generation
 ==========================
@@ -8,7 +8,7 @@ Schema module generation code.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ Schema module generation code.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 from . import _meta
 from . import _table
@@ -57,8 +58,7 @@ class Schema(object):
     #: Template for the module
     #:
     #: :Type: Template
-    _MODULE_TPL = _template.Template(
-        '''
+    _MODULE_TPL = _template.Template('''
         # -*- coding: ascii -*-
         # flake8: noqa pylint: skip-file
         """
@@ -82,8 +82,7 @@ class Schema(object):
         del %(sa)s, %(table)s, %(column)s, %(default)s, %(meta)s
 
         # vim: nowrap tw=0
-    '''
-    )
+    ''')
 
     def __init__(
         self, conn, tables, schemas, symbols, dbname=None, types=None
@@ -138,8 +137,7 @@ class Schema(object):
             if table.is_reference:
                 continue
             name = table.sa_table.name.encode("ascii", "backslashescape")
-            if bytes is not str:
-                name = name.decode("ascii")
+            name = name.decode("ascii")
             lines.append('# Table "%s"' % (name,))
             lines.append("%s = %r" % (table.varname, table))
             lines.append("")

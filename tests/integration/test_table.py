@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2016 - 2025
+ Copyright 2016 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Tests for gensaschema._table
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import os as _os
 
@@ -48,15 +49,11 @@ def test_table(tmpdir):
     db = _sa.create_engine("sqlite:///%s" % (filename,)).connect()
     meta = _meta.BoundMetaData(db)
     with db.begin():
-        db.execute(
-            _sa.text(
-                """
+        db.execute(_sa.text("""
             CREATE TABLE stocks
             (date DATE, trans text, symbol varchar(12), qty real, price real,
             primary key (date))
-        """
-            )
-        )
+        """))
     table = _table.Table.by_name(
         "main.stocks", "STOCKS", meta, {}, _symbols.Symbols()
     )

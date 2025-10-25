@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ======================================
  Column inspection and representation
 ======================================
@@ -8,7 +8,7 @@ Column inspection and generation.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,12 +26,12 @@ Column inspection and generation.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import sqlalchemy as _sa
 
 from . import _type
-from . import _util
 
 
 class ServerDefault(object):
@@ -71,7 +71,7 @@ class ServerDefault(object):
         if identity is not None and isinstance(self._default, identity):
             return "%s.%s" % (
                 self._symbols["sa"],
-                _util.unicode(self._default),
+                str(self._default),
             )
 
         if self._default.for_update:
@@ -81,7 +81,7 @@ class ServerDefault(object):
 
         return "%s(%r%s)" % (
             self._symbols["default"],
-            _util.unicode(self._default.arg),
+            str(self._default.arg),
             for_update,
         )
 

@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ==========
  Metadata
 ==========
@@ -8,7 +8,7 @@ Schema module generation code.
 
 :Copyright:
 
- Copyright 2023 - 2025
+ Copyright 2023 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ Schema module generation code.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import sqlalchemy as _sa
 

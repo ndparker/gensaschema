@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2023 - 2025
+ Copyright 2023 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Test setup
 """
-__author__ = u"Andr\xe9 Malo, Andr\xe9s Reyes Monge"
+
+__author__ = "Andr\xe9 Malo, Andr\xe9s Reyes Monge"
 
 import time as _time
 

@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ==========================================
  Constraint inspection and representation
 ==========================================
@@ -8,7 +8,7 @@ Constraint inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,13 +26,12 @@ Constraint inspection and representation.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import keyword as _keyword
 import re as _re
 import tokenize as _tokenize
-
-from . import _util
 
 
 class Constraint(object):
@@ -86,8 +85,8 @@ class Constraint(object):
             self.constraint, self.table, self._symbols, self.options
         )
 
-    def __cmp__(self, other):
-        """Compare"""
+    def __lt__(self, other):
+        """Check for '<'"""
         names = [
             "PrimaryKeyConstraint",
             "UniqueConstraint",
@@ -102,24 +101,20 @@ class Constraint(object):
             except IndexError:
                 return -1
 
-        return _util.cmp(
-            (
-                bytype(self.constraint),
-                self.options is not None,
-                self.constraint.name,
-                repr(self),
-            ),
-            (
-                bytype(other.constraint),
-                other.options is not None,
-                other.constraint.name,
-                repr(other),
-            ),
+        left = (
+            bytype(self.constraint),
+            self.options is not None,
+            self.constraint.name,
+            repr(self),
+        )
+        right = (
+            bytype(other.constraint),
+            other.options is not None,
+            other.constraint.name,
+            repr(other),
         )
 
-    def __lt__(self, other, _cmp=__cmp__):
-        """Check for '<'"""
-        return _cmp(self, other) < 0
+        return left < right
 
     def repr(self, symbol, args, keywords=(), short=False):
         """
@@ -196,10 +191,7 @@ def access_col(col):
     except AttributeError:
         name = col
     try:
-        if _util.py2 and isinstance(name, _util.bytes):
-            name.decode("ascii")
-        else:
-            name.encode("ascii")
+        name.encode("ascii")
     except UnicodeError:
         is_ascii = False
     else:
@@ -216,8 +208,8 @@ def access_col(col):
 class UniqueConstraint(Constraint):
     """Unique constraint"""
 
-    _SYMBOL = "uk"
-    _IMPORT = "from %(constraints)s import Unique as %(uk)s"
+    _SYMBOL = "uk"  # type: ignore
+    _IMPORT = "from %(constraints)s import Unique as %(uk)s"  # type: ignore
 
     def __repr__(self):
         """
@@ -244,15 +236,15 @@ class UniqueConstraint(Constraint):
 class PrimaryKeyConstraint(UniqueConstraint):
     """Primary Key constraint"""
 
-    _SYMBOL = "pk"
-    _IMPORT = "from %(constraints)s import PrimaryKey as %(pk)s"
+    _SYMBOL = "pk"  # type: ignore
+    _IMPORT = "from %(constraints)s import PrimaryKey as %(pk)s"  # type: ignore
 
 
 class ForeignKeyConstraint(Constraint):
     """ForeignKey constraint"""
 
-    _SYMBOL = "fk"
-    _IMPORT = "from %(constraints)s import ForeignKey as %(fk)s"
+    _SYMBOL = "fk"  # type: ignore
+    _IMPORT = "from %(constraints)s import ForeignKey as %(fk)s"  # type: ignore
 
     def __repr__(self):
         """
@@ -271,7 +263,7 @@ class ForeignKeyConstraint(Constraint):
             [
                 "%s%s"
                 % (
-                    self._symbols[u"table_%s" % key.column.table.name],
+                    self._symbols["table_%s" % key.column.table.name],
                     access_col(key.column),
                 )
                 for key in self.constraint.elements

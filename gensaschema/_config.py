@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ==========================
  Schema config management
 ==========================
@@ -8,7 +8,7 @@ Schema config management.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ Schema config management.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import errno as _errno
 
@@ -61,8 +62,7 @@ class Config(object):
     #: Template for empty config file
     #:
     #: :Type: `Template`
-    _CONFIG_TPL = _template.Template(
-        """
+    _CONFIG_TPL = _template.Template("""
         # This is a comment. I love comments.
         #
         # This files contains table names, one per line
@@ -77,8 +77,7 @@ class Config(object):
         #
         # The basename of this file (modulo .schema extension) is used as
         # basename for the python file.
-    """
-    )
+    """)
 
     def __init__(self, tables, schemas, lines=None):
         """
@@ -120,11 +119,9 @@ class Config(object):
         else:
             read = getattr(name_or_file, "read", None)
             if read is None:
-                kwargs = {} if str is bytes else {"encoding": "utf-8"}
                 try:
-                    # pylint: disable = bad-option-value, unspecified-encoding
-                    # pylint: disable = bad-option-value, consider-using-with
-                    fp = open(name_or_file, **kwargs)
+                    # pylint: disable = consider-using-with
+                    fp = open(name_or_file, encoding="utf-8")
                 except IOError as e:
                     if e.errno != _errno.ENOENT:
                         raise
@@ -162,15 +159,10 @@ class Config(object):
                 if "." in name:
                     name = name.rsplit(".", 1)[1]
                 conf_lines.append("%s = %s" % (name, line))
-        if bytes is str:
-            parser = _config_parser.RawConfigParser()
-            parser.optionxform = lambda x: x
-            # pylint: disable = deprecated-method
-            parser.readfp(_TextIO("\n".join(conf_lines)))
-        else:
-            parser = _config_parser.RawConfigParser(strict=False)
-            parser.optionxform = lambda x: x
-            parser.read_file(_TextIO("\n".join(conf_lines)))
+
+        parser = _config_parser.RawConfigParser(strict=False)
+        parser.optionxform = lambda x: x
+        parser.read_file(_TextIO("\n".join(conf_lines)))
         return cls.from_parser(parser, lines=lines)
 
     @classmethod

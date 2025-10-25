@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2014 - 2025
+ Copyright 2014 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Tests for gensaschema._config
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import os as _os
 import tempfile as _tempfile
@@ -87,9 +88,7 @@ def test_dump():
     inst.dump(fp)
     fp.seek(0, 0)
 
-    assert (
-        fp.read()
-        == """
+    assert fp.read() == """
 # This is a comment. I love comments.
 #
 # This files contains table names, one per line
@@ -113,7 +112,5 @@ a = b.c
 
 [schemas]
 foo = bar
-    """.strip()
-        + "\n"
-    )
+    """.strip() + "\n"
     fp.close()

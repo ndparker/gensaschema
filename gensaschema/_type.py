@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ====================================
  Type inspection and representation
 ====================================
@@ -8,7 +8,7 @@ Type inspection and representation.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,13 +26,14 @@ Type inspection and representation.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import inspect as _inspect
 
 import sqlalchemy as _sa
 
-_have_signature = hasattr(_inspect, "signature")
+_HAVE_SIGNATURE = hasattr(_inspect, "signature")
 
 
 class Type(object):
@@ -117,7 +118,7 @@ class Type(object):
         mod = self._symbols.types.resolve(self._ctype, self._dialect)
         params = []
 
-        if _have_signature:
+        if _HAVE_SIGNATURE:
             try:
                 # pylint: disable = no-member
                 sign = _inspect.signature(self._ctype.__init__)

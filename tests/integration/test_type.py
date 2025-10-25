@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2016 - 2025
+ Copyright 2016 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Tests for gensaschema._type
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 from pytest import skip
 
@@ -45,7 +46,7 @@ def test_find_class():
     if _sa is None or _mysql is None:
         skip("SA not installed")
 
-    assert _type._find_class(_sa.Unicode, '__init__')
-    assert _type._find_class(_sa.Unicode(255), '__init__')
-    assert _type._find_class(_mysql.DATE, '__init__')
-    assert _type._find_class(_mysql.ENUM('a', 'b'), '__init__')
+    assert _type._find_class(_sa.Unicode, "__init__")
+    assert _type._find_class(_sa.Unicode(255), "__init__")
+    assert _type._find_class(_mysql.DATE, "__init__")
+    assert _type._find_class(_mysql.ENUM("a", "b"), "__init__")

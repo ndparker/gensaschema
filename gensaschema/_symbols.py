@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 ===================
  Symbol management
 ===================
@@ -8,7 +8,7 @@ Symbol management.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,14 +26,14 @@ Symbol management.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import keyword as _keyword
 import operator as _op
 import weakref as _weakref
 
 from . import _exceptions
-from . import _util
 
 
 class SymbolException(_exceptions.Error):
@@ -120,10 +120,6 @@ class Symbols(object):
         Raises:
           SymbolException: Symbol could not be set because of some conflict
         """
-        if _util.py2 and not isinstance(
-            name, _util.unicode
-        ):  # pragma: no cover
-            name = str(name).decode("ascii")
         if _keyword.iskeyword(symbol):
             raise SymbolException(
                 "Cannot use keyword %r as symbol" % (symbol,)
@@ -149,8 +145,6 @@ class Symbols(object):
         Raises:
           KeyError: Symbol not found
         """
-        if _util.py2 and not isinstance(name, _util.unicode):
-            name = str(name).decode("ascii")
         return self._symbols[name]
 
     def __contains__(self, name):
@@ -164,8 +158,6 @@ class Symbols(object):
         Returns:
           bool: Does the symbol entry exist?
         """
-        if _util.py2 and not isinstance(name, _util.unicode):
-            name = str(name).decode("ascii")
         return name in self._symbols
 
     def __iter__(self):
@@ -320,10 +312,6 @@ class _Imports(object):
         Raises:
           SymbolException: Import conflict
         """
-        if _util.py2 and not isinstance(
-            name, _util.unicode
-        ):  # pragma: no cover
-            name = str(name).decode("ascii")
         imports = dict(self._imports)
         if name in imports:
             if imports[name] != import_:
