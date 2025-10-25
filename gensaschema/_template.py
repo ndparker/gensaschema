@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 =============================
  Simple template abstraction
 =============================
@@ -8,7 +8,7 @@ Simple template abstraction.
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ Simple template abstraction.
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import textwrap as _textwrap
 

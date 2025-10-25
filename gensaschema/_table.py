@@ -1,5 +1,5 @@
 # -*- coding: ascii -*-
-u"""
+"""
 =====================================
  Table inspection and representation
 =====================================
@@ -8,7 +8,7 @@ Table inspection and representation
 
 :Copyright:
 
- Copyright 2010 - 2025
+ Copyright 2010 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -26,7 +26,8 @@ Table inspection and representation
  limitations under the License.
 
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import logging as _logging
 import operator as _op
@@ -37,7 +38,6 @@ import sqlalchemy as _sa
 
 from . import _column
 from . import _constraint
-from . import _util
 
 logger = _logging.getLogger(__name__)
 
@@ -113,7 +113,7 @@ class Table(object):
         """
         # pylint: disable = unused-argument
 
-        symbols[u"table_%s" % table.name] = varname
+        symbols["table_%s" % table.name] = varname
         self._symbols = symbols
         self.varname = varname
         self.sa_table = table
@@ -172,7 +172,7 @@ class Table(object):
         else:
             schema = None
 
-        tmatch = _re.compile(u"^Did not recognize type (.+) of column").match
+        tmatch = _re.compile(r"^Did not recognize type (.+) of column").match
 
         def type_name(e):
             """Extract type name from exception"""
@@ -263,14 +263,14 @@ class Table(object):
             for col in self.sa_table.columns
         ]
         if self.sa_table.schema is not None:
-            args.append("schema=%r" % (_util.unicode(self.sa_table.schema),))
+            args.append("schema=%r" % (str(self.sa_table.schema),))
 
         args = ",\n    ".join(args)
         if args:
             args = ",\n    %s,\n" % args
         result = "%s(%r, %s%s)" % (
             self._symbols["table"],
-            _util.unicode(self.sa_table.name),
+            str(self.sa_table.name),
             self._symbols["meta"],
             args,
         )
@@ -329,7 +329,7 @@ class TableReference(object):
             mod = modas
         else:
             symbols.imports[schema] = "from %s import %s" % (pkg, mod)
-        symbols[u"table_%s" % table.name] = "%s.%s" % (mod, varname)
+        symbols["table_%s" % table.name] = "%s.%s" % (mod, varname)
 
 
 class TableCollection(tuple):
@@ -375,8 +375,6 @@ class TableCollection(tuple):
             """Map SA table to table object"""
             if sa_table.key not in objects:
                 varname = sa_table.name
-                if _util.py2 and isinstance(varname, _util.unicode):
-                    varname = varname.encode("ascii")
                 objects[sa_table.key] = Table(
                     varname, sa_table, schemas, symbols
                 )

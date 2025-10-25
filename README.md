@@ -30,7 +30,7 @@ The API is not stabilized yet. There also may be a few kinks here and there.
 
 ## COPYRIGHT AND LICENSE
 
-Copyright 2010 - 2025
+Copyright 2010 - 2026
 André Malo or his licensors, as applicable.
 
 The whole package is distributed under the Apache License Version 2.0.
@@ -40,7 +40,7 @@ at: <http://www.apache.org/licenses/LICENSE-2.0>.
 
 ## SYSTEM REQUIREMENTS
 
-You need at least python 2.7 or Python 3 starting with version 3.6.
+You need at least python Python 3 starting with version 3.6.
 
 
 ## INSTALLATION

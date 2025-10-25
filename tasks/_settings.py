@@ -5,7 +5,6 @@ Project Settings
 
 """
 
-
 settings = dict(
     package="gensaschema",
     #
@@ -16,6 +15,6 @@ settings = dict(
     # Wheels
     #
     wheels=dict(
-        build="universal",
+        build="simple",
     ),
 )

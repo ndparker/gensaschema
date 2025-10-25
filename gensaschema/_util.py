@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2014 - 2025
+ Copyright 2014 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,32 +25,8 @@ u"""
 
 Misc utilities.
 """
-__author__ = u"Andr\xe9 Malo"
 
-
-# pylint: disable = redefined-builtin, invalid-name, self-assigning-variable
-try:
-    unicode  # pylint: disable = used-before-assignment
-except NameError:
-    unicode = str
-else:
-    unicode = unicode
-
-try:
-    bytes  # pylint: disable = used-before-assignment
-except NameError:
-    bytes = str
-else:
-    bytes = bytes
-
-py2 = bytes is str
-
-try:
-    cmp  # pylint: disable = used-before-assignment
-except NameError:
-    cmp = lambda a, b: (a > b) - (a < b)
-else:
-    cmp = cmp
+__author__ = "Andr\xe9 Malo"
 
 
 def find_public(space):

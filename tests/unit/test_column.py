@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2014 - 2025
+ Copyright 2014 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Tests for gensaschema._column
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 import sqlalchemy as _sa
 from pytest import skip
@@ -48,13 +49,13 @@ def test_ServerDefault():
         inst = _column.ServerDefault(default, symbols)
         assert repr(inst) == "DEF(u'12')"
 
-        default.for_update = u"lalala"
+        default.for_update = "lalala"
         assert repr(inst) == "DEF(u'12', for_update=True)"
     else:
         inst = _column.ServerDefault(default, symbols)
         assert repr(inst) == "DEF('12')"
 
-        default.for_update = u"lalala"
+        default.for_update = "lalala"
         assert repr(inst) == "DEF('12', for_update=True)"
 
 
@@ -62,13 +63,13 @@ def test_Column():
     """_column.Column() works as expected"""
     meta = _sa.MetaData()
     table = _sa.Table(
-        u"mytable",
+        "mytable",
         meta,
         _sa.Column(
-            u"Lala", _mysql.VARCHAR(255), nullable=True, server_default='""'
+            "Lala", _mysql.VARCHAR(255), nullable=True, server_default='""'
         ),
         _sa.Column(
-            u"lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
+            "lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
         ),
     )
     meta.bind = _test.Bunch(dialect=_test.Bunch(name="mysql"))
@@ -97,11 +98,11 @@ def test_Column_identity():
 
     meta = _sa.MetaData()
     table = _sa.Table(
-        u"mytable",
+        "mytable",
         meta,
-        _sa.Column(u"Lala", _mysql.VARCHAR(255), _sa.Identity()),
+        _sa.Column("Lala", _mysql.VARCHAR(255), _sa.Identity()),
         _sa.Column(
-            u"lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
+            "lolo", _mysql.INTEGER, primary_key=True, autoincrement=False
         ),
     )
     meta.bind = _test.Bunch(dialect=_test.Bunch(name="mysql"))

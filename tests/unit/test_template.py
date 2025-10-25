@@ -1,8 +1,8 @@
 # -*- coding: ascii -*-
-u"""
+"""
 :Copyright:
 
- Copyright 2016 - 2025
+ Copyright 2016 - 2026
  Andr\xe9 Malo or his licensors, as applicable
 
 :License:
@@ -25,7 +25,8 @@ u"""
 
 Tests for gensaschema._template
 """
-__author__ = u"Andr\xe9 Malo"
+
+__author__ = "Andr\xe9 Malo"
 
 from pytest import raises
 
@@ -36,13 +37,11 @@ from gensaschema import _template
 
 def test_Template_init():
     """_template.Template initializes properly"""
-    inst = _template.Template(
-        """
+    inst = _template.Template("""
         lalala
 
          lolo
-    """
-    )
+    """)
     assert inst._template == "lalala\n\n lolo"
 
     inst = _template.Template(
